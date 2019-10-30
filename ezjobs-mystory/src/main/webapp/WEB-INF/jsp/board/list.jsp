@@ -13,6 +13,10 @@
 	color: white;
 }
 </style>
+
+요소:${boards.numberOfElements}/${boards.size}<br>
+페이지:${boards.number+1}/${boards.totalPages}<br>
+총개수:${boards.totalElements}
 	<div class="container">
 		<div class="jumbotron">
 			<h1 class="display-4">자유게시판</h1>
@@ -40,7 +44,7 @@
 				<!-- 티에블 내용 채우기 -->
 				<tbody>
 							
-				<c:forEach var="item" items="${content.boards}">
+				<c:forEach var="item" items="${boards.content}">
 					<tr>
 						<td align="center">${item.id}</td>
 						<td><a href="/board/content/${item.id}">${item.title}&nbsp;</a></td>
@@ -73,13 +77,13 @@
 
 		<nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="#"
+				<li class="page-item"><a class="page-link" href="?page=${pageNavNumber*5}"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li class="page-item"><a class="page-link" href="#">1</a></li>
-				<li class="page-item"><a class="page-link" href="#">2</a></li>
-				<li class="page-item"><a class="page-link" href="#">3</a></li>
-				<li class="page-item"><a class="page-link" href="#"
+				<c:forEach var="item" begin="${pageNavNumber*5+1}" end="${(pageNavNumber+1)*5}">
+					<li class="page-item"><a class="page-link" href="?page=${item}">${item}</a></li>
+				</c:forEach>
+				<li class="page-item"><a class="page-link" href="?page=${(pageNavNumber+1)*5+1}"
 					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>

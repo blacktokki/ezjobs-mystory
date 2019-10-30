@@ -28,7 +28,8 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@GetMapping("/community")//커뮤니티 게시판 목록 /board/community
-	public String community(Map<Object, Object> map){
+	public String community(@RequestParam String page,Map<Object, Object> map){
+		map.put("page",page);
 		boardService.community(map);
 		return "board/list";
 	}

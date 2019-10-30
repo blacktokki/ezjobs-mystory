@@ -5,10 +5,14 @@
 	<head>
 		<title></title>
 		<meta charset="utf-8" />
-		<link href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-		<link href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
-		<script  src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-		<script src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<link href="/webjars/font-awesome/css/font-awesome.min.css">
+		<link href="/webjars/jqcloud2/dist/jqcloud.min.css">
+		<link href="/webjars/chart.js/dist/Chart.min.css">
+		<script  src="/webjars/jquery/jquery.min.js"></script>
+		<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+		<script src="/webjars/jqcloud2/dist/jqcloud.min.js"></script>
+		<script src="/webjars/chart.js/dist/Chart.min.js"></script>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		</head>
 		<body>

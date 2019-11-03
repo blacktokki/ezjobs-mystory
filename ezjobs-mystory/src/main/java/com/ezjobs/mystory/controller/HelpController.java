@@ -22,5 +22,5 @@ public class HelpController{
 	public String helpqna() {
 		return "help/qna";
 	}
-	
+// 깃 허브 재 업로드용 소스
 }

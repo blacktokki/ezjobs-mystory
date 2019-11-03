@@ -74,6 +74,7 @@ height:45px;
 	<div class="nav"> 줄 고정 하는 것 연습용 창입니다 편하게 지울 수 있으니 걱정 ㄴㄴ
 	</div>
 </div><!-- 화면 휠이 내려가도 고정 시키는것. -->
+<!-- 깃 허브 재 업로드 용 소스 -->
 <div id="div_root">
 <div id ="div_top">
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

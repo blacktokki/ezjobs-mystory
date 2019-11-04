@@ -3,16 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
-<!-- 점보트론 스타일 -->
-<style>
-.jumbotron {
-	background-image: url(/image/jumbotronBG.jpg);
-	background-size: cover;
-	background-position: 0% 40%;
-	text-shadow: black -0.4em 0.4em 0.4em;
-	color: white;
-}
-</style>
 
 <div class="container">
 	<div class="jumbotron">

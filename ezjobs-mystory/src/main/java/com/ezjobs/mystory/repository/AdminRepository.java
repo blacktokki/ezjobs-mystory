@@ -7,5 +7,4 @@ import com.ezjobs.mystory.entity.User;
 
 @Repository
 public interface AdminRepository extends JpaRepository<User, Integer>{
-	
 }

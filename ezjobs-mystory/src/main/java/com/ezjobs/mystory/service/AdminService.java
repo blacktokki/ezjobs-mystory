@@ -34,6 +34,7 @@ public class AdminService {
 		model.addAttribute("pageNavNumber",users.getNumber()/5);//페이징바의 번호		
 	}
 
+	
 	public void personal(Model model) {
 		Map<String,Object> modelMap=model.asMap();
 		int id=Integer.parseInt(modelMap.get("id").toString());

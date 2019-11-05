@@ -1,14 +1,15 @@
-package com.ezjobs.mystory.entity;
+package com.ezjobs.mystory.dto;
 
 import java.util.Date;
 import javax.persistence.*;
 
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import lombok.Data;
 
-@Entity
-@Table(name="resume")
+@Document(indexName = "intro", type = "doc")
 @Data
-public class Resume {
+public class ElasticResume {
     
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,5 +46,7 @@ public class Resume {
     
     @Column(name="edit_group", nullable = false)
     private Integer editGroup;
+    
+    private String[] terms;
     
 }

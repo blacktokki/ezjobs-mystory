@@ -2,8 +2,6 @@ package com.ezjobs.mystory.entity;
 
 import java.util.Date;
 import javax.persistence.*;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity

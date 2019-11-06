@@ -15,8 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.ezjobs.mystory.entity.Resume;
-import com.ezjobs.mystory.repository.ResumeRepository;
+import com.ezjobs.mystory.entity.Search;
+import com.ezjobs.mystory.repository.SearchRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -24,25 +24,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SearchService {
 	
 	@Inject
-	ResumeRepository resumeRepository;
+	SearchRepository searchRepository;
 	
 	@Inject
 	ObjectMapper mapper;
 	
-	List<Resume> searchDummy=new ArrayList<>();
+	List<Search> searchDummy=new ArrayList<>();
 	int searchIdx=1;
 	int tpTotal = 99;
 	int tpCount = 0;
 
 	public void searchAct(Model model) {
+		
+
 		String act = (String)model.getAttribute("act");
+		String npg = (String)model.getAttribute("npg");
+		
+		
 		if(searchDummy.size()!=0) {
 			searchDummy.clear();
 			tpCount = 0;
 		}
 		for(int i=0;i<tpTotal;i++) {
 			if(i<5) {
-				Resume search=new Resume(i, "a","a","a","a","a","a","a", new Date(), i);
+				Search search=new Search(i, "a","a","a","a","a","a","a", new Date(), i);
 				if(search.getType().contains(act)||search.getDept().contains(act)|| search.getCompany().contains(act)|| search.getQuestion().contains(act) || search.getAnswer().contains(act) || search.getUserId().contains(act) || act.isEmpty()||act.trim()==""){
 					// priority, date, group을 제외하고 모든 결과 검색
 					searchDummy.add(search);
@@ -51,18 +56,22 @@ public class SearchService {
 			}
 			else
 			{
-				Resume search=new Resume(i, "b","b","b","b","b","b","b", new Date(), i);
+				Search search=new Search(i, "b","b","b","b","b","b","b", new Date(), i);
 				if(search.getType().contains(act)||search.getDept().contains(act)|| search.getCompany().contains(act)|| search.getQuestion().contains(act) || search.getAnswer().contains(act) || search.getUserId().contains(act) || act.isEmpty()||act.trim()==""){
 					searchDummy.add(search); tpCount++;
 				}
 			}
-		}
-		String npg = (String)model.getAttribute("npg");
+		} // 더미데이터 및 검색 테스트
+		
 		int pageNum=Integer.parseInt(npg);//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
-		Page<Resume> resumes=resumeRepository.findAll(pr);
-		model.addAttribute("resumes",resumes);
-		model.addAttribute("pageNavNumber",resumes.getNumber()/5);
+		Page<Search> Searchs=searchRepository.findAll(pr);
+		
+		System.out.println("page객체 확인 :" + Searchs.getContent());
+		System.out.println("외않되");
+		
+		model.addAttribute("Searchs",Searchs);
+		model.addAttribute("pageNavNumber",Searchs.getNumber()/5);
 		if(tpCount==0) {
 			// 검색 결과가 없습니다
 			model.addAttribute("total", tpCount);

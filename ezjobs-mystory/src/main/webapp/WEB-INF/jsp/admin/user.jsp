@@ -4,12 +4,13 @@
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
 
-	<div class="jumbotron">
-		<h1 class="display-4">회원관리</h1>
-		<p class="lead">회원들을 관리해주세요</p>
-		<hr class="my-4">
-	</div>
+<div class="jumbotron">
+	<h1 class="display-4">회원관리</h1>
+	<p class="lead">회원들을 관리해주세요</p>
+	<hr class="my-4">
+</div>
 <p>
+
 <div class="container">
 	<h2>회원 정보</h2>
 	<div class="pagination justify-content-center">
@@ -23,10 +24,10 @@
 					<th width="120">방문수</th>
 				</tr>
 			</thead>
+			
 			<!-- 티에블 내용 채우기 -->
 			<tbody>
-
-				<c:forEach var="item" items="${user.content}">
+				<c:forEach var="item" items="${users.content}">
 					<tr>
 						<td align="center">${item.id}</td>
 						<td>${item.loginId}&nbsp;</td>
@@ -55,6 +56,7 @@
 			</a></li>
 		</ul>
 	</nav>
+
 </div>
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

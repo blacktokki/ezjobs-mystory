@@ -19,11 +19,11 @@ public class SearchController {
 	private SearchService searchService;
 	
 	@GetMapping("list")
-	public String search(Model model, @RequestParam(value = "searchText", required = false, defaultValue = "")String act, @RequestParam(value="page", required=false, defaultValue="1") String npg){
+	public String search(@RequestParam(value = "searchText", required = false, defaultValue = "")String act, @RequestParam(value="page", required=false, defaultValue="1") String npg, Model model){
 		
 		model.addAttribute("npg", npg);
-		int nowPage = Integer.parseInt(npg);
-		searchService.searchAct(model, act);
+		model.addAttribute("act", act);
+		searchService.searchAct(model);
 		/*
 		 * searchService.makeLastPage(model); searchService.makeBlock(model, nowPage);
 		 */

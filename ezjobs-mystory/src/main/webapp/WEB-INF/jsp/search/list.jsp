@@ -13,6 +13,8 @@
 
 
 <head>
+
+<!-- 삭제예정 :: 스타일 참고용 주석
 	<style type="text/css">
 	
 		input::placeholder{
@@ -27,7 +29,7 @@
 			color: white;
 		}
 		
-	</style>
+	</style> -->
 
 </head>
 
@@ -52,35 +54,6 @@
 <c:set var="st" value = "4"/>
 
 <div style="position: absolute; left: 500px; top: 380px; width: 600px; height: 300px; margin: 0px 0px 200px 0px;">
-	<%-- <table class="table table-hover" style="table-layout:fixed">
-		<colgroup>
-			<col width="50px" />
-			<col width="60px" />
-			<col width="100px" />
-		</colgroup>
-		<thead>
-		<tr align="center" bgcolor=#3cdd9a height="10">
-			<th>기업명</th><th>직무</th><th>스펙</th>
-		</tr>
-		</thead>
-		<c:choose>
-		<c:when test="${total}=='0'">
-			<tr>
-				<td colspan="3">
-					<!--  검색 된 결과가 없습니다. -->
-				</td>
-			</tr>
-		</c:when>
-		<c:otherwise>
-		begin="${bg}" end="${bg+st}"
-		<c:forEach var="item"  items="${searchs.content}">
-			<tr align="center">
-				<td>${item.company}</td><td>${item.dept}</td><td>${item.question}</td>
-			</tr>
-		</c:forEach>
-		</c:otherwise>
-		</c:choose>
-	</table> --%>
 	<div class="pagination justify-content-center">
 			<table class="table">
 				<!-- 테이블 제목 -->
@@ -95,7 +68,7 @@
 				<!-- 티에블 내용 채우기 -->
 				<tbody>
 							
-				<c:forEach var="item" items="${searchs.content}">
+				<c:forEach var="item" items="${resumes.content}">
 					<tr>
 						<td align="center">${item.id}</td>
 						<td>${item.company}&nbsp;</td>
@@ -108,7 +81,8 @@
 			</table>
 		</div>
 	
-        <%-- <c:if test="${ nowPage > 5 }">
+        <%-- 이전 내가 만든 페이징 DB 연동 성공시 삭제
+         <c:if test="${ nowPage > 5 }">
             <a href="?searchText=${ param.searchText }&page=${ startBlock - 1 }">◀</a>
         </c:if>
         
@@ -121,6 +95,7 @@
         <c:if test="${ lastPage > lastBlock }">
             <a href="?searchText=${ param.searchText }&page=${ lastBlock + 1 }">▶</a>
         </c:if> --%>
+        
         <nav aria-label="Page navigation example">
 			<ul class="pagination justify-content-center">
 				<li class="page-item"><a class="page-link" href="?page=${pageNavNumber*5}"

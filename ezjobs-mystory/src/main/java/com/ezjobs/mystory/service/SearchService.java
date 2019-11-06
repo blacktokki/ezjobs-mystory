@@ -7,14 +7,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
+
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.ezjobs.mystory.entity.Search;
-import com.ezjobs.mystory.repository.SearchRepository;
+import com.ezjobs.mystory.entity.Resume;
+import com.ezjobs.mystory.repository.ResumeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -22,24 +24,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SearchService {
 	
 	@Inject
-	SearchRepository searchRepository;
+	ResumeRepository resumeRepository;
 	
 	@Inject
 	ObjectMapper mapper;
 	
-	List<Search> searchDummy=new ArrayList<>();
+	List<Resume> searchDummy=new ArrayList<>();
 	int searchIdx=1;
 	int tpTotal = 99;
 	int tpCount = 0;
 
-	public void searchAct(Model model, String act) {
+	public void searchAct(Model model) {
+		String act = (String)model.getAttribute("act");
 		if(searchDummy.size()!=0) {
 			searchDummy.clear();
 			tpCount = 0;
 		}
 		for(int i=0;i<tpTotal;i++) {
 			if(i<5) {
-				Search search=new Search(i, "a","a","a","a","a","a","a", new Date(), i);
+				Resume search=new Resume(i, "a","a","a","a","a","a","a", new Date(), i);
 				if(search.getType().contains(act)||search.getDept().contains(act)|| search.getCompany().contains(act)|| search.getQuestion().contains(act) || search.getAnswer().contains(act) || search.getUserId().contains(act) || act.isEmpty()||act.trim()==""){
 					// priority, date, group을 제외하고 모든 결과 검색
 					searchDummy.add(search);
@@ -48,7 +51,7 @@ public class SearchService {
 			}
 			else
 			{
-				Search search=new Search(i, "b","b","b","b","b","b","b", new Date(), i);
+				Resume search=new Resume(i, "b","b","b","b","b","b","b", new Date(), i);
 				if(search.getType().contains(act)||search.getDept().contains(act)|| search.getCompany().contains(act)|| search.getQuestion().contains(act) || search.getAnswer().contains(act) || search.getUserId().contains(act) || act.isEmpty()||act.trim()==""){
 					searchDummy.add(search); tpCount++;
 				}
@@ -57,9 +60,9 @@ public class SearchService {
 		String npg = (String)model.getAttribute("npg");
 		int pageNum=Integer.parseInt(npg);//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
-		Page<Search> searchs=searchRepository.findAll(pr);
-		model.addAttribute("searchs",searchs);
-		model.addAttribute("pageNavNumber",searchs.getNumber()/5);
+		Page<Resume> resumes=resumeRepository.findAll(pr);
+		model.addAttribute("resumes",resumes);
+		model.addAttribute("pageNavNumber",resumes.getNumber()/5);
 		if(tpCount==0) {
 			// 검색 결과가 없습니다
 			model.addAttribute("total", tpCount);

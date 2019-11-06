@@ -4,16 +4,14 @@
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
 
-<div class="container">
 	<div class="jumbotron">
 		<h1 class="display-4">회원관리</h1>
 		<p class="lead">회원들을 관리해주세요</p>
 		<hr class="my-4">
 	</div>
-</div>
 <p>
 <div class="container">
-	<h2>게시판</h2>
+	<h2>회원 정보</h2>
 	<div class="pagination justify-content-center">
 		<table class="table">
 			<!-- 테이블 제목 -->
@@ -28,12 +26,12 @@
 			<!-- 티에블 내용 채우기 -->
 			<tbody>
 
-				<c:forEach var="item" items="${user.personal}">
+				<c:forEach var="item" items="${user.content}">
 					<tr>
 						<td align="center">${item.id}</td>
-						<td>${item.login_id}&nbsp;</td>
-						<td>${item.regist_date}&nbsp;</td>
-						<td align="center">${item.visit_cnt}</td>
+						<td>${item.loginId}&nbsp;</td>
+						<td>${item.registDate}&nbsp;</td>
+						<td align="center">${item.visitCnt}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

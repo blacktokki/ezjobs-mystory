@@ -2,133 +2,126 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-<style>
-#div_root{
-margin : auto;
-width:80%;
-height: 100%;
-}
-
-#div_top{
-width:100%;
-height:30%;
-background-color:#82FA58;
-text-align: center;
-}
-
-#div_menu{
-width:100%;
-height:30%;
-float:left;
-background-color: #819FF7;
-text-align:left;
-}
-
-#div_con{
-width:100%;
-height: 30%;
-float:left;
-background-color: #2DDA69;
-text-align: center;
-}
-
-#div_bottom{
-width:100%;
-height: 100%;
-clear.both;
-background-color: #C8FF2E;
-text-align: center;
-}
-
-#carouselExampleIndicators{
-position:relative;
-width:100%;
-height: 100%;
-}
-#carousel_one{
-position:relative;
-width:100%;
-height: 100%;
-}
-#first_img{
-position:relative;
-width:100%;
-height: 100%;
-}
-.img_wrap{
-	height:100%;
-}
-html, body{width:100%; height:100%;}
-
-.nav_wrap{
-width:100%;
-height:45px;
-}
-.nav{width:100%; height:45px;position:fixed; top:0; z-index:2; background-color:yellow;}
-// 화면 고정 z-index -> 화면의 높이를 z축을 도입해서 높낮이를 줄 수 있음. 숫자가 크면 위로 올라옴.
-
-</style>
 
 <!-- body -->
-<div class="nav_wrap">
-	<div class="nav"> 줄 고정 하는 것 연습용 창입니다 편하게 지울 수 있으니 걱정 ㄴㄴ
-	</div>
-</div><!-- 화면 휠이 내려가도 고정 시키는것. -->
-<!-- 깃 허브 재 업로드 용 소스 -->
-<div id="div_root">
-<div id ="div_top">
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div id="carousel_one" class="carousel-inner">
-    <div class="carousel-item active img_wrap">
-      <img src="..." id="first_img" class="d-block w-100" alt="마땅한 사진 없음 1">
+
+<div>
+<div class="jumbotron text-center" >
+<div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-interval="10000">
+      <img src="..." class="d-block w-100" alt="...">
     </div>
-    <div class="carousel-item img_wrap">
-      <img src="..." class="d-block w-100" alt="마땅한 사진 없음 2">
+    <div class="carousel-item" data-interval="10000">
+      <img src="..." class="d-block w-100" alt="...">
     </div>
-    <div class="carousel-item img_wrap">
-      <img src="..." class="d-block w-100" alt="마땅한 사진 없음 3">
+    <div class="carousel-item" data-interval="10000">
+      <img src="..." class="d-block w-100" alt="...">
     </div>
   </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="sr-only">Previous</span>
   </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="sr-only">Next</span>
   </a>
 </div>
-</div>
-<div id="div_menu">
-<p>
-  <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">1번 버튼</a>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">2번 버튼</button>
-  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">동시 버튼</button>
-</p>
-<div class="row">
-  <div class="col">
-    <div class="collapse multi-collapse" id="multiCollapseExample1">
-      <div class="card card-body">
-		1번 입니다.
-      </div>
+
+</div><!-- 제일 위 -->
+
+<div class="jumbotron container">
+둘
+</div><!-- 중간 위 -->
+<div  class="container">
+<table class="table table-borderless table-sm">
+  <thead>
+    <tr>
+      <td scope="col">최근 게시된 인기공고</td>
+      <td scope="col">7일 내에 마감됨 인기공고</td>
+      <td scope="col">직무별 인기공고</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+<table class="table table-hover"><!-- 최근 게시된 인기공고테이블 -->
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+	  </td>
+      <td>
+<table class="table table-hover">
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+	  </td>
+      <td>
+      <div class="row">
+  <div class="col-4">
+    <div class="list-group" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list" href="#list-home" role="tab" aria-controls="home">Home</a>
+      <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">Profile</a>
+      <a class="list-group-item list-group-item-action" id="list-messages-list" data-toggle="list" href="#list-messages" role="tab" aria-controls="messages">Messages</a>
+      <a class="list-group-item list-group-item-action" id="list-settings-list" data-toggle="list" href="#list-settings" role="tab" aria-controls="settings">Settings</a>
     </div>
   </div>
-  <div class="col">
-    <div class="collapse multi-collapse" id="multiCollapseExample2">
-      <div class="card card-body">
-        2번 입니다.
-      </div>
+  <div class="col-8">
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">...</div>
+      <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">...</div>
+      <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">...</div>
+      <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">...</div>
     </div>
   </div>
 </div>
-</div>
-<div id="div_con">내용</div>
-<div id="div_bottom">마무리</div>
-</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div><!-- 중간 하 -->
+<div class="jumbotron container">
+넷
+</div><!-- 맨 아래 -->
+
+</div><!-- 전체 div -->
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>	

@@ -31,14 +31,24 @@
   </tbody>
  
  </table>
- <div class="btn_area">
-  <a id="login_btn" class="btn">로그인</a>
+
+ <div class="btn">
+  <button id="login_btn">
+  로그인
+     </button>
+ </div>
+
+  <div class="btn">
+  <button id="Join_btn">
+  회원가입
+  </button>
  </div>
 </form>
 
 <script>
+
 $(document).ready(function() {
- $("#login_btn").unbind("click").click(function(e) {
+ $("#Login_btn").unbind("click").click(function(e) {
   e.preventDefault();
   fn_login();
  }); 

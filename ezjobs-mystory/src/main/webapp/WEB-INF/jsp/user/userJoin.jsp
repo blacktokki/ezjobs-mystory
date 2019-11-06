@@ -29,24 +29,61 @@
    </tr>
   </thead>
   <tbody>
-   <tr>
+  <tr>
+    <th scope="row">editDate</th>
+    <td><input type="text" id="user_editDate" name="EDITDATE" class="wdp_90"></td>
+    <td></td>
+   </tr>
+  <tr>
+    <th scope="row">이메일</th>
+    <td><input type="text" id="user_email" name="EMAIL" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">학력</th>
+    <td><input type="text" id="user_grad" name="GRAD" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">닉네임</th>
+    <td><input type="text" id="user_id" name="ID" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">아이디</th>
+    <td><input type="text" id="user_loginId" name="LOGINID" class="wdp_90"></td>
+     <td><a href="#" id="user_id_checkBtn" class="btn">중복확인</a></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">비밀번호</th>
+    <td><input type="password" id="user_loginPw" name="LOGINPW" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
     <th scope="row">이름</th>
     <td><input type="text" id="user_name" name="NAME" class="wdp_90"></td>
     <td></td>
    </tr>
-   <tr>
-    <th scope="row">전화번호</th>
-    <td><input type="text" id="user_tel" name="TEL" class="wdp_90"></td>
+    <tr>
+    <th scope="row">relId</th>
+    <td><input type="text" id="user_relID" name="RELID" class="wdp_90"></td>
     <td></td>
    </tr>
-   <tr>
-    <th scope="row">아이디</th>
-    <td><input type="text" id="user_id" name="ID" class="wdp_90"></td>
-    <td><a href="#" id="user_id_checkBtn" class="btn">중복확인</a></td>
+    <tr>
+    <th scope="row">relLoginId</th>
+    <td><input type="text" id="user_relLoginId" name="RELLOGINID" class="wdp_90"></td>
+    <td></td>
    </tr>
-   <tr>
-    <th scope="row">비밀번호</th>
-    <td><input type="password" id="user_pwd" name="PASSWORD" class="wdp_90"></td>
+  
+ <tr>
+    <th scope="row">성별</th>
+    <td><input type="text" id="user_sex" name="SEX" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">방문자</th>
+    <td><input type="text" id="user_visitCnt" name="VISITCNT" class="wdp_90"></td>
     <td></td>
    </tr>
   </tbody>

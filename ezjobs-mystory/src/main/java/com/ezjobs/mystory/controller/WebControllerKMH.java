@@ -27,8 +27,10 @@ public class WebControllerKMH {
 	}
 
 	@GetMapping("/userJoin")
-	public String userJoin(){
-		return "userJoin";
+	public String userJoin(@RequestParam String page,Map<Object, Object> map){
+		map.put("page",page);
+		userService.userLogin(map);
+		return "user/userJoin";
 	}
 	
 }

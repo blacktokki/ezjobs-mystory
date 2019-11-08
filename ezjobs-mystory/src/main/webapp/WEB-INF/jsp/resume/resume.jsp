@@ -3,134 +3,109 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
+<style>
+[data-toggle="collapse"]:after {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f054";
+	transform: rotate(90deg);
+	transition: all linear 0.25s;
+	float: right;
+}
+
+[data-toggle="collapse"].collapsed:after {
+	transform: rotate(0deg);
+}
+</style>
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="#">Home</a></li>
-		<li class="breadcrumb-item"><a href="#">Library</a></li>
-		<li class="breadcrumb-item active" aria-current="page">Data</li>
-	</ol>
+	<div class="nav nav-tabs breadcrumb pb-0" id="nav-tab" role="tablist">
+		<a class="nav-item nav-link breadcrumb-item active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+			aria-controls="nav-home" aria-selected="true">자소서관리</a>
+		<a class="nav-item nav-link breadcrumb-item" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
+			aria-controls="nav-profile" aria-selected="false">자소서작성</a> 
+		<a class="nav-item nav-link breadcrumb-item" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+			aria-controls="nav-contact" aria-selected="false">자소서검토</a>
+		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
+			새 자기소개서
+		</a>
+	</div>
 </nav>
-<div class="container-fluid row">
-	<div class="col-2">
-		<input type="email" class="form-control" id="exampleInputEmail1"
-			placeholder="Enter email">
-		<div class="accordion" id="accordionExample">
-			<div class="card">
-				<div class="card-header p-0" id="headingOne">
-					<h2 class="mb-0">
-						<button class="btn btn-link" type="button" data-toggle="collapse"
-							data-target="#collapseOne" aria-expanded="true"
-							aria-controls="collapseOne">Collapsible Group Item #1</button>
-					</h2>
-				</div>
-
-				<div id="collapseOne" class="collapse show"
-					aria-labelledby="headingOne" data-parent="#accordionExample">
-						<ul class="card-body list-group p-0">
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-						</ul>
+<div class="tab-content" id="nav-tabContent">
+	<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+		<div class="container-fluid row">
+			<div class="col-3 pl-2 pr-0">
+				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
+			</div>
+			<div class="col-6 px-3">
+				<div id="accordion1" role="tablist">
+					<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
 				</div>
 			</div>
-			<div class="card">
-				<div class="card-header p-0" id="headingTwo">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							Collapsible Group Item #2</button>
-					</h2>
-				</div>
-				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-					data-parent="#accordionExample">
-						<ul class="card-body list-group p-0">
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-						</ul>
-				</div>
-			</div>
+			<div class="col-4"></div>
 		</div>
 	</div>
-	<div class="col-8">
-		<hr>
-		<div class="accordion" id="accordionExample">
-			<div class="card">
-				<div class="card-header" id="headingOne">
-					<h2 class="mb-0">
-						<button class="btn btn-link" type="button" data-toggle="collapse"
-							data-target="#collapseOne" aria-expanded="true"
-							aria-controls="collapseOne">Collapsible Group Item #1</button>
-					</h2>
-				</div>
-
-				<div id="collapseOne" class="collapse show"
-					aria-labelledby="headingOne" data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
+	<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+		<div class="container-fluid row">
+			<div class="col-3 pl-2 pr-0">
+				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
+			</div>
+			<div class="col-6 px-3">
+				<div id="accordion2" role="tablist">
 				</div>
 			</div>
-			<div class="card">
-				<div class="card-header" id="headingTwo">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							Collapsible Group Item #2</button>
-					</h2>
-				</div>
-				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-					data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
-				</div>
-			</div>
-			<div class="card">
-				<div class="card-header" id="headingThree">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseThree"
-							aria-expanded="false" aria-controls="collapseThree">
-							Collapsible Group Item #3</button>
-					</h2>
-				</div>
-				<div id="collapseThree" class="collapse"
-					aria-labelledby="headingThree" data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
-				</div>
-			</div>
+			<div class="col-4"></div>
 		</div>
 	</div>
-	<div class="col-2"></div>
+	<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+		<div class="container-fluid row">
+			<div class="col-3 pl-2 pr-0">
+				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
+			</div>
+			<div id=resume-content class="col-6 px-3">
+				<div id="accordion3" role="tablist">
+				새 자기소개서
+				</div>
+			</div>
+			<div class="col-4"></div>
+		</div>
+	</div>
 </div>
+<script>
+	/*
+	$("#resume-group").delegate(".collapse", "show.bs.collapse", function() {
+		$(this).load("/resume/list");
+	})*/
+	var resume_idx=1;
+	var resume_new=1;
+	$("#nav-tab").delegate("#resume-create", "click", function() {
+		$frag = $(document.createDocumentFragment()).load("/resume/write",function(response){
+			var $result=$(response);
+			$result.find(".card-header")
+		           .attr("id","heading-write"+resume_idx)
+		           .find("a")
+				   .attr("href","#collapse-write"+resume_idx)
+				   .attr("aria-controls","collapse-write"+resume_idx)
+				   .html("새 자기소개서 "+resume_new);
+			$result.find(".collapse")
+				   .attr("id","collapse-write"+resume_idx)
+				   .attr("aria-labelledby","heading-write"+resume_idx)
+				   .find(".write-question")
+				   .attr("id","write-question"+resume_idx)
+				   .val("새 자기소개서 "+resume_new);
+			$result.appendTo("#accordion2");
+			resume_idx+=1;
+			resume_new+=1;
+		});
+		return false;
+	})
+	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e) {
+		var currentVal = $(e.target).val();
+		var id=$(e.target).attr("id").replace("write-question","");
+		$("#heading-write"+id+" a").html(currentVal);
+});
+</script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -2,6 +2,10 @@ package com.ezjobs.mystory.entity;
 
 import java.util.Date;
 import javax.persistence.*;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.Data;
 
 @Entity
@@ -17,24 +21,24 @@ public class Board {
 	@Column(name="board_type", nullable = false)
     private String boardType;
 	
-    @Column(name="title", nullable = false)
+    @Column(name="title", nullable = true)
     private String title;
 
     @Column(name="user_id", nullable = false)
     private String userId;
     
-    @Column(name="intro_dept", nullable = false)
+    @Column(name="intro_dept", nullable = true)
     private String introDept;
     
-    @Column(name="intro_type", nullable = false)
+    @Column(name="intro_type", nullable = true)
     private String introType;
     
-    @Column(name="text", nullable = false)
+    @Column(name="text", nullable = true)
     private String text;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="edit_date", nullable = false)
-    private Date editDate= new Date();
+    private Date editDate;
     
     @Column(name="edit_group", nullable = false)
     private Integer editGroup;

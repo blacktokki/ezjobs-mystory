@@ -80,8 +80,8 @@
 	})*/
 	var resume_idx=1;
 	var resume_new=1;
-	$("#nav-tab").delegate("#resume-create", "click", function() {
-		$frag = $(document.createDocumentFragment()).load("/resume/write",function(response){
+	$("body").delegate("#resume-create", "click", function() {
+		 $(document.createDocumentFragment()).load("/resume/write",function(response){
 			var $result=$(response);
 			$result.find(".card-header")
 		           .attr("id","heading-write"+resume_idx)
@@ -95,30 +95,57 @@
 				   .find(".write-question")
 				   .attr("id","write-question"+resume_idx)
 				   .val("새 자기소개서 "+resume_new);
-			$result.appendTo("#accordion2");
+			$("#nav-profile-tab").tab("show");
+			$result.appendTo("#accordion2").find(".collapse").collapse("show");
 			resume_idx+=1;
 			resume_new+=1;
 		});
 		return false;
+	});
+	$("#accordion1").delegate(".resume-link","click",function(e){
+		var href=$(e.target).attr("href");
+		var card=href.replace("/resume/write/","#resume-card");
+
+		if($(card).length==0){
+			$(document.createDocumentFragment()).load(href,function(response){
+				var $result=$(response);
+				$result.find(".card-header")
+			           .attr("id","heading-write"+resume_idx)
+			           .find("a")
+					   .attr("href","#collapse-write"+resume_idx)
+					   .attr("aria-controls","collapse-write"+resume_idx)
+				$result.find(".collapse")
+					   .attr("id","collapse-write"+resume_idx)
+					   .attr("aria-labelledby","heading-write"+resume_idx)
+					   .find(".write-question")
+					   .attr("id","write-question"+resume_idx)
+				$("#nav-profile-tab").tab("show");
+				$result.appendTo("#accordion2").find(".collapse").collapse("show");
+				resume_idx+=1;
+			});
+		}
+		else{
+			$(card).find(".collapse").collapse("show");
+		}
+		return false;
 	})
 	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e) {
-		var currentVal = $(e.target).val();
-		var id=$(e.target).attr("id").replace("write-question","");
+		var id=$(e.target).attr("id").replace("heading","");
 		$("#heading-write"+id+" a").html(currentVal);
 	});
 	$("#accordion2").delegate("form","submit",function(e){
 		var form=$(e.target).serializeJSON();
 		//console.log(form);
-		$.post("/resume/content",form,function(data){
+		$.post("/resume/content/"+form.id,form,function(data){
 			//console.log(data);
-			$(e.target).find(".resume-id").val(data.id);
-			$.get("/resume/content",function(data){
-				console.log(data);
-				$("#accordion1").html(data);
+			$(e.target).find(".resume-id").val(data.map.id);
+			$(e.target).find(".resume-method").val("put");
+			$.get("/resume/content",function(data2){
+				//console.log(data2);
+				$("#accordion1").html(data2);
 			});
 		});
 		return false;
-		//$.post
 	});
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

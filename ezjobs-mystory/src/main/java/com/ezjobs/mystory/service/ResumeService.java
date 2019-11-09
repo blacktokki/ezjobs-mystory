@@ -11,7 +11,6 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.repository.ResumeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,6 +77,15 @@ public class ResumeService {
 		resume.setUserId(userId);
 		resume.setEditDate(new Date());
 		resumeRepository.save(resume);
-		model.addAttribute("id",resume.getId());
+		model.addAttribute("map",resume);
+	}
+	
+	public void edit(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
+		resume.setId(id);
+		resumeRepository.update(resume);
 	}
 }

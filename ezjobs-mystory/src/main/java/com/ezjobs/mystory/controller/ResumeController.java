@@ -55,21 +55,45 @@ public class ResumeController {
 	}
 	
 	@GetMapping("write")
-	public String write(){
+	public String write(Model model){
+		model.addAttribute("method","post");
+		return "resume/write";
+	}
+	@GetMapping("write/{id}")
+	public String write(@PathVariable String id,HttpSession session,Model model){
+		Object loginId=session.getAttribute("loginId");
+		if(loginId==null) 
+			return "redirect:/temp/login/fail";
+		model.addAttribute("method","put");
+		model.addAttribute("id",id);
+		resumeService.content(model);
 		return "resume/write";
 	}
 	
 	@ResponseBody
 	@PostMapping("content")
-	public ResponseEntity<?> write(@RequestParam Map<Object, Object> map,HttpSession session,Model model){
+	public ResponseEntity<?> content(@RequestParam Map<Object, Object> map,HttpSession session,Model model){
 		Object loginId=session.getAttribute("loginId");
-		if(loginId==null) {
-			
-		}
+		if(loginId==null)
+			return ResponseEntity.badRequest().build();
 		else {
 			model.addAttribute("loginId",loginId);
 			model.addAttribute("map", map);
 			resumeService.write(model);
+		}
+		return ResponseEntity.ok(model);
+	}
+	
+	@ResponseBody
+	@PutMapping("content/{id}")
+	public ResponseEntity<?> content(@PathVariable String id,@RequestParam Map<Object, Object> map,HttpSession session,Model model){
+		Object loginId=session.getAttribute("loginId");
+		if(loginId==null) 
+			return ResponseEntity.badRequest().build();
+		else {
+			model.addAttribute("id",id);
+			model.addAttribute("map", map);
+			resumeService.edit(model);
 		}
 		return ResponseEntity.ok(model);
 	}

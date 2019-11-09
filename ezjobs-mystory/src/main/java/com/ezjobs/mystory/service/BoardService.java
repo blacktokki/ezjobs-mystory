@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Board;
 import com.ezjobs.mystory.repository.BoardRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -60,12 +59,11 @@ public class BoardService {
 	}
 	
 	public void edit(Model model){
-		content(model);
 		Map<String,Object> modelMap=model.asMap();
-		Map<String,Object> mapOld =mapper.convertValue(modelMap.get("board"),new TypeReference<Map<String,Object>>(){});
-		Map<String,Object> map =mapper.convertValue(modelMap.get("map"),new TypeReference<Map<String,Object>>(){});
-		mapOld.putAll(map);
-		Board board=mapper.convertValue(mapOld, Board.class);//board로 변환
-		boardRepository.save(board);
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		board.setId(id);
+		boardRepository.update(board);
 	}
 }

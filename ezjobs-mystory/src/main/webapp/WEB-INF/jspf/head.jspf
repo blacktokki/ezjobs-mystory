@@ -5,15 +5,22 @@
 <head>
 <title></title>
 <meta charset="utf-8" />
-<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet"
-	id="bootstrap-css">
-<link href="/webjars/font-awesome/css/font-awesome.min.css">
-<link href="/webjars/jqcloud2/dist/jqcloud.min.css">
-<link href="/webjars/chart.js/dist/Chart.min.css">
+<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="/webjars/font-awesome/css/font-awesome.min.css"  rel="stylesheet">
+<link href="/webjars/jqcloud2/dist/jqcloud.min.css" rel="stylesheet">
+<link href="/webjars/chart.js/dist/Chart.min.css" rel="stylesheet">
+<link href="/css/template.css" rel="stylesheet">
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 <script src="/webjars/jqcloud2/dist/jqcloud.min.js"></script>
 <script src="/webjars/chart.js/dist/Chart.min.js"></script>
+<script src="/webjars/jquery.serializeJSON/jquery.serializejson.min.js"></script>
+<script src="/js/template.js"></script>
+<script>
+	var errorMessage="${errorMessage}";
+	if (errorMessage!="")
+		alert(errorMessage);
+</script>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 </head>
 <body>
@@ -24,7 +31,11 @@
 			<div class="collapse navbar-collapse" id="navbarsExample03">
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item"><a class="nav-link" href="/search/list">검색하기</a></li>
-					<li class="nav-item"><a class="nav-link"href="/resume">자기소개서</a></li>
+					<li class="nav-item"><a class="nav-link" href="/resume">자기소개서</a></li>
+					<li class="nav-item"><a class="nav-link" href="/board/community">커뮤니티</a></li>
+					<li class="nav-item"><a class="nav-link" href="/help/faq">고객센터</a></li>
+					<li class="nav-item"><a class="nav-link" href="/user/login">로그인</a></li>
+					<li class="nav-item"><a class="nav-link" href="/temp/login">임시로그인:${sessionScope.loginId}</a></li>
 				</ul>
 				<div class="searchBox w-50"></div>
 			</div>

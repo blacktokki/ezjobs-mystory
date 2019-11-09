@@ -59,5 +59,7 @@
 	<p>
 		<a class="btn btn-secondary btn-sm" href="/board/community"
 			role="button">목록</a>
+		<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
+			role="button">수정</a>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

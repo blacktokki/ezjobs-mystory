@@ -30,9 +30,23 @@ public class UserController {
 	@PostMapping("/login")
 	public String userLogin(HttpSession session ,@RequestParam Map<Object, Object> map, Model model){
 		model.addAttribute("map",map);
-		userService.user(model);
-		return "user/login";
+		try {
+			userService.user(model);
+			String loginId=(String)map.get("loginId");
+			session.setAttribute("loginId", loginId);
+
+		} catch (Exception e) {
+			model.addAttribute("login_message", "로그인이 필요합니다.");
+			return "user/fail";
+		}
+		return "/index";
 	}
+	
+	@GetMapping("/fail")
+	public String failView(){
+		return "user/fail";
+	}
+
 	
 /*
 	@GetMapping("/userJoin")
@@ -48,12 +62,26 @@ public class UserController {
 		return "user/join";
 	}
 	
+
+	
 	@PostMapping("/join")//회원가입 요청 
 	public String Write(@RequestParam Map<Object,Object> map,Model model){
 		model.addAttribute("map",map);
 		userService.write(model);
 		return "redirect:login";
 	}
-	
+	@GetMapping("/info")//수정 요청
+	public String infoView(HttpSession session){
+		if(session.getAttribute("loginId")!=null)
+			return "user/info";
+		else
+			return "user/fail";
+	}
+	@PostMapping("/info")//정보수정 요청 
+	public String Modify(@RequestParam Map<Object,Object> map,Model model,HttpSession session){
+		model.addAttribute("map",map);
+		userService.modify(model);
+		return "redirect:login";
+	}
 	
 }

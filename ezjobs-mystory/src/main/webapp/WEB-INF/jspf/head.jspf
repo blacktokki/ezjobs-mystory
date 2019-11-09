@@ -27,6 +27,7 @@
 					<li class="nav-item"><a class="nav-link"href="/resume">자기소개서</a></li>
 				</ul>
 				<div class="searchBox w-50"></div>
+				<%@ include file="/WEB-INF/jspf/user/head.jspf"%>
 			</div>
 		</nav>
 	</header>

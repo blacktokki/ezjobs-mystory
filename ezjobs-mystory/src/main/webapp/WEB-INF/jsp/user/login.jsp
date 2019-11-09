@@ -42,9 +42,8 @@
  
   <div>
 
-  <button type="button" onclick="location.href='userJoin'">회원가입</button> </div>
+  <button type="button" onclick="location.href='join'">회원가입</button> </div>
 </form>
-
 
 </body>
 </html>

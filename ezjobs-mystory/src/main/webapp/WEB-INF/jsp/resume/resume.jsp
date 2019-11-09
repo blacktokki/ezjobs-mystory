@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-
 <style>
 [data-toggle="collapse"]:after {
 	display: inline-block;
@@ -106,6 +105,20 @@
 		var currentVal = $(e.target).val();
 		var id=$(e.target).attr("id").replace("write-question","");
 		$("#heading-write"+id+" a").html(currentVal);
-});
+	});
+	$("#accordion2").delegate("form","submit",function(e){
+		var form=$(e.target).serializeJSON();
+		//console.log(form);
+		$.post("/resume/content",form,function(data){
+			//console.log(data);
+			$(e.target).find(".resume-id").val(data.id);
+			$.get("/resume/content",function(data){
+				console.log(data);
+				$("#accordion1").html(data);
+			});
+		});
+		return false;
+		//$.post
+	});
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -8,7 +8,7 @@
 	</div>
 	<div id="collapse-i" class="collapse" role="tabpanel"
 		aria-labelledby="heading-i" data-parent="#accordion2">
-		<form method="POST" action="/resume/content">
+		<form>
 			<div class="card-body">
 				
 				<div class="input-group mb-3">
@@ -17,17 +17,15 @@
 					</div>
 					<input type="text" id=" write-question-i" class="form-control write-question" name="question" value="${resume.question}">
 				</div>
-
+					
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text">내용</span>
 					</div>
-					<textarea class="form-control" name="text" rows="15">
-						${resume.answer}
-					</textarea>
+					<textarea class="form-control" name="text" rows="15">${resume.answer}</textarea>
 				</div>
-				<button type="submit" class="btn btn-primary resume-submit">글올리기</button>
-				<input type="hidden" name="id" value="${resume.id}" />
+				<button type="submit"  class="btn btn-primary">글올리기</button>
+				<input type="hidden" class="resume-id" name="id" value="${resume.id}"/>
 			</div>
 		</form>
 	</div>

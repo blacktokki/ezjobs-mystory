@@ -9,12 +9,15 @@
 <link href="/webjars/font-awesome/css/font-awesome.min.css"  rel="stylesheet">
 <link href="/webjars/jqcloud2/dist/jqcloud.min.css" rel="stylesheet">
 <link href="/webjars/chart.js/dist/Chart.min.css" rel="stylesheet">
+<link href="/webjars/jquery-tagsinput/jquery.tagsinput.css" rel="stylesheet">
 <link href="/css/template.css" rel="stylesheet">
+
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 <script src="/webjars/jqcloud2/dist/jqcloud.min.js"></script>
 <script src="/webjars/chart.js/dist/Chart.min.js"></script>
 <script src="/webjars/jquery.serializeJSON/jquery.serializejson.min.js"></script>
+<script src="/webjars/jquery-tagsinput/jquery.tagsinput.js"></script>
 <script src="/js/template.js"></script>
 <script>
 	var errorMessage="${errorMessage}";

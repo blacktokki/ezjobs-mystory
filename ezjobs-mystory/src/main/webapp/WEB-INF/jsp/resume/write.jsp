@@ -16,6 +16,19 @@
 					</div>
 					<input type="text" id=" write-question-i" class="form-control write-question" name="question" value="${resume.question}">
 				</div>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">회사명</span>
+					</div>
+					<input type="text" class="form-control" name="company" value="${resume.company}">
+				</div>
+				
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon1">태그</span>
+					</div>
+					<input name="tags" class="tags" value="dummy" />
+				</div>
 					
 				<div class="input-group">
 					<div class="input-group-prepend">

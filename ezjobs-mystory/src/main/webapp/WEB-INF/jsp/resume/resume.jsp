@@ -23,14 +23,18 @@
 <nav aria-label="breadcrumb">
 	<div class="nav nav-tabs breadcrumb pb-0" id="nav-tab" role="tablist">
 		<a class="nav-item nav-link breadcrumb-item active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-			aria-controls="nav-home" aria-selected="true">자소서관리</a>
+			aria-controls="nav-home" aria-selected="true">작성 목록</a><!-- 작성중,작성중:내용없음 -->
 		<a class="nav-item nav-link breadcrumb-item" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
-			aria-controls="nav-profile" aria-selected="false">자소서작성</a> 
+			aria-controls="nav-profile" aria-selected="false">작성중</a> 
 		<a class="nav-item nav-link breadcrumb-item" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-			aria-controls="nav-contact" aria-selected="false">자소서검토</a>
+			aria-controls="nav-contact" aria-selected="false">작성 완료</a><!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 -->
 		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
 			새 자기소개서
 		</a>
+		<!-- 
+		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
+			작성 기록
+		</a>-->
 	</div>
 </nav>
 <div class="container-fluid row">
@@ -89,7 +93,10 @@
 			$("#nav-profile-tab").tab("show");
 			$result.appendTo("#accordion2").find(".collapse").collapse("show");
 			$("#tags-write"+resume_idx).tagsInput();
+<<<<<<< HEAD
+=======
 
+>>>>>>> branch 'develop-prepare' of https://github.com/blacktokki/ezjobs-mystory.git
 			resume_idx+=1;
 			resume_new+=1;
 		});

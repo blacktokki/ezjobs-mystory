@@ -8,6 +8,10 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -49,16 +53,10 @@ public class ResumeService {
 		Integer page=0;
 		Integer size=30;
 		String userId=modelMap.get("loginId").toString();
-		String group="userId";
-		String groupValue=userId;
-		List<Object[]> resumes = entityManager
-		        .createQuery("SELECT id,question,answer FROM Resume as r "
-		        		+ "WHERE userId=?1 AND "+group+"= ?2",Object[].class)
-		        .setParameter(1, userId)
-		        .setParameter(2, groupValue)
-		        .setMaxResults(size)
-		        .setFirstResult(page * size)
-		        .getResultList();
+		Resume resume=new Resume();
+		resume.setUserId(userId);
+		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
 		model.addAttribute("resumes",resumes);
 	}
 	

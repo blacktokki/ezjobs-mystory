@@ -33,53 +33,43 @@
 		</a>
 	</div>
 </nav>
-<div class="tab-content" id="nav-tabContent">
-	<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-		<div class="container-fluid row">
-			<div class="col-3 pl-2 pr-0">
-				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
-			</div>
-			<div class="col-6 px-3">
+<div class="container-fluid row">
+	<div class="col-3 pl-2 pr-0">
+		<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
+	</div>
+	<div class="col-6 px-3">
+		<div class="tab-content" id="nav-tabContent">
+			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 				<div id="accordion1" role="tablist">
 					<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
 				</div>
 			</div>
-			<div class="col-4"></div>
-		</div>
-	</div>
-	<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-		<div class="container-fluid row">
-			<div class="col-3 pl-2 pr-0">
-				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
-			</div>
-			<div class="col-6 px-3">
+			<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
 				<div id="accordion2" role="tablist">
 				</div>
 			</div>
-			<div class="col-4"></div>
-		</div>
-	</div>
-	<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-		<div class="container-fluid row">
-			<div class="col-3 pl-2 pr-0">
-				<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
-			</div>
-			<div id=resume-content class="col-6 px-3">
+			<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 				<div id="accordion3" role="tablist">
-				새 자기소개서
+					새 자기소개서
 				</div>
 			</div>
-			<div class="col-4"></div>
-		</div>
+		</div>	
 	</div>
+	<div class="col-4"></div>
 </div>
 <script>
-	/*
-	$("#resume-group").delegate(".collapse", "show.bs.collapse", function() {
-		$(this).load("/resume/list");
-	})*/
 	var resume_idx=1;
 	var resume_new=1;
+	$("body").delegate(".tagsinput", "propertychange change keyup paste input", function(e) {
+		var id=$(event.target).attr("id").replace("_tag","");
+		var tags=[];
+		$("#"+id+"_tagsinput").find(".tag>span").each(function(i,e){
+			tags.push($.trim($(e).text()));
+		});
+		//console.log($("#"+id).val());
+		$("#"+id).val(tags.join(","));
+		return true;
+	});
 	$("body").delegate("#resume-create", "click", function() {
 		 $(document.createDocumentFragment()).load("/resume/write",function(response){
 			var $result=$(response);
@@ -95,8 +85,11 @@
 				   .find(".write-question")
 				   .attr("id","write-question"+resume_idx)
 				   .val("새 자기소개서 "+resume_new);
+			$result.find(".tags").attr("id","tags-write"+resume_idx);
 			$("#nav-profile-tab").tab("show");
 			$result.appendTo("#accordion2").find(".collapse").collapse("show");
+			$("#tags-write"+resume_idx).tagsInput();
+
 			resume_idx+=1;
 			resume_new+=1;
 		});
@@ -119,8 +112,11 @@
 					   .attr("aria-labelledby","heading-write"+resume_idx)
 					   .find(".write-question")
 					   .attr("id","write-question"+resume_idx)
+				$result.find(".tags").attr("id","tags-write"+resume_idx);
 				$("#nav-profile-tab").tab("show");
 				$result.appendTo("#accordion2").find(".collapse").collapse("show");
+				$("#tags-write"+resume_idx).tagsInput();
+
 				resume_idx+=1;
 			});
 		}
@@ -141,7 +137,7 @@
 			$(e.target).find(".resume-id").val(data.map.id);
 			$(e.target).find(".resume-method").val("put");
 			$.get("/resume/content",function(data2){
-				//console.log(data2);
+				console.log(data2);
 				$("#accordion1").html(data2);
 			});
 		});

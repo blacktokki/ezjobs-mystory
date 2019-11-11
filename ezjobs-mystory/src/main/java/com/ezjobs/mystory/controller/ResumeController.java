@@ -82,11 +82,9 @@ public class ResumeController {
 		Object loginId=session.getAttribute("loginId");
 		if(loginId==null)
 			return ResponseEntity.badRequest().build();
-		else {
-			model.addAttribute("loginId",loginId);
-			model.addAttribute("map", map);
-			resumeService.write(model);
-		}
+		model.addAttribute("loginId",loginId);
+		model.addAttribute("map", map);
+		resumeService.write(model);
 		return ResponseEntity.ok(model);
 	}
 	
@@ -96,13 +94,11 @@ public class ResumeController {
 		Object loginId=session.getAttribute("loginId");
 		if(loginId==null) 
 			return ResponseEntity.badRequest().build();
-		else {
-			model.addAttribute("id",id);
-			model.addAttribute("map", map);
-			resumeService.edit(model);
-		}
+		model.addAttribute("id",id);
+		model.addAttribute("map", map);
+		System.out.println(map.get("tags"));
+		resumeService.edit(model);
 		return ResponseEntity.ok(model);
 	}
-
 
 }

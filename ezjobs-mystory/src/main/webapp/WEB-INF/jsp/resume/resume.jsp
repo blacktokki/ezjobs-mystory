@@ -93,10 +93,6 @@
 			$("#nav-profile-tab").tab("show");
 			$result.appendTo("#accordion2").find(".collapse").collapse("show");
 			$("#tags-write"+resume_idx).tagsInput();
-<<<<<<< HEAD
-=======
-
->>>>>>> branch 'develop-prepare' of https://github.com/blacktokki/ezjobs-mystory.git
 			resume_idx+=1;
 			resume_new+=1;
 		});

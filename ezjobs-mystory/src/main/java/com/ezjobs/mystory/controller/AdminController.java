@@ -31,4 +31,11 @@ public class AdminController {
 		return "admin/user";
 	}
 	
+	@GetMapping("/personal/{id}")//글내용 보기 /board/content
+	public String content(@PathVariable String id,Model model){
+		model.addAttribute("id",id);
+		adminService.personal(model);
+		return "admin/personal";
+	}
+	
 }

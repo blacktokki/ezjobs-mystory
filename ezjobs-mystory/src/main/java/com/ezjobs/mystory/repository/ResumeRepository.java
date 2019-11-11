@@ -24,8 +24,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 
 	Page<Resume> findByTypeContainingOrDeptContainingOrCompanyContainingOrQuestionContainingOrAnswerContainingOrUserIdContaining(
 			Pageable pageable, String type, String dept, String company, String question, String answer, String userId);
-
 	Page<Resume> findByQuestionContaining(Pageable pageable, String question);
-
 	Page<Resume> findByAnswerContaining(Pageable pageable, String answer);
 }

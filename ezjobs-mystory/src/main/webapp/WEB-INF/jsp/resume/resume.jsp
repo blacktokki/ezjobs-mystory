@@ -89,6 +89,7 @@
 			$("#nav-profile-tab").tab("show");
 			$result.appendTo("#accordion2").find(".collapse").collapse("show");
 			$("#tags-write"+resume_idx).tagsInput();
+
 			resume_idx+=1;
 			resume_new+=1;
 		});
@@ -115,6 +116,7 @@
 				$("#nav-profile-tab").tab("show");
 				$result.appendTo("#accordion2").find(".collapse").collapse("show");
 				$("#tags-write"+resume_idx).tagsInput();
+
 				resume_idx+=1;
 			});
 		}

@@ -30,6 +30,7 @@ public class AdminService {
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 20,Sort.by(Sort.Direction.DESC,"id"));
 		Page<User> users=userRepository.findAll(pr);
+		System.out.println("s:"+users.getSize());
 		model.addAttribute("users",users);
 		model.addAttribute("pageNavNumber",users.getNumber()/5);//페이징바의 번호		
 	}

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +18,7 @@
  <table class="board_list">
   <colgroup>
   </colgroup>
-  <caption>로그인</caption>
+  
   <thead>
   </thead>
   <tbody>
@@ -30,20 +30,21 @@
     <th scope="row">비밀번호</th>
     <td><input type="password" id="user_pwd" name="loginPw" class="wdp_90"></td>
    </tr>
+   <tr>
+   <td> 
+   <button type="submit" id="login_btn" class="btn btn-primary resume-submit">로그인</button>
+</td>
+</tr>
+<tr>
+<td> 
+<button type="button" onclick="location.href='join'" class="btn btn-primary resume-submit">회원가입</button>
+</td>
+</tr>
   </tbody>
  
  </table>
-
- <div class="btn">
-  <button type="submit" id="login_btn" class="btn btn-primary resume-submit">
-  로그인
-     </button>
- </div>
- 
-  <div>
-
-  <button type="button" onclick="location.href='join'">회원가입</button> </div>
+  
 </form>
-
 </body>
+<%@ include file="/WEB-INF/jspf/footer.jspf"%>
 </html>

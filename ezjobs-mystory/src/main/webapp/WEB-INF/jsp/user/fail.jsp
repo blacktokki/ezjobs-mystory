@@ -6,10 +6,10 @@
 <html>
 <head>
 <script>
-alert(${login_message});
-location.href="login"
+alert("로그인 실패");
+location.href="login";
 </script>
+<%@ include file="/WEB-INF/jspf/footer.jspf"%>
 </body>
 </html>
-
 

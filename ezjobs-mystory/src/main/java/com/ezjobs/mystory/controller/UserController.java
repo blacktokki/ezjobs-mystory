@@ -70,18 +70,42 @@ public class UserController {
 		userService.write(model);
 		return "redirect:login";
 	}
-	@GetMapping("/info")//수정 요청
-	public String infoView(HttpSession session){
-		if(session.getAttribute("loginId")!=null)
-			return "user/info";
-		else
+	
+/*	
+	@GetMapping("/info")
+	public String writeView( HttpSession session, Model model) {
+		Object loginId = session.getAttribute("loginId");
+		if (loginId == null)
 			return "user/fail";
+		userService.content(model);
+		return "user/info";
 	}
+	*/
+	
+	@GetMapping("/info")
+	public String infoView(HttpSession session){
+		if(session.getAttribute("loginId")==null)
+			return "user/fail";
+		
+		return "user/info";
+	}
+	
+	/*
 	@PostMapping("/info")//정보수정 요청 
 	public String Modify(@RequestParam Map<Object,Object> map,Model model,HttpSession session){
 		model.addAttribute("map",map);
 		userService.modify(model);
 		return "redirect:login";
 	}
-	
+	*/
+	@PutMapping("/info") // 글수정요청 /board/write/1
+	public String Write( @RequestParam Map<Object, Object> map, HttpSession session, Model model) {
+		Object loginId = session.getAttribute("loginId");
+		if (loginId == null)
+			return "redirect:/temp/login/fail";
+		model.addAttribute("loginId", loginId);
+		model.addAttribute("map", map);
+		userService.edit(model);
+		return "redirect:/index";
+	}
 }

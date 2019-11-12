@@ -89,4 +89,24 @@ public class UserService {
 		userRepository.save(user);		
 	}
 
+
+	public void edit(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String loginId=modelMap.get("loginId").toString();
+		User user=mapper.convertValue(map, User.class);//board로 변환
+		user.setLoginId(loginId);
+		userRepository.update(user);
+	}
+
+
+	public void content(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		User user=userRepository.findById(id).get();//id로 board 찾기
+		model.addAttribute("user",user);
+	}
+
 }

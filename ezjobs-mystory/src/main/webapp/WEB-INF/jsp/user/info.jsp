@@ -16,6 +16,7 @@
 </head>
 <body>
  <form method="post" action="/user/info">
+ 	<input type="hidden" name="_method" value="PUT">
  <table class="board_list">
 
   <caption>회원 정보 수정</caption>
@@ -89,6 +90,6 @@
 
  </table>
 </form>
-
+<%@ include file="/WEB-INF/jspf/footer.jspf"%>
 </body>
 </html>

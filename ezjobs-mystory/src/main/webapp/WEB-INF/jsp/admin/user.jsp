@@ -10,29 +10,34 @@
 	<hr class="my-4">
 </div>
 <p>
-
 <div class="container">
 	<h2>우리의 회원들</h2>
 	<div class="pagination justify-content-center">
-		<table class="table">
+		<table class="table table-sm table-hover">
+			<colgroup>
+				<col width="120">
+				<col width="*">
+				<col width="200">
+				<col width="100">
+			</colgroup>
 			<!-- 테이블 제목 -->
-			<thead>
-				<tr bgcolor="#EDEDED">
-					<th width="120">회원번호</th>
-					<th>아이디</th>
-					<th width="270">가입일자</th>
-					<th width="120">방문수</th>
+			<thead class="thead-light">
+				<tr>
+					<th scope="col">회원번호</th>
+					<th scope="col">아이디</th>
+					<th scope="col">가입일자</th>
+					<th scope="col">방문수</th>
 				</tr>
 			</thead>
-			
+
 			<!-- 티에블 내용 채우기 -->
 			<tbody>
 				<c:forEach var="item" items="${users.content}">
 					<tr>
-						<td align="center">${item.id}</td>
+						<th scope="row">${item.id}</th>
 						<td><a href="/admin/personal/${item.id}">${item.loginId}&nbsp;</a></td>
 						<td>${item.registDate}&nbsp;</td>
-						<td align="center">${item.visitCnt}</td>
+						<td>${item.visitCnt}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

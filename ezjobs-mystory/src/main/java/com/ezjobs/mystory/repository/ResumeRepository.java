@@ -7,9 +7,23 @@ import org.springframework.stereotype.Repository;
 
 import com.ezjobs.mystory.entity.Resume;
 
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
 @Repository
-public interface ResumeRepository extends JpaRepository<Resume, Integer>{
-	Page<Resume> findByTypeContainingOrDeptContainingOrCompanyContainingOrQuestionContainingOrAnswerContainingOrUserIdContaining(Pageable pageable, String type, String dept, String company, String question, String answer, String userId);
+public interface ResumeRepository extends JpaRepository<Resume, Integer> {
+
+	@Transactional
+	@Modifying // update , delete Query
+	@Query(value = "update Resume r set "
+			+ "r.question = :#{#resume.question}, r.answer = :#{#resume.answer}, r.company = :#{#resume.company} "
+			+ " WHERE r.id = :#{#resume.id}")
+	void update(@Param("resume") Resume resume);
+
+	Page<Resume> findByTypeContainingOrDeptContainingOrCompanyContainingOrQuestionContainingOrAnswerContainingOrUserIdContaining(
+			Pageable pageable, String type, String dept, String company, String question, String answer, String userId);
 	Page<Resume> findByQuestionContaining(Pageable pageable, String question);
 	Page<Resume> findByAnswerContaining(Pageable pageable, String answer);
 }

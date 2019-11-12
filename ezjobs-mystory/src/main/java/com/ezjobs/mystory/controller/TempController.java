@@ -24,7 +24,8 @@ public class TempController{
 			session.setAttribute("loginId","DUMMY_LOGIN_ID");
 		else
 			session.removeAttribute("loginId");
-		return "/index";
+		System.out.println(session.getAttribute("loginId"));
+		return "redirect:/index";
 	}
 	
 	@GetMapping("/login/fail")//로그인 필요 메세지      /user/fail로 옮겨야 함

@@ -21,27 +21,28 @@
 }
 </style>
 <nav aria-label="breadcrumb">
-	<div class="nav nav-tabs breadcrumb pb-0" id="nav-tab" role="tablist">
-		<a class="nav-item nav-link breadcrumb-item active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+	<div class=" breadcrumb pb-0">
+	<a class="nav-item nav-link breadcrumb-item col-3" id="resume-create" href="#">
+		새 자기소개서
+	</a>
+	<div class="nav nav-tabs justify-content-center col-6" id="nav-tab" role="tablist">
+		<a class="nav-item nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
 			aria-controls="nav-home" aria-selected="true">작성 목록</a><!-- 작성중,작성중:내용없음 -->
-		<a class="nav-item nav-link breadcrumb-item" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
+		<a class="nav-item nav-link breadcrumb-item text-center" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
 			aria-controls="nav-profile" aria-selected="false">작성중</a> 
-		<a class="nav-item nav-link breadcrumb-item" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-			aria-controls="nav-contact" aria-selected="false">작성 완료</a><!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 -->
-		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
-			새 자기소개서
-		</a>
-		<!-- 
-		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
-			작성 기록
-		</a>-->
+		<a class="nav-item nav-link breadcrumb-item text-center" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+			aria-controls="nav-contact" aria-selected="false">작성 완료</a><!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 --> 
+	</div>
+	<a class="nav-item nav-link breadcrumb-item col-3 text-right" id="resume-achive" href="#">
+		작성 기록
+	</a>
 	</div>
 </nav>
 <div class="container-fluid row">
 	<div class="col-3 pl-2 pr-0">
-		<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
+		<%@ include file="/WEB-INF/jsp/resume/aside.jsp"%>
 	</div>
-	<div class="col-6 px-3">
+	<div class="col-7 px-3">
 		<div class="tab-content" id="nav-tabContent">
 			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 				<div id="accordion1" role="tablist">
@@ -59,7 +60,7 @@
 			</div>
 		</div>	
 	</div>
-	<div class="col-4"></div>
+	<div class="col-2"></div>
 </div>
 <script>
 	var resume_idx=1;

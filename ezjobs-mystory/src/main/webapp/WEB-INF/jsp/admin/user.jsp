@@ -12,7 +12,7 @@
 <p>
 
 <div class="container">
-	<h2>회원 정보</h2>
+	<h2>우리의 회원들</h2>
 	<div class="pagination justify-content-center">
 		<table class="table">
 			<!-- 테이블 제목 -->
@@ -30,7 +30,7 @@
 				<c:forEach var="item" items="${users.content}">
 					<tr>
 						<td align="center">${item.id}</td>
-						<td>${item.loginId}&nbsp;</td>
+						<td><a href="/admin/personal/${item.id}">${item.loginId}&nbsp;</a></td>
 						<td>${item.registDate}&nbsp;</td>
 						<td align="center">${item.visitCnt}</td>
 					</tr>

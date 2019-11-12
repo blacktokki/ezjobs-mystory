@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -18,7 +20,10 @@ import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.ScriptField;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+//import org.springframework.data.elasticsearch.core.query.SourceFilter;
+//import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Input2CharSequence;
@@ -32,54 +37,63 @@ import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.LabelSequence;
+import kr.bydelta.koala.okt.SentenceSplitter;
 
 import com.ezjobs.mystory.dto.ElasticResume;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
+
 @Service
 public class AutoLabelService {
 	
 	@Inject
 	private ElasticsearchOperations elasticsearchTemplate;
 	
+	@Inject
+	ObjectMapper mapper;
+	
 	public void temp() {
-		String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};
-		Script script=new Script("doc['question'].values");
-		PageRequest pr=PageRequest.of(0, 36000);
+		//String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};
+		Script script=new Script("List a=new ArrayList();"
+							   + "for(t in doc['question'].values){"
+							   + "	if(t.length()>1&& a.size()<5)"
+							   + "		a.add(t);"
+							   + "}"
+							   + "return a;"
+							   );
+		Script script2=new Script("doc['question.keyword']");
+		//SourceFilter sourceFilter = new FetchSourceFilter(new String[]{"question"}, null);
+		PageRequest pr=PageRequest.of(0, 32768);
 		SearchQuery searchQuery=new NativeSearchQueryBuilder()
 				.withQuery(matchAllQuery())
 				.withIndices("intro")
       			//.withTypes("doc")
+				//.withSourceFilter(sourceFilter)
 				.withScriptField(new ScriptField("terms",script))
+				.withScriptField(new ScriptField("question",script2))
 				.withPageable(pr)
 				.build();	
-		Page<ElasticResume> page=elasticsearchTemplate.queryForPage(searchQuery,ElasticResume.class);//resumeElasticsearchRepository;
+		Page<ElasticResume> page=elasticsearchTemplate.queryForPage(searchQuery,ElasticResume.class);
 		
 		ArrayList<String> al=new ArrayList<>();
 		for(ElasticResume resume:page.getContent()) {
 			String[] strs=resume.getTerms();
+			String str;
 			if(strs!=null) {
-				strs=strs.clone();
-				for(int j=0;j<strs.length;j++) {
-					if (strs[j].length()<2)
-						strs[j]=new String("");
-				}
-				String str=Arrays.toString(strs)
-						.replaceAll("[\\,\\[\\]]|회사|이내|본인|기술|작성|이유|구체", "");
-				al.add(str);
-				System.out.println(str);
+				str=Arrays.toString(strs).replaceAll("[\\,\\[\\]]", "");
 			}
 			else {
-				System.out.println("---------------없음");
+				str="미분류";
 			}
-		}
-		for(String str:array) {
+			al.add(str);
+			System.out.println(resume.getQuestion());
 			System.out.println(str);
 		}
 		temp(al.toArray(new String[al.size()]));
 	}
 	private void temp(String[] array) {
-		int numTopic=60;//maximum300
+		int numTopic=300;//maximum300
 		Pattern pattern = Pattern.compile("[\\p{L}\\p{N}_]+");
 		ArrayList<Pipe> pipelist=new ArrayList<Pipe>();
 		pipelist.add(new Input2CharSequence("UTF-8"));
@@ -89,7 +103,7 @@ public class AutoLabelService {
 		instances.addThruPipe(new StringArrayIterator(array));
 		ParallelTopicModel model=new ParallelTopicModel(numTopic,0.1,1.0/numTopic);
 		model.addInstances(instances);
-		model.setNumThreads(16);
+		model.setNumThreads(4);
 		model.setNumIterations(3000);
 
 		try {
@@ -102,14 +116,14 @@ public class AutoLabelService {
 				out=new Formatter(new StringBuilder(), Locale.US);
 				FeatureSequence tokens=(FeatureSequence) model.data.get(i).instance.getData();
 				LabelSequence topics = model.getData().get(i).topicSequence;
+				System.out.println(i+"번째 문서");
 		        for (int position = 0; position < tokens.getLength(); position++) {
 		            out.format("%s-%d ", dataAlphabet.lookupObject(tokens.getIndexAtPosition(position)), topics.getIndexAtPosition(position));
 		        }
 		        System.out.println(out);
 		        double[] topicDistribution = model.getTopicProbabilities(i);
 		        for (int topic = 0; topic < numTopic; topic++) {
-		            if(topicDistribution[topic]>1.0/numTopic){
-		            	Iterator<IDSorter> iterator = topicSortedWords.get(topic).iterator();         
+		            if(topicDistribution[topic]>1.0/numTopic){        
 		            	out = new Formatter(new StringBuilder(), Locale.US);
 		            	out.format("%d\t%.3f\t", topic, topicDistribution[topic]);
 		            	System.out.println(out);
@@ -120,10 +134,10 @@ public class AutoLabelService {
 			
 			for(int i=0;i<topicSortedWords.size();i++) {
 				Iterator<IDSorter> iterator=topicSortedWords.get(i).iterator();
-				System.out.println("lists "+i);
+				System.out.println(i+"번째 카테고리");
 				out = new Formatter(new StringBuilder(), Locale.US);
 				int rank = 0;
-				while (iterator.hasNext() && rank < 3) {
+				while (iterator.hasNext() && rank < 5) {
 	                IDSorter idCountPair = iterator.next();
 	                out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
 	                rank++;
@@ -134,5 +148,30 @@ public class AutoLabelService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void spliterResumes(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		Object resumesObj=modelMap.get("resumes");
+		List<?> resumes=mapper.convertValue(resumesObj, List.class);
+		List<List<String>> resumesSplit=new ArrayList<>();
+		for(Object resume:resumes) {
+			Object[] resumeArr=mapper.convertValue(resume,Object[].class);
+			String str=(String)resumeArr[2];
+			if(str!=null)
+				resumesSplit.add(spliter(str));
+			else
+				System.out.println("NULL!");
+			System.out.println("-------------------------");
+		}
+		model.addAttribute("resumesSplit",resumesSplit);
+	}
+	
+	private List<String> spliter(String str) {
+		SentenceSplitter splitter = new SentenceSplitter();
+		List<String> paragraph = splitter.sentences(str);
+		for(String s:paragraph)
+			System.out.println(s);
+		return paragraph;
 	}
 }

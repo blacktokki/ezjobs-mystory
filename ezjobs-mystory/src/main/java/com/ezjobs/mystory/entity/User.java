@@ -31,7 +31,7 @@ public class User {
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="regist_date", nullable = false)
-    private Date editDate= new Date();
+    private Date registDate= new Date();
     
     @Column(name="visit_cnt", nullable = false)
     private Integer visitCnt;

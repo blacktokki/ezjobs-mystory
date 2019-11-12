@@ -40,7 +40,9 @@ import cc.mallet.types.LabelSequence;
 import kr.bydelta.koala.okt.SentenceSplitter;
 
 import com.ezjobs.mystory.dto.ElasticResume;
+import com.ezjobs.mystory.entity.Resume;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -56,8 +58,8 @@ public class AutoLabelService {
 	public void temp() {
 		//String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};
 		Script script=new Script("List a=new ArrayList();"
-							   + "for(t in doc['question'].values){"
-							   + "	if(t.length()>1&& a.size()<5)"
+							   + "for(t in doc['answer'].values){"
+							   + "	if(t.length()>2)"
 							   + "		a.add(t);"
 							   + "}"
 							   + "return a;"
@@ -87,13 +89,13 @@ public class AutoLabelService {
 				str="미분류";
 			}
 			al.add(str);
-			System.out.println(resume.getQuestion());
-			System.out.println(str);
+			//System.out.println(resume.getQuestion());
+			//System.out.println(str);
 		}
 		temp(al.toArray(new String[al.size()]));
 	}
 	private void temp(String[] array) {
-		int numTopic=300;//maximum300
+		int numTopic=450;//maximum300
 		Pattern pattern = Pattern.compile("[\\p{L}\\p{N}_]+");
 		ArrayList<Pipe> pipelist=new ArrayList<Pipe>();
 		pipelist.add(new Input2CharSequence("UTF-8"));
@@ -101,10 +103,10 @@ public class AutoLabelService {
 		pipelist.add(new TokenSequence2FeatureSequence());
 		InstanceList instances=new InstanceList(new SerialPipes(pipelist));
 		instances.addThruPipe(new StringArrayIterator(array));
-		ParallelTopicModel model=new ParallelTopicModel(numTopic,0.1,1.0/numTopic);
+		ParallelTopicModel model=new ParallelTopicModel(numTopic,1.0,1.0/numTopic);
 		model.addInstances(instances);
 		model.setNumThreads(4);
-		model.setNumIterations(3000);
+		model.setNumIterations(5000);
 
 		try {
 			model.estimate();
@@ -152,12 +154,11 @@ public class AutoLabelService {
 	
 	public void spliterResumes(Model model) {
 		Map<String,Object> modelMap=model.asMap();
-		Object resumesObj=modelMap.get("resumes");
-		List<?> resumes=mapper.convertValue(resumesObj, List.class);
+		Object resumesObj=mapper.convertValue(modelMap.get("resumes"),Map.class).get("content");
+		List<Resume> resumes=mapper.convertValue(resumesObj,new TypeReference<List<Resume>>(){});
 		List<List<String>> resumesSplit=new ArrayList<>();
-		for(Object resume:resumes) {
-			Object[] resumeArr=mapper.convertValue(resume,Object[].class);
-			String str=(String)resumeArr[2];
+		for(Resume resume:resumes) {
+			String str=(String)resume.getAnswer();
 			if(str!=null)
 				resumesSplit.add(spliter(str));
 			else

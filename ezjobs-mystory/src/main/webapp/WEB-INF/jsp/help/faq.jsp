@@ -3,4 +3,63 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!-- body -->
+<!-- 기본적으로 로그인이 되어 있어야지 들어 올 수 있는 페이지입니다. -->
+<div class="jumbotron">
+	<h1 class="display-4">1 대 1 문의</h1>
+	<p class="lead">내가 물었던 질문</p>
+	<hr class="my-4">
+	<ul class="nav">
+		<ul class="nav nav-tabs">
+			<li class="nav-item"><a class="nav-link" href="/help/qna">Q&A</a>
+			</li>
+			<li class="nav-item"><a class="nav-link" href="/help/notice">공지사항</a></li>
+			<li class="nav-item"><a class="nav-link active" href="/help/faq">1:1 문의</a></li>
+
+		</ul>
+</div>
+<div class="container">
+<!-- 우측정렬 하기 -->
+<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
+<p>
+	<table class="table">
+		<thead class="text-center">
+			<tr>
+				<th scope="col" style="width: 10%">No.</th>
+				<th scope="col" style="width: 60%">제목</th>
+				<th scope="col" style="width: 20%">작성날짜</th>
+				<th scope="col" style="width: 10%">대답여부</th>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- 이제 반복문 써서 글 여러개로 불리기 할 것 -->
+			<tr>
+				<th scope="row" class="text-center">1</th>
+				<td>Mark</td>
+				<td class="text-center">Otto</td>
+				<td class="text-center">@mdo</td>
+			</tr>
+		</tbody>
+	</table>
+<!-- 우측정렬 하기 -->
+<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
+</div>
+<p>
+<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		<li class="page-item"><a class="page-link" href="#"
+			aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+		</a></li>
+		<li class="page-item"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">4</a></li>
+		<li class="page-item"><a class="page-link" href="#">5</a></li>
+		<li class="page-item"><a class="page-link" href="#"
+			aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+		</a></li>
+	</ul>
+</nav>
+
+<p>
+
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

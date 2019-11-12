@@ -1,5 +1,6 @@
 package com.ezjobs.mystory.service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,7 +51,19 @@ public class BoardService {
 	public void write(Model model){
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String userId=(String)modelMap.get("userId");
 		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		board.setUserId(userId);
+		board.setEditDate(new Date());
 		boardRepository.save(board);
+	}
+	
+	public void edit(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		board.setId(id);
+		boardRepository.update(board);
 	}
 }

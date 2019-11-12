@@ -2,135 +2,150 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
+<style>
+[data-toggle="collapse"]:after {
+	display: inline-block;
+	font: normal normal normal 14px/1 FontAwesome;
+	font-size: inherit;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\f054";
+	transform: rotate(90deg);
+	transition: all linear 0.25s;
+	float: right;
+}
 
+[data-toggle="collapse"].collapsed:after {
+	transform: rotate(0deg);
+}
+</style>
 <nav aria-label="breadcrumb">
-	<ol class="breadcrumb">
-		<li class="breadcrumb-item"><a href="#">Home</a></li>
-		<li class="breadcrumb-item"><a href="#">Library</a></li>
-		<li class="breadcrumb-item active" aria-current="page">Data</li>
-	</ol>
+	<div class=" breadcrumb pb-0">
+	<a class="nav-item nav-link breadcrumb-item col-3" id="resume-create" href="#">
+		새 자기소개서
+	</a>
+	<div class="nav nav-tabs justify-content-center col-6" id="nav-tab" role="tablist">
+		<a class="nav-item nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+			aria-controls="nav-home" aria-selected="true">작성 목록</a><!-- 작성중,작성중:내용없음 -->
+		<a class="nav-item nav-link breadcrumb-item text-center" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
+			aria-controls="nav-profile" aria-selected="false">작성중</a> 
+		<a class="nav-item nav-link breadcrumb-item text-center" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+			aria-controls="nav-contact" aria-selected="false">작성 완료</a><!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 --> 
+	</div>
+	<a class="nav-item nav-link breadcrumb-item col-3 text-right" id="resume-achive" href="#">
+		작성 기록
+	</a>
+	</div>
 </nav>
 <div class="container-fluid row">
-	<div class="col-2">
-		<input type="email" class="form-control" id="exampleInputEmail1"
-			placeholder="Enter email">
-		<div class="accordion" id="accordionExample">
-			<div class="card">
-				<div class="card-header p-0" id="headingOne">
-					<h2 class="mb-0">
-						<button class="btn btn-link" type="button" data-toggle="collapse"
-							data-target="#collapseOne" aria-expanded="true"
-							aria-controls="collapseOne">Collapsible Group Item #1</button>
-					</h2>
-				</div>
-
-				<div id="collapseOne" class="collapse show"
-					aria-labelledby="headingOne" data-parent="#accordionExample">
-						<ul class="card-body list-group p-0">
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-						</ul>
-				</div>
-			</div>
-			<div class="card">
-				<div class="card-header p-0" id="headingTwo">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							Collapsible Group Item #2</button>
-					</h2>
-				</div>
-				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-					data-parent="#accordionExample">
-						<ul class="card-body list-group p-0">
-							<li class="list-group-item">Cras justo odio</li>
-							<li class="list-group-item">Dapibus ac facilisis in</li>
-							<li class="list-group-item">Morbi leo risus</li>
-							<li class="list-group-item">Porta ac consectetur ac</li>
-							<li class="list-group-item">Vestibulum at eros</li>
-						</ul>
-				</div>
-			</div>
-		</div>
+	<div class="col-3 pl-2 pr-0">
+		<%@ include file="/WEB-INF/jsp/resume/aside.jsp"%>
 	</div>
-	<div class="col-8">
-		<hr>
-		<div class="accordion" id="accordionExample">
-			<div class="card">
-				<div class="card-header" id="headingOne">
-					<h2 class="mb-0">
-						<button class="btn btn-link" type="button" data-toggle="collapse"
-							data-target="#collapseOne" aria-expanded="true"
-							aria-controls="collapseOne">Collapsible Group Item #1</button>
-					</h2>
-				</div>
-
-				<div id="collapseOne" class="collapse show"
-					aria-labelledby="headingOne" data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
+	<div class="col-7 px-3">
+		<div class="tab-content" id="nav-tabContent">
+			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div id="accordion1" role="tablist">
+					<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
 				</div>
 			</div>
-			<div class="card">
-				<div class="card-header" id="headingTwo">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseTwo"
-							aria-expanded="false" aria-controls="collapseTwo">
-							Collapsible Group Item #2</button>
-					</h2>
-				</div>
-				<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-					data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
+			<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+				<div id="accordion2" role="tablist">
 				</div>
 			</div>
-			<div class="card">
-				<div class="card-header" id="headingThree">
-					<h2 class="mb-0">
-						<button class="btn btn-link collapsed" type="button"
-							data-toggle="collapse" data-target="#collapseThree"
-							aria-expanded="false" aria-controls="collapseThree">
-							Collapsible Group Item #3</button>
-					</h2>
-				</div>
-				<div id="collapseThree" class="collapse"
-					aria-labelledby="headingThree" data-parent="#accordionExample">
-					<div class="card-body">Anim pariatur cliche reprehenderit,
-						enim eiusmod high life accusamus terry richardson ad squid. 3 wolf
-						moon officia aute, non cupidatat skateboard dolor brunch. Food
-						truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-						sunt aliqua put a bird on it squid single-origin coffee nulla
-						assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer
-						labore wes anderson cred nesciunt sapiente ea proident. Ad vegan
-						excepteur butcher vice lomo. Leggings occaecat craft beer
-						farm-to-table, raw denim aesthetic synth nesciunt you probably
-						haven't heard of them accusamus labore sustainable VHS.</div>
+			<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+				<div id="accordion3" role="tablist">
+					새 자기소개서
 				</div>
 			</div>
-		</div>
+		</div>	
 	</div>
 	<div class="col-2"></div>
 </div>
+<script>
+	var resume_idx=1;
+	var resume_new=1;
+	$("body").delegate(".tagsinput", "propertychange change keyup paste input", function(e) {
+		var id=$(event.target).attr("id").replace("_tag","");
+		var tags=[];
+		$("#"+id+"_tagsinput").find(".tag>span").each(function(i,e){
+			tags.push($.trim($(e).text()));
+		});
+		//console.log($("#"+id).val());
+		$("#"+id).val(tags.join(","));
+		return true;
+	});
+	$("body").delegate("#resume-create", "click", function() {
+		 $(document.createDocumentFragment()).load("/resume/write",function(response){
+			var $result=$(response);
+			$result.find(".card-header")
+		           .attr("id","heading-write"+resume_idx)
+		           .find("a")
+				   .attr("href","#collapse-write"+resume_idx)
+				   .attr("aria-controls","collapse-write"+resume_idx)
+				   .html("새 자기소개서 "+resume_new);
+			$result.find(".collapse")
+				   .attr("id","collapse-write"+resume_idx)
+				   .attr("aria-labelledby","heading-write"+resume_idx)
+				   .find(".write-question")
+				   .attr("id","write-question"+resume_idx)
+				   .val("새 자기소개서 "+resume_new);
+			$result.find(".tags").attr("id","tags-write"+resume_idx);
+			$("#nav-profile-tab").tab("show");
+			$result.appendTo("#accordion2").find(".collapse").collapse("show");
+			$("#tags-write"+resume_idx).tagsInput();
+			resume_idx+=1;
+			resume_new+=1;
+		});
+		return false;
+	});
+	$("#accordion1").delegate(".resume-link","click",function(e){
+		var href=$(e.target).attr("href");
+		var card=href.replace("/resume/write/","#resume-card");
+
+		if($(card).length==0){
+			$(document.createDocumentFragment()).load(href,function(response){
+				var $result=$(response);
+				$result.find(".card-header")
+			           .attr("id","heading-write"+resume_idx)
+			           .find("a")
+					   .attr("href","#collapse-write"+resume_idx)
+					   .attr("aria-controls","collapse-write"+resume_idx)
+				$result.find(".collapse")
+					   .attr("id","collapse-write"+resume_idx)
+					   .attr("aria-labelledby","heading-write"+resume_idx)
+					   .find(".write-question")
+					   .attr("id","write-question"+resume_idx)
+				$result.find(".tags").attr("id","tags-write"+resume_idx);
+				$("#nav-profile-tab").tab("show");
+				$result.appendTo("#accordion2").find(".collapse").collapse("show");
+				$("#tags-write"+resume_idx).tagsInput();
+
+				resume_idx+=1;
+			});
+		}
+		else{
+			$(card).find(".collapse").collapse("show");
+		}
+		return false;
+	})
+	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e) {
+		var id=$(e.target).attr("id").replace("heading","");
+		$("#heading-write"+id+" a").html(currentVal);
+	});
+	$("#accordion2").delegate("form","submit",function(e){
+		var form=$(e.target).serializeJSON();
+		//console.log(form);
+		$.post("/resume/content/"+form.id,form,function(data){
+			//console.log(data);
+			$(e.target).find(".resume-id").val(data.map.id);
+			$(e.target).find(".resume-method").val("put");
+			$.get("/resume/content",function(data2){
+				console.log(data2);
+				$("#accordion1").html(data2);
+			});
+		});
+		return false;
+	});
+</script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

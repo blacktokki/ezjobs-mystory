@@ -3,67 +3,68 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!-- body -->
+<!-- 기본적으로 로그인이 되어 있어야지 들어 올 수 있는 페이지입니다. -->
 <div class="jumbotron">
-	<h1 class="display-4">Q & A</h1>
-	<p class="lead">자주 묻는 질문들</p>
+	<h1 class="display-4">1 대 1 문의</h1>
+	<p class="lead">내가 물었던 질문</p>
 	<hr class="my-4">
 	<ul class="nav">
 		<ul class="nav nav-tabs">
-			<li class="nav-item"><a class="nav-link active" href="/help/qna">Q&A</a>
+			<li class="nav-item"><a class="nav-link" href="/help/faq">FAQ</a>
 			</li>
 			<li class="nav-item"><a class="nav-link" href="/help/notice">공지사항</a></li>
-			<li class="nav-item"><a class="nav-link" href="/help/faq">1:1 문의</a></li>
+			<li class="nav-item"><a class="nav-link active" href="/help/qna">1:1 문의</a></li>
 
 		</ul>
 </div>
+<div class="container">
+<!-- 우측정렬 하기 -->
+<a class="btn btn-primary btn-sm" href="/help/qnawrite" role="button">문의하기</a>
 <p>
-<!-- 이것도 DB를 써서 반복문을 사용해서 늘릴 지 매우 고민이 되는 부분. -->
-<div class="accordion container" id="accordionExample">
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          자주 묻는 질문1
-        </button>
-      </h2>
-    </div>
+	<table class="table">
+		<thead class="text-center">
+			<tr>
+				<th scope="col" style="width: 10%">No.</th>
+				<th scope="col" style="width: 60%">제목</th>
+				<th scope="col" style="width: 20%">작성날짜</th>
+				<th scope="col" style="width: 10%">대답여부</th>
+			</tr>
+		</thead>
+		<tbody>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          자주 묻는 질문2
-        </button>
-      </h2>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-header" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          자주 묻는 질문3
-        </button>
-      </h2>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
-  </div>
+			<c:forEach var="item" items="${boards.content}">
+				<tr>
+					<td align="center">${item.id}</td>
+					<td><a href="/help/qnacontent/${item.id}">${item.title}&nbsp;</a></td>
+					<td align="center">${item.editDate}</td>
+					<td>${item.goodCnt }</td>
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+<!-- 우측정렬 하기 -->
+<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
 </div>
+<p>
+
+
+<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		<li class="page-item"><a class="page-link"
+			href="?page=${pageNavNumber*5}" aria-label="Previous"> <span
+				aria-hidden="true">&laquo;</span>
+		</a></li>
+		<c:forEach var="item" begin="${pageNavNumber*5+1}"
+			end="${(pageNavNumber+1)*5}">
+			<li class="page-item"><a class="page-link" href="?page=${item}">${item}</a></li>
+		</c:forEach>
+		<li class="page-item"><a class="page-link"
+			href="?page=${(pageNavNumber+1)*5+1}" aria-label="Next"> <span
+				aria-hidden="true">&raquo;</span>
+		</a></li>
+	</ul>
+</nav>
 
 <p>
 
-<%@ include file="/WEB-INF/jspf/footer.jspf"%>
+<%@ include file="/WEB-INF/jspf/footer.jspf"%>	

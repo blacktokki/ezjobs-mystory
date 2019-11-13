@@ -13,7 +13,7 @@
 <link href="/css/template.css" rel="stylesheet">
 
 <script src="/webjars/jquery/jquery.min.js"></script>
-<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="/webjars/jqcloud2/dist/jqcloud.min.js"></script>
 <script src="/webjars/chart.js/dist/Chart.min.js"></script>
 <script src="/webjars/jquery.serializeJSON/jquery.serializejson.min.js"></script>

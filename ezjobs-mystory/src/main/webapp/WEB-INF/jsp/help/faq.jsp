@@ -3,63 +3,41 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!-- body -->
-<!-- 기본적으로 로그인이 되어 있어야지 들어 올 수 있는 페이지입니다. -->
 <div class="jumbotron">
-	<h1 class="display-4">1 대 1 문의</h1>
-	<p class="lead">내가 물었던 질문</p>
+	<h1 class="display-4">F A Q</h1>
+	<p class="lead">자주 묻는 질문들</p>
 	<hr class="my-4">
 	<ul class="nav">
 		<ul class="nav nav-tabs">
-			<li class="nav-item"><a class="nav-link" href="/help/qna">Q&A</a>
+			<li class="nav-item"><a class="nav-link active" href="/help/faq">FAQ</a>
 			</li>
 			<li class="nav-item"><a class="nav-link" href="/help/notice">공지사항</a></li>
-			<li class="nav-item"><a class="nav-link active" href="/help/faq">1:1 문의</a></li>
+			<li class="nav-item"><a class="nav-link" href="/help/qna">1:1
+					문의</a></li>
 
 		</ul>
 </div>
-<div class="container">
-<!-- 우측정렬 하기 -->
-<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
 <p>
-	<table class="table">
-		<thead class="text-center">
-			<tr>
-				<th scope="col" style="width: 10%">No.</th>
-				<th scope="col" style="width: 60%">제목</th>
-				<th scope="col" style="width: 20%">작성날짜</th>
-				<th scope="col" style="width: 10%">대답여부</th>
-			</tr>
-		</thead>
-		<tbody>
-			<!-- 이제 반복문 써서 글 여러개로 불리기 할 것 -->
-			<tr>
-				<th scope="row" class="text-center">1</th>
-				<td>Mark</td>
-				<td class="text-center">Otto</td>
-				<td class="text-center">@mdo</td>
-			</tr>
-		</tbody>
-	</table>
-<!-- 우측정렬 하기 -->
-<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
+	<!-- 이것도 DB를 써서 반복문을 사용할 부분. -->
+<div class="accordion container" id="accordionExample">
+	<c:forEach var="item" items="${boards.content}">
+		<div class="card">
+			<div class="card-header" id="heading${item.id}">
+				<h2 class="mb-0">
+					<button class="btn btn-link" type="button" data-toggle="collapse"
+						data-target="#collapse${item.id}" aria-expanded="true"
+						aria-controls="collapseOne">${item.title}</button>
+				</h2>
+			</div>
+
+			<div id="collapse${item.id}" class="collapse"
+				aria-labelledby="heading${item.id}" data-parent="#accordionExample">
+				<div class="card-body">${item.text}</div>
+			</div>
+		</div>
+	</c:forEach>
 </div>
-<p>
-<nav aria-label="Page navigation example">
-	<ul class="pagination justify-content-center">
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-		</a></li>
-		<li class="page-item"><a class="page-link" href="#">1</a></li>
-		<li class="page-item"><a class="page-link" href="#">2</a></li>
-		<li class="page-item"><a class="page-link" href="#">3</a></li>
-		<li class="page-item"><a class="page-link" href="#">4</a></li>
-		<li class="page-item"><a class="page-link" href="#">5</a></li>
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-		</a></li>
-	</ul>
-</nav>
 
 <p>
 
-<%@ include file="/WEB-INF/jspf/footer.jspf"%>
+	<%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -10,13 +10,13 @@
 			data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="첫번째 이미지">
 				</div>
 				<div class="carousel-item" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="두번째 이미지">
 				</div>
 				<div class="carousel-item" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="세번째 이미지">
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleInterval"
@@ -35,74 +35,36 @@
 
 	<div class="jumbotron">
 		<div class="container">
-
-			<div class="input-group mb-3">
-				<input type="text" class="form-control"
-					placeholder="Recipient's username"
-					aria-label="Recipient's username" aria-describedby="basic-addon2">
-				<div class="input-group-append">
-					<span class="input-group-btn" id="basic-addon2"><button
-							type="button" class="btn btn-primary">검색</button></span>
-				</div>
-			</div>
-			<!-- 검색창 파트입니다. -->
-			<input class="btn btn-success" type="reset" value="Reset">
-			<div class="btn-group" role="group"
-				aria-label="Button group with nested dropdown">
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">기간</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
+			<form method="post" action="index">
+				<div class="form-row">
+					<div class="col-11">
+						<input type="text" class="form-control" placeholder="검색어를 입력해주세요">
+					</div>
+					<div class="col">
+						<button class="btn btn-primary" type="submit">Button</button>
 					</div>
 				</div>
+				<p>
+					<!-- 검색창 부분입니다. -->
+				<div class="form-row">
+					<input class="btn btn-primary" type="reset" value="Reset">
 
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">언론사</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
+					<div class="dropdown show">
+						<a class="btn btn-secondary dropdown-toggle" href="#"
+							role="button" id="dropdownMenuLink" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false"> Dropdown link </a>
+
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<a class="dropdown-item" href="#">Action</a> <a
+								class="dropdown-item" href="#">Another action</a> <a
+								class="dropdown-item" href="#">Something else here</a>
+						</div>
 					</div>
+
 				</div>
+				<!-- 분류창 부분입니다. -->
 
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">통합분류</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">사건사고분류</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-
-
-
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">상세검색</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-			</div>
-			<!-- 분류창 부분입니다. -->
-
+			</form>
 		</div>
 	</div>
 	<!-- 중간 위 -->
@@ -156,19 +118,19 @@
 	<!-- 중간 하 -->
 	<div class="jumbotron">
 		<div class="container">
-<table class="table table-borderless text-center">
-  <tbody>
-    <tr>
-      <td>작성 도구</td>
-    </tr>
-    <tr>
-      <td>취업 자료</td>
-    </tr>
-    <tr>
-      <td>정보 공유</td>
-    </tr>
-  </tbody>
-</table>
+			<table class="table table-borderless text-center">
+				<tbody>
+					<tr>
+						<td>작성 도구</td>
+					</tr>
+					<tr>
+						<td>취업 자료</td>
+					</tr>
+					<tr>
+						<td>정보 공유</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<!-- 맨 아래 -->

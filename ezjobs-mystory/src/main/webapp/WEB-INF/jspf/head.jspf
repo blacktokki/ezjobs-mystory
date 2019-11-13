@@ -41,6 +41,7 @@
 					<li class="nav-item"><a class="nav-link" href="/temp/login">임시로그인:${sessionScope.loginId}</a></li>
 				</ul>
 				<div class="searchBox w-50"></div>
+				<%@ include file="/WEB-INF/jspf/user/head.jspf"%>
 			</div>
 		</nav>
 	</header>

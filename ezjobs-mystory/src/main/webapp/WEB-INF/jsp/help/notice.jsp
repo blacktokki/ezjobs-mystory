@@ -8,13 +8,13 @@
 	<p class="lead">홈페이지 공지사항</p>
 	<hr class="my-4">
 	<ul class="nav nav-tabs">
-		<li class="nav-item"><a class="nav-link" href="/help/qna">Q&A</a></li>
-		<li class="nav-item"><a class="nav-link active" href="/help/notice">공지사항</a></li>
-		<li class="nav-item"><a class="nav-link" href="/help/faq">1:1문의</a></li>
+		<li class="nav-item"><a class="nav-link" href="/help/faq">FAQ</a></li>
+		<li class="nav-item"><a class="nav-link active"
+			href="/help/notice">공지사항</a></li>
+		<li class="nav-item"><a class="nav-link" href="/help/qna">1:1문의</a></li>
 	</ul>
 </div>
 <p>
-
 <div class="container">
 	<table class="table">
 		<thead class="text-center">
@@ -25,34 +25,41 @@
 				<th scope="col" style="width: 20%">날짜</th>
 			</tr>
 		</thead>
+
 		<tbody>
-			<!-- 이제 반복문 써서 글 여러개로 불리기 할 것 -->
-			<tr>
-				<th scope="row" class="text-center">1</th>
-				<td>Mark</td>
-				<td class="text-center">Otto</td>
-				<td class="text-center">@mdo</td>
-			</tr>
+
+			<c:forEach var="item" items="${boards.content}">
+				<tr>
+					<td align="center">${item.id}</td>
+					<td><a href="/help/noticecontent/${item.id}">${item.title}&nbsp;</a></td>
+					<td>관리자</td>
+					<td align="center">${item.editDate}</td>
+				</tr>
+			</c:forEach>
 		</tbody>
+
+
+
 	</table>
 
 </div>
 
 <nav aria-label="Page navigation example">
 	<ul class="pagination justify-content-center">
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+		<li class="page-item"><a class="page-link"
+			href="?page=${pageNavNumber*5}" aria-label="Previous"> <span
+				aria-hidden="true">&laquo;</span>
 		</a></li>
-		<li class="page-item"><a class="page-link" href="#">1</a></li>
-		<li class="page-item"><a class="page-link" href="#">2</a></li>
-		<li class="page-item"><a class="page-link" href="#">3</a></li>
-		<li class="page-item"><a class="page-link" href="#">4</a></li>
-		<li class="page-item"><a class="page-link" href="#">5</a></li>
-		<li class="page-item"><a class="page-link" href="#"
-			aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+		<c:forEach var="item" begin="${pageNavNumber*5+1}"
+			end="${(pageNavNumber+1)*5}">
+			<li class="page-item"><a class="page-link" href="?page=${item}">${item}</a></li>
+		</c:forEach>
+		<li class="page-item"><a class="page-link"
+			href="?page=${(pageNavNumber+1)*5+1}" aria-label="Next"> <span
+				aria-hidden="true">&raquo;</span>
 		</a></li>
 	</ul>
 </nav>
 
 <p>
-<%@ include file="/WEB-INF/jspf/footer.jspf"%>
+	<%@ include file="/WEB-INF/jspf/footer.jspf"%>

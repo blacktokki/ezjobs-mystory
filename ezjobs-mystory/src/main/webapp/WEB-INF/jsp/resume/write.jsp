@@ -27,7 +27,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="basic-addon1">태그</span>
 					</div>
-					<input name="tags" class="tags" value="dummy" />
+					<input name="tags" class="tags" value="dummy,dummy2,dummy3" />
 				</div>
 					
 				<div class="input-group">

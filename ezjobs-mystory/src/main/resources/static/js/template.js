@@ -1,0 +1,1 @@
+console.log("templete.js loaded");

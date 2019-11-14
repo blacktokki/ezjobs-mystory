@@ -1,4 +1,5 @@
 FROM openjdk:8-jdk-alpine
+ENV devtools=false
 ENV mysql-host=192.168.25.7:3306
 ENV mysql-username=root
 ENV mysql-password=abcd

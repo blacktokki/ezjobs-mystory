@@ -35,34 +35,21 @@
 
 	<div class="jumbotron">
 		<div class="container">
-			<form method="post" action="index">
+			<form method="post" action="#">
+			<div align="right">
+			<button class="btn btn-primary" type="submit" >검색하기</button>
+			</div>
+			<p>
+			<!-- 태그 처리해야하는 부분을 넣어야합니다. -->
 				<div class="form-row">
-					<div class="col-11">
-						<input type="text" class="form-control" placeholder="검색어를 입력해주세요">
+					<div class="col-6">
+						<input type="text" class="form-control" placeholder="태그 검색">
 					</div>
-					<div class="col">
-						<button class="btn btn-primary" type="submit">Button</button>
+					<div class="col-6">
+						<input type="text" class="form-control" placeholder="일반 검색">
 					</div>
 				</div>
-				<p>
-					<!-- 검색창 부분입니다. -->
-				<div class="form-row">
-					<input class="btn btn-primary" type="reset" value="Reset">
-
-					<div class="dropdown show">
-						<a class="btn btn-secondary dropdown-toggle" href="#"
-							role="button" id="dropdownMenuLink" data-toggle="dropdown"
-							aria-haspopup="true" aria-expanded="false"> Dropdown link </a>
-
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-							<a class="dropdown-item" href="#">Action</a> <a
-								class="dropdown-item" href="#">Another action</a> <a
-								class="dropdown-item" href="#">Something else here</a>
-						</div>
-					</div>
-
-				</div>
-				<!-- 분류창 부분입니다. -->
+				
 
 			</form>
 		</div>
@@ -121,13 +108,13 @@
 			<table class="table table-borderless text-center">
 				<tbody>
 					<tr>
-						<td>작성 도구</td>
+						<td class="table-light">작성 도구</td>
 					</tr>
 					<tr>
-						<td>취업 자료</td>
+						<td class="table-light">취업 자료</td>
 					</tr>
 					<tr>
-						<td>정보 공유</td>
+						<td class="table-light">정보 공유</td>
 					</tr>
 				</tbody>
 			</table>
@@ -135,10 +122,6 @@
 	</div>
 	<!-- 맨 아래 -->
 
-	<div class="jumbotron">
-		<div class="container">기업 신청란</div>
-	</div>
-	<!-- 기업 신청란 -->
 </div>
 <!-- 전체 div -->
 

@@ -10,4 +10,6 @@ public class HomeController{
 	public String index() {
 		return "index";
 	}
+	// 태그 검색 처리 소스 넣을 공간.
+	
 }// 깃 허브 재 업로드용 소스

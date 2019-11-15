@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <body>
-<button type="button" onclick="location.href='info'">정보수정</button> </div>
+
+<i  type="button" onclick="location.href='info'" class="fa fa-user fa-3x"></i>
+
 </body>

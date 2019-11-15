@@ -108,5 +108,12 @@ public class UserService {
 		User user=userRepository.findById(id).get();//id로 board 찾기
 		model.addAttribute("user",user);
 	}
-
+	
+	public void info(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		User user=userRepository.findById(id).get();//id로 board 찾기
+		model.addAttribute("user",user);
+	}
 }

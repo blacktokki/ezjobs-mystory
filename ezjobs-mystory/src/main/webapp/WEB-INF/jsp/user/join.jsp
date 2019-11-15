@@ -18,7 +18,7 @@
  <form method="post" action="/user/join">
  <table class="board_list">
 
-  <caption>회원가입</caption>
+  <caption></caption>
   <tbody>
       
  <!-- <tr>
@@ -55,11 +55,13 @@
     <td></td>
    </tr>
  -->
+ <!--
   <tr>
     <th scope="row">방문자</th>
     <td><input type="text" id="user_visitCnt" name="cisit_cnt" class="wdp_90"></td>
     <td></td>
    </tr>
+    -->
    <!--
     <tr>
     <th scope="row">relId</th>
@@ -87,7 +89,7 @@
   <tfoot>
    <tr>
     <td colspan="3">
-     <button type="submit" class="btn btn-primary resume-submit">회원가입</button>
+     <button type="submit" class="btn btn-secondary resume-submit">회원가입</button>
     </td>
    </tr>
   </tfoot>

@@ -3,5 +3,5 @@
 <body>
 
 <button type="button" onclick="location.href='info'">정보수정</button>
->>>>>>> branch 'develop' of https://github.com/blacktokki/ezjobs-mystory
+
 </body>

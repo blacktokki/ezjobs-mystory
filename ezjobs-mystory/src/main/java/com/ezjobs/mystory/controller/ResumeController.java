@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ezjobs.mystory.service.AutoLabelService;
 import com.ezjobs.mystory.service.ResumeService;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -39,7 +40,7 @@ public class ResumeController {
 			return "redirect:/temp/login/fail";
 		model.addAttribute("loginId",loginId);
 		resumeService.list(model);
-		autoLabelService.spliterResumes(model);
+		//autoLabelService.spliterResumes(model);
 		return "resume/resume";
 	}
 	
@@ -50,7 +51,7 @@ public class ResumeController {
 			return "redirect:/temp/login/fail";
 		model.addAttribute("loginId",loginId);
 		resumeService.list(model);
-		autoLabelService.spliterResumes(model);
+		//autoLabelService.spliterResumes(model);
 		return "resume/list";
 	}
 	
@@ -99,6 +100,21 @@ public class ResumeController {
 		System.out.println(map.get("tags"));
 		resumeService.edit(model);
 		return ResponseEntity.ok(model);
+	}
+	
+	@ResponseBody
+	@GetMapping("auto")
+	public ResponseEntity<?> auto(@RequestParam String keyword,Model model){
+		model.addAttribute("keyword",keyword);
+		resumeService.autoComplete(model);
+		return ResponseEntity.ok(model);
+	}
+	
+	@GetMapping("changelist")
+	public String changeList(Model model){
+		System.out.println((String)model.getAttribute("answer"));
+		autoLabelService.spliterAnswer(model);
+		return "changelist";
 	}
 
 }

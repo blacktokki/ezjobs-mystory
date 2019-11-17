@@ -1,14 +1,7 @@
 package com.ezjobs.mystory.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Formatter;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
@@ -41,6 +34,9 @@ import kr.bydelta.koala.okt.SentenceSplitter;
 
 import com.ezjobs.mystory.dto.ElasticResume;
 import com.ezjobs.mystory.entity.Resume;
+import com.ezjobs.mystory.entity.Sentence;
+import com.ezjobs.mystory.repository.SentenceRepository;
+import com.ezjobs.mystory.repository.SynonymRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -53,13 +49,19 @@ public class AutoLabelService {
 	private ElasticsearchOperations elasticsearchTemplate;
 	
 	@Inject
-	ObjectMapper mapper;
+	private SynonymRepository synonymRepository;
+	
+	@Inject
+	private SentenceRepository sentenceRepository;
+	
+	@Inject
+	private ObjectMapper mapper;
 	
 	public void temp() {
 		//String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};
 		Script script=new Script("List a=new ArrayList();"
 							   + "for(t in doc['answer'].values){"
-							   + "	if(t.length()>2)"
+							   + "	if(t.length()==2)"
 							   + "		a.add(t);"
 							   + "}"
 							   + "return a;"
@@ -68,8 +70,8 @@ public class AutoLabelService {
 		//SourceFilter sourceFilter = new FetchSourceFilter(new String[]{"question"}, null);
 		PageRequest pr=PageRequest.of(0, 32768);
 		SearchQuery searchQuery=new NativeSearchQueryBuilder()
-				.withQuery(matchAllQuery())
-				.withIndices("intro")
+				.withQuery(matchAllQuery())//queryStringQuery("*wonwoo*")
+				.withIndices("intro_mnvv")
       			//.withTypes("doc")
 				//.withSourceFilter(sourceFilter)
 				.withScriptField(new ScriptField("terms",script))
@@ -106,7 +108,7 @@ public class AutoLabelService {
 		ParallelTopicModel model=new ParallelTopicModel(numTopic,1.0,1.0/numTopic);
 		model.addInstances(instances);
 		model.setNumThreads(4);
-		model.setNumIterations(5000);
+		model.setNumIterations(4500);
 
 		try {
 			model.estimate();
@@ -146,6 +148,18 @@ public class AutoLabelService {
 	            }
 				System.out.println(out);
 			}
+			for(int i=0;i<topicSortedWords.size();i++) {
+				Iterator<IDSorter> iterator=topicSortedWords.get(i).iterator();
+				int rank = 0,w=0;
+				while (iterator.hasNext() && rank < 5) {
+	                IDSorter idCountPair = iterator.next();
+	                System.out.print(dataAlphabet.lookupObject(idCountPair.getID())+" ");
+	                if(rank==2)
+	                	w=(int)idCountPair.getWeight();
+	                rank++;
+	            }
+				System.out.println(w);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,11 +182,53 @@ public class AutoLabelService {
 		model.addAttribute("resumesSplit",resumesSplit);
 	}
 	
+	public void spliterAnswer(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		String answer=(String)modelMap.get("answer");
+		List<String> strs = spliter(answer);
+		/*for(String str:strs){
+			
+		}*/
+		model.addAttribute("Sentences",strs);
+	}
+	
 	private List<String> spliter(String str) {
 		SentenceSplitter splitter = new SentenceSplitter();
 		List<String> paragraph = splitter.sentences(str);
 		for(String s:paragraph)
 			System.out.println(s);
+		return spliterAddon(paragraph);
+	}
+	
+	private List<String> spliterAddon(List<String> strs) {
+		List<String> paragraph = new ArrayList<String>();
+		for(String s:strs) {
+			 Collections.addAll(paragraph,(s.split("\n")));
+		}
 		return paragraph;
+	}
+	
+	public void sentenceAddAll(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		List<List<String>> resumesSplit=mapper.convertValue(modelMap.get("resumesSplit"),new TypeReference<List<List<String>>>(){});	
+		List<Sentence> sentences=new ArrayList<Sentence>();
+		int mx=0;
+		for(List<String> resumeSplit:resumesSplit) {
+			int i=0;
+			for(String str:resumeSplit) {
+				Sentence sentence=new Sentence();
+				sentence.setUserId("_admin");
+				sentence.setText(str);
+				sentence.setPosition(i++);
+				sentence.setPositionMax(resumeSplit.size());
+				if(mx<str.length()) {
+					mx=str.length();
+					System.out.println(str);
+				}
+				System.out.println(mx);
+				sentences.add(sentence);
+			}
+		}
+		sentenceRepository.saveAll(sentences);
 	}
 }

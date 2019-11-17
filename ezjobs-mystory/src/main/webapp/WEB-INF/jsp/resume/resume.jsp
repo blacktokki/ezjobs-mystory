@@ -20,126 +20,171 @@
 	transform: rotate(0deg);
 }
 </style>
-<nav aria-label="breadcrumb">
-	<div class="nav nav-tabs breadcrumb pb-0" id="nav-tab" role="tablist">
-		<a class="nav-item nav-link breadcrumb-item active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-			aria-controls="nav-home" aria-selected="true">작성 목록</a><!-- 작성중,작성중:내용없음 -->
-		<a class="nav-item nav-link breadcrumb-item" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" 
-			aria-controls="nav-profile" aria-selected="false">작성중</a> 
-		<a class="nav-item nav-link breadcrumb-item" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
-			aria-controls="nav-contact" aria-selected="false">작성 완료</a><!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 -->
-		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
-			새 자기소개서
-		</a>
-		<!-- 
-		<a class="nav-item nav-link breadcrumb-item" id="resume-create" href="#">
-			작성 기록
-		</a>-->
-	</div>
-</nav>
-<div class="container-fluid row">
-	<div class="col-3 pl-2 pr-0">
-		<input type="text" class="form-control" id="exampleInput" placeholder="Enter text">
-	</div>
-	<div class="col-6 px-3">
-		<div class="tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-				<div id="accordion1" role="tablist">
-					<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
+<div class="row">
+	<div class="col-12">
+		<nav aria-label="breadcrumb">
+			<div class=" breadcrumb pb-0 row">
+				<div class="nav nav-tabs col-3 " id="nav-tab-left" role="tablist">
+					<a class="nav-item nav-link active" id="nav-sentence-tab" data-toggle="tab" href="#nav-sentence" role="tab"
+						aria-controls="nav-sentence" aria-selected="true">문장 모음</a>
+					<a class="nav-item nav-link" id="nav-complete-tab" data-toggle="tab" href="#nav-complete" role="tab" 
+						aria-controls="nav-complete" aria-selected="false">자동 완성</a> 
+				</div>
+				<div class="nav nav-tabs justify-content-center col-6" id="nav-tab"
+					role="tablist">	
+					<a class="nav-item nav-link breadcrumb-item text-center active"
+						id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+						aria-controls="nav-home" aria-selected="true">작성 목록</a>
+					<!-- 작성중,작성중:내용없음 -->
+					
+					<a class="nav-item nav-link breadcrumb-item text-center"
+						id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+						role="tab" aria-controls="nav-profile" aria-selected="false">작성중</a>
+					
+					<a class="nav-item nav-link breadcrumb-item text-center"
+						id="nav-contact-tab" data-toggle="tab" href="#nav-contact"
+						role="tab" aria-controls="nav-contact" aria-selected="false">작성
+						완료</a>
+					<!--작성완료:미제출,작성완료:제출됨 작성완료:서류합격 -->
+				</div>
+				<div class="nav nav-tabs col-3 justify-content-right" id="nav-tab-rght"
+					role="tablist">
+					<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create"
+					href="#"> 새 자기소개서 </a>
+					<a class="nav-item nav-link breadcrumb-item text-right"
+						id="resume-achive" href="#"> 작성 기록 
+					</a>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-				<div id="accordion2" role="tablist">
-				</div>
-			</div>
-			<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-				<div id="accordion3" role="tablist">
-					새 자기소개서
-				</div>
-			</div>
-		</div>	
+		</nav>
 	</div>
-	<div class="col-4"></div>
+	<div class="container-fluid row">
+		<div class="pl-2 pr-0 col-3">
+			<%@ include file="/WEB-INF/jsp/resume/aside.jsp"%>
+		</div>
+		<div class="col-9 px-3 row">
+			<div class="tab-content col-9" id="nav-tabContent">
+				<div class="tab-pane fade show active" id="nav-home"
+					role="tabpanel" aria-labelledby="nav-home-tab">
+					<div id="accordion1" role="tablist">
+						<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="nav-profile" role="tabpanel"
+					aria-labelledby="nav-profile-tab">
+					<div id="accordion2" role="tablist"></div>
+				</div>
+				<div class="tab-pane fade" id="nav-contact" role="tabpanel"
+					aria-labelledby="nav-contact-tab">
+					<div id="accordion3" role="tablist">새 자기소개서</div>
+				</div>
+			</div>
+			<div class="col-3">
+			</div>
+		</div>
+	</div>
 </div>
 <script>
-	var resume_idx=1;
-	var resume_new=1;
-	$("body").delegate(".tagsinput", "propertychange change keyup paste input", function(e) {
-		var id=$(event.target).attr("id").replace("_tag","");
-		var tags=[];
-		$("#"+id+"_tagsinput").find(".tag>span").each(function(i,e){
-			tags.push($.trim($(e).text()));
-		});
-		//console.log($("#"+id).val());
-		$("#"+id).val(tags.join(","));
-		return true;
-	});
-	$("body").delegate("#resume-create", "click", function() {
-		 $(document.createDocumentFragment()).load("/resume/write",function(response){
-			var $result=$(response);
-			$result.find(".card-header")
-		           .attr("id","heading-write"+resume_idx)
-		           .find("a")
-				   .attr("href","#collapse-write"+resume_idx)
-				   .attr("aria-controls","collapse-write"+resume_idx)
-				   .html("새 자기소개서 "+resume_new);
-			$result.find(".collapse")
-				   .attr("id","collapse-write"+resume_idx)
-				   .attr("aria-labelledby","heading-write"+resume_idx)
-				   .find(".write-question")
-				   .attr("id","write-question"+resume_idx)
-				   .val("새 자기소개서 "+resume_new);
-			$result.find(".tags").attr("id","tags-write"+resume_idx);
-			$("#nav-profile-tab").tab("show");
-			$result.appendTo("#accordion2").find(".collapse").collapse("show");
-			$("#tags-write"+resume_idx).tagsInput();
-			resume_idx+=1;
-			resume_new+=1;
-		});
-		return false;
-	});
-	$("#accordion1").delegate(".resume-link","click",function(e){
-		var href=$(e.target).attr("href");
-		var card=href.replace("/resume/write/","#resume-card");
-
-		if($(card).length==0){
-			$(document.createDocumentFragment()).load(href,function(response){
-				var $result=$(response);
-				$result.find(".card-header")
-			           .attr("id","heading-write"+resume_idx)
-			           .find("a")
-					   .attr("href","#collapse-write"+resume_idx)
-					   .attr("aria-controls","collapse-write"+resume_idx)
-				$result.find(".collapse")
-					   .attr("id","collapse-write"+resume_idx)
-					   .attr("aria-labelledby","heading-write"+resume_idx)
-					   .find(".write-question")
-					   .attr("id","write-question"+resume_idx)
-				$result.find(".tags").attr("id","tags-write"+resume_idx);
-				$("#nav-profile-tab").tab("show");
-				$result.appendTo("#accordion2").find(".collapse").collapse("show");
-				$("#tags-write"+resume_idx).tagsInput();
-
-				resume_idx+=1;
+	var resume_idx = 1;
+	var resume_new = 1;
+	$("body").delegate(
+			".tagsinput",
+			"propertychange change keyup paste input",
+			function(e) {
+				var id = $(event.target).attr("id").replace("_tag", "");
+				var tags = [];
+				$("#" + id + "_tagsinput").find(".tag>span").each(
+						function(i, e) {
+							tags.push($.trim($(e).text()));
+						});
+				//console.log($("#"+id).val());
+				$("#" + id).val(tags.join(","));
+				return true;
 			});
-		}
-		else{
-			$(card).find(".collapse").collapse("show");
-		}
-		return false;
-	})
-	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e) {
-		var id=$(e.target).attr("id").replace("heading","");
-		$("#heading-write"+id+" a").html(currentVal);
-	});
-	$("#accordion2").delegate("form","submit",function(e){
-		var form=$(e.target).serializeJSON();
+	$("body").delegate(
+			"#resume-create",
+			"click",
+			function() {
+				$(document.createDocumentFragment()).load(
+						"/resume/write",
+						function(response) {
+							var $result = $(response);
+							$result.find(".card-header").attr("id",
+									"heading-write" + resume_idx).find("a")
+									.attr("href",
+											"#collapse-write" + resume_idx)
+									.attr("aria-controls",
+											"collapse-write" + resume_idx)
+									.html("새 자기소개서 " + resume_new);
+							$result.find(".collapse").attr("id",
+									"collapse-write" + resume_idx).attr(
+									"aria-labelledby",
+									"heading-write" + resume_idx).find(
+									".write-question").attr("id",
+									"write-question" + resume_idx).val(
+									"새 자기소개서 " + resume_new);
+							$result.find(".tags").attr("id",
+									"tags-write" + resume_idx);
+							$("#nav-profile-tab").tab("show");
+							$result.appendTo("#accordion2").find(".collapse")
+									.collapse("show");
+							$("#tags-write" + resume_idx).tagsInput();
+							resume_idx += 1;
+							resume_new += 1;
+						});
+				return false;
+			});
+	$("#accordion1").delegate(
+			".resume-link",
+			"click",
+			function(e) {
+				var href = $(e.target).attr("href");
+				var card = href.replace("/resume/write/", "#resume-card");
+
+				if ($(card).length == 0) {
+					$(document.createDocumentFragment()).load(
+							href,
+							function(response) {
+								var $result = $(response);
+								$result.find(".card-header").attr("id",
+										"heading-write" + resume_idx).find("a")
+										.attr("href",
+												"#collapse-write" + resume_idx)
+										.attr("aria-controls",
+												"collapse-write" + resume_idx)
+								$result.find(".collapse").attr("id",
+										"collapse-write" + resume_idx).attr(
+										"aria-labelledby",
+										"heading-write" + resume_idx).find(
+										".write-question").attr("id",
+										"write-question" + resume_idx)
+								$result.find(".tags").attr("id",
+										"tags-write" + resume_idx);
+								$("#nav-profile-tab").tab("show");
+								$result.appendTo("#accordion2").find(
+										".collapse").collapse("show");
+								$("#tags-write" + resume_idx).tagsInput();
+
+								resume_idx += 1;
+							});
+				} else {
+					$(card).find(".collapse").collapse("show");
+				}
+				return false;
+			})
+	$("#accordion2").delegate(".write-question",
+			"propertychange change keyup paste input", function(e) {
+				var id = $(e.target).attr("id").replace("heading", "");
+				$("#heading-write" + id + " a").html(currentVal);
+			});
+	$("#accordion2").delegate("form", "submit", function(e) {
+		var form = $(e.target).serializeJSON();
 		//console.log(form);
-		$.post("/resume/content/"+form.id,form,function(data){
+		$.post("/resume/content/" + form.id, form, function(data) {
 			//console.log(data);
 			$(e.target).find(".resume-id").val(data.map.id);
 			$(e.target).find(".resume-method").val("put");
-			$.get("/resume/content",function(data2){
+			$.get("/resume/content", function(data2) {
 				console.log(data2);
 				$("#accordion1").html(data2);
 			});

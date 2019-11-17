@@ -90,6 +90,77 @@
    <tr>
     <td colspan="3">
      <button type="submit" class="btn btn-secondary resume-submit">회원가입</button>
+
+  <tbody>
+      
+ <!-- <tr>
+    <th scope="row">회원번호</th>
+    <td><input type="text" id="user_id" name="id" class="wdp_90"></td>
+    <td></td>
+  </tr> 
+   -->
+    <tr>
+    <th scope="row">아이디</th>
+    <td><input type="text" id="user_loginId" name="loginId" class="wdp_90"></td>
+  <!--   <td><a href="#" id="user_id_checkBtn" class="btn">중복확인</a></td> -->
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">비밀번호</th>
+    <td><input type="password" id="user_loginPw" name="loginPw" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">이름</th>
+    <td><input type="text" id="user_name" name="name" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">이메일</th>
+    <td><input type="text" id="user_email" name="email" class="wdp_90"></td>
+    <td></td>
+   </tr>
+   <!-- 
+  <tr>
+    <th scope="row">editDate</th>
+    <td><input type="text" id="user_editDate" name="regist_date" class="wdp_90"></td>
+    <td></td>
+   </tr>
+ -->
+  <tr>
+    <th scope="row">방문자</th>
+    <td><input type="text" id="user_visitCnt" name="cisit_cnt" class="wdp_90"></td>
+    <td></td>
+   </tr>
+   <!--
+    <tr>
+    <th scope="row">relId</th>
+    <td><input type="text" id="user_relID" name="RELID" class="wdp_90"></td>
+    <td></td>
+   </tr>
+    <tr>
+    <th scope="row">relLoginId</th>
+    <td><input type="text" id="user_relLoginId" name="RELLOGINID" class="wdp_90"></td>
+    <td></td>
+   </tr>
+  -->
+ <tr>
+    <th scope="row">성별</th>
+    <td><input type="text" id="user_sex" name="sex" class="wdp_90"></td>
+    <td></td>
+   </tr>
+     <tr>
+    <th scope="row">학력</th>
+    <td><input type="text" id="user_grad" name="grad" class="wdp_90"></td>
+    <td></td>
+   </tr>
+  
+  </tbody>
+  <tfoot>
+   <tr>
+    <td colspan="3">
+     <button type="submit" class="btn btn-primary resume-submit">회원가입</button>
+>>>>>>> branch 'develop' of https://github.com/blacktokki/ezjobs-mystory
     </td>
    </tr>
   </tfoot>

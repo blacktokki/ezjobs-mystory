@@ -2,6 +2,6 @@
     pageEncoding="UTF-8"%>
 <body>
 
-<i  type="button" onclick="location.href='info'" class="fa fa-user fa-3x"></i>
-
+<button type="button" onclick="location.href='info'">정보수정</button>
+>>>>>>> branch 'develop' of https://github.com/blacktokki/ezjobs-mystory
 </body>

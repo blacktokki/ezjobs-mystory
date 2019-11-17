@@ -99,6 +99,7 @@ public class UserController {
 	}
 	*/
 	@PutMapping("/info") // 글수정요청 /board/write/1
+
 	public String Write(@RequestParam Map<Object, Object> map, HttpSession session, Model model) {
 		Object loginId = session.getAttribute("loginId");
 		if (loginId == null)
@@ -115,5 +116,15 @@ public class UserController {
 		model.addAttribute("id",id);
 		userService.info(model);
 		return "user/info";
+	}
+	public String write( @RequestParam Map<Object, Object> map, HttpSession session, Model model) {
+		Object loginId = session.getAttribute("loginId");
+		if (loginId == null)
+			return "redirect:/temp/login/fail";
+		model.addAttribute("loginId", loginId);
+		model.addAttribute("map", map);
+		userService.edit(model);
+		return "redirect:/index";
+
 	}
 }

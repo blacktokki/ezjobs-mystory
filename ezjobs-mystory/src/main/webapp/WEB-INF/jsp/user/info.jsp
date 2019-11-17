@@ -36,7 +36,11 @@
    </tr>
     <tr>
     <th scope="row">이름</th>
+
+    <td><input type="text" id="user_name" name="name" class="wdp_90"value="${user.name}"> </td>
+
     <td><input type="text" id="user_name" name="name" class="wdp_90"></td>
+
     <td></td>
    </tr>
     <tr>

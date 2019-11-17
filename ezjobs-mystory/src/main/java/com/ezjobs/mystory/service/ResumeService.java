@@ -1,5 +1,6 @@
 package com.ezjobs.mystory.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Resume;
+import com.ezjobs.mystory.entity.Sentence;
 import com.ezjobs.mystory.repository.ResumeRepository;
+import com.ezjobs.mystory.repository.SentenceRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -24,6 +27,9 @@ public class ResumeService {
 	
 	@Inject
 	ResumeRepository resumeRepository;
+	
+	@Inject
+	SentenceRepository sentenceRepository;
 	
 	@Inject
 	ObjectMapper mapper;
@@ -60,6 +66,15 @@ public class ResumeService {
 		model.addAttribute("resumes",resumes);
 	}
 	
+	public void listAll(Model model){
+		Integer page=0;
+		Integer size=32768;
+		Resume resume=new Resume();
+		PageRequest pr=PageRequest.of(page,size);
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		model.addAttribute("resumes",resumes);
+	}
+	
 	public void content(Model model){
 		Map<String,Object> modelMap=model.asMap();
 		int id=Integer.parseInt(modelMap.get("id").toString());
@@ -85,5 +100,16 @@ public class ResumeService {
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setId(id);
 		resumeRepository.update(resume);
+	}
+	
+	public void autoComplete(Model model){
+		String keyword=(String)model.getAttribute("keyword");
+		Integer page=0;
+		Integer size=30;
+		PageRequest pr=PageRequest.of(page,size);
+		Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%", pr);
+		System.out.println(pageList.getNumberOfElements());
+		List<Sentence> list=pageList.getContent();
+		model.addAttribute("list",list);
 	}
 }

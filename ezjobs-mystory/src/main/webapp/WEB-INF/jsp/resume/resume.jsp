@@ -259,9 +259,9 @@
 		return false;
 	});
 	
-	$("#wordChange").delegate(".btn-apply","click",function(e){//유사도 검사
+	$("#compare").delegate(".btn-apply","click",function(e){//유사도 검사
 		$("#compare ul li").each(function(i,element){
-			var currentVal+=$(element).text();
+			var currentVal = $(element).text();
 			var form={sentence:currentVal};
 			$.get("/resume/compare", form, function(data) {
 				console.log(data.result);

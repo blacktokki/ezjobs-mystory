@@ -110,11 +110,19 @@ public class ResumeController {
 		return ResponseEntity.ok(model);
 	}
 	
-	@GetMapping("changelist")
-	public String changeList(Model model){
-		System.out.println((String)model.getAttribute("answer"));
+	@PostMapping("changelist")
+	public String changeList(@RequestParam String answer,Model model){
+		model.addAttribute("answer",answer);
 		autoLabelService.spliterAnswer(model);
-		return "changelist";
+		return "resume/changelist";
+	}
+	
+	@ResponseBody
+	@GetMapping("compare")
+	public String compare(@RequestParam String sentence,Model model){
+		model.addAttribute("sentence",sentence);
+		//autoLabelService.spliterAnswer(model);
+		return "resultValue";
 	}
 
 }

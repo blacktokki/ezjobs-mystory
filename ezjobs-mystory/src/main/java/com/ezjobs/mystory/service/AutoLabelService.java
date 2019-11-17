@@ -185,18 +185,17 @@ public class AutoLabelService {
 	public void spliterAnswer(Model model) {
 		Map<String,Object> modelMap=model.asMap();
 		String answer=(String)modelMap.get("answer");
+		System.out.println(answer);
 		List<String> strs = spliter(answer);
 		/*for(String str:strs){
 			
 		}*/
-		model.addAttribute("Sentences",strs);
+		model.addAttribute("sentences",strs);
 	}
 	
 	private List<String> spliter(String str) {
 		SentenceSplitter splitter = new SentenceSplitter();
-		List<String> paragraph = splitter.sentences(str);
-		for(String s:paragraph)
-			System.out.println(s);
+		List<String> paragraph = splitter.sentences(str.replaceAll("다\\.", "다. "));
 		return spliterAddon(paragraph);
 	}
 	
@@ -205,6 +204,8 @@ public class AutoLabelService {
 		for(String s:strs) {
 			 Collections.addAll(paragraph,(s.split("\n")));
 		}
+		for(String s:paragraph)
+			System.out.println(s);
 		return paragraph;
 	}
 	

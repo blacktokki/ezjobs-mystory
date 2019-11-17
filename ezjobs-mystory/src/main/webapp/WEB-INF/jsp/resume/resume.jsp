@@ -89,8 +89,8 @@
 					<div class="card-header card-title">단어 교체</div>
 					<div class="card-body">
 						<ul class="card-text list-group list-group-flush"></ul>
-						<a href="#" class="btn btn-primary">내용 가져오기</a>
-						<a href="#" class="btn btn-primary">내용 적용하기</a>
+						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
+						<a href="#" class="btn btn-primary btn-apply">내용 적용하기</a>
 					</div>
 				</div>
 			</div>
@@ -99,8 +99,8 @@
 					<div class="card-header card-title">비교 하기</div>
 					<div class="card-body">
 						<ul class="card-text list-group list-group-flush"></ul>
-						<a href="#" class="btn btn-primary">내용 가져오기</a>
-						<a href="#" class="btn btn-primary">유사도검사</a>
+						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
+						<a href="#" class="btn btn-primary btn-apply">유사도검사</a>
 					</div>
 				</div>
 			</div>
@@ -111,7 +111,6 @@
 <script>
 	var resume_idx = 1;
 	var resume_new = 1;
-	//$("#wordChange ul").sortable();
 	$("body").delegate(".tagsinput","propertychange change keyup paste input",function(e) {//태그와 태그입력값 동기화
 				var id = $(event.target).attr("id").replace("_tag", "");
 				var tags = [];
@@ -194,13 +193,13 @@
 			});
 	
 	timer_auto=null;
+	keyword=null;
 	$("#accordion2").delegate(".write-answer","propertychange change paste input click", function(e){//내용 자동검색
 		var currentVal=$(e.target).html();
 		var pos=$(e.target).get(0).selectionEnd;
-		var keywords=currentVal.substring(0,pos);
-		console.log(keywords);
-		keywords=keywords.split(/다 |\.|\n/);
-		var form={keyword:$.trim(keywords[keywords.length-1])};
+		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
+		keyword=keywords[keywords.length-1];
+		var form={keyword:$.trim(keyword)};
 		//console.log(form);
 		if(timer_auto){
 			clearTimeout(timer_auto);
@@ -210,6 +209,7 @@
 				console.log(data);
 				var $frag=$(document.createDocumentFragment());
 				data.list.forEach(function(e,i){
+					var text=e.text.replace()
 					$frag.append("<li class='list-group-item p-1'><font size='2'><a href='#'>"
 							+e.text+"</a></font></li>");
 				});
@@ -219,9 +219,57 @@
 	});
 	$("#autoComplete ul").delegate("a","click",function(e){//자동완성 입력
 		var currentVal=$(e.target).html();
-		var $target=$("#accordion2 .collapse,.show .write-answer");
-		//$target.html(target.html()+currentVal);
+		var $target=$("#accordion2 .card").find(".show").find(".write-answer");
+		var beforeVal=$target.html();
+		console.log(currentVal);
+		console.log(beforeVal);
+		var pos=$target.get(0).selectionEnd;
+		var result=
+			beforeVal.substring(0,pos-keyword.length)
+			+currentVal+" "
+			+beforeVal.substring(pos,beforeVal.length);
+		$target.html(result);
+		keyword=null;
+		$("#autoComplete ul").html("");
+		return false;
 	});
+	
+	$("#accordion2").delegate(".card-header","click",function(e){
+		keyword=null;
+		$("#autoComplete ul").html("");
+	});
+	
+	$("#wordChange,#compare").delegate(".btn-load","click",function(e){//단어교체,비교하기 불러오기
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
+		var form={answer:currentVal};
+		$.post("/resume/changelist", form, function(data) {
+			$(e.target).parent().find("ul").html(data).sortable();
+		});
+		return false;
+	});
+	
+	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
+		var currentVal="";
+		$("#wordChange ul li").each(function(i,element){
+			currentVal+=$.trim($(element).text());
+			
+		});
+		//console.log(currentVal);
+		$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+		return false;
+	});
+	
+	$("#wordChange").delegate(".btn-apply","click",function(e){//유사도 검사
+		$("#compare ul li").each(function(i,element){
+			var currentVal+=$(element).text();
+			var form={sentence:currentVal};
+			$.get("/resume/compare", form, function(data) {
+				console.log(data.result);
+			});
+		});
+		return false;
+	});
+	
 	
 	$("#accordion2").delegate("form", "submit", function(e) {//저장하기
 		var form = $(e.target).serializeJSON();

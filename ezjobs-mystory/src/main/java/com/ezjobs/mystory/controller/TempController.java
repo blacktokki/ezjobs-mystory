@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ezjobs.mystory.service.AutoLabelService;
+import com.ezjobs.mystory.service.ResumeService;
 
 @Controller
 @RequestMapping("/temp")//상위 서브도메인
@@ -17,6 +18,9 @@ public class TempController{
 	
 	@Inject
 	AutoLabelService autoLabelService;
+	
+	@Inject
+	ResumeService resumeService;
 
 	@GetMapping("/login")//로그인,로그아웃후 인덱스 페이지로 넘어감 /temp/login
 	public String login(HttpSession session,Model model) {
@@ -39,5 +43,11 @@ public class TempController{
 		autoLabelService.temp();
 	}
 	
+	@GetMapping("/resumetostc")//오토라벨링, 신경쓰지마세요
+	public void resumetostc(Model model){
+		resumeService.listAll(model);
+		autoLabelService.spliterResumes(model);
+		autoLabelService.sentenceAddAll(model);
+	}
 	
 }

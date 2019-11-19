@@ -22,6 +22,10 @@ public class Sentence {
 
 	@Column(name = "user_id", nullable = false)
 	private String userId;
-
-
+	
+	@Column(name = "position", nullable = false)
+	private Integer position;
+	
+	@Column(name = "position_max", nullable = false)
+	private Integer positionMax;
 }

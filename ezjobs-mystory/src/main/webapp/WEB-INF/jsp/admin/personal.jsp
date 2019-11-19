@@ -16,61 +16,69 @@
 <div class="container">
 	<h2>와글와글</h2>
 	<p>
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">항목</th>
-				<th scope="col">내용</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<th scope="row">회원번호</th>
-				<td>${user.id}</td>
-			</tr>
-			<tr>
-				<th scope="row">아이디</th>
-				<td>${user.loginId}</td>
-			</tr>
-			<tr>
-				<th scope="row">비밀번호</th>
-				<td>${user.loginPw}</td>
-			</tr>
-			<tr>
-				<th scope="row">이름</th>
-				<td>${user.name}</td>
-			</tr>
-			<tr>
-				<th scope="row">이메일</th>
-				<td>${user.email}</td>
-			</tr>
-			<tr>
-				<th scope="row">가입일</th>
-				<td>${user.registDate}</td>
-			</tr>
-			<tr>
-				<th scope="row">방문횟수</th>
-				<td>${user.visitCnt}</td>
-			</tr>
-			<tr>
-				<th scope="row">연동서비스명</th>
-				<td>${user.relId}</td>
-			</tr>
-			<tr>
-				<th scope="row">연동계정</th>
-				<td>${user.relLoginId}</td>
-			</tr>
-			<tr>
-				<th scope="row">성별</th>
-				<td>${user.sex}</td>
-			</tr>
-			<tr>
-				<th scope="row">학력</th>
-				<td>${user.grad}</td>
-			</tr>
-		</tbody>
-	</table>
-
+	<div class="row">
+		<div class="col"></div>
+		<div class="col-8">
+			<table class="table table-sm">
+				<colgroup>
+					<col width="200">
+					<col width="*">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col">항목</th>
+						<th scope="col">내용</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">회원번호</th>
+						<td>${user.id}</td>
+					</tr>
+					<tr>
+						<th scope="row">아이디</th>
+						<td>${user.loginId}</td>
+					</tr>
+					<tr>
+						<th scope="row">비밀번호</th>
+						<td>${user.loginPw}</td>
+					</tr>
+					<tr>
+						<th scope="row">이름</th>
+						<td>${user.name}</td>
+					</tr>
+					<tr>
+						<th scope="row">이메일</th>
+						<td>${user.email}</td>
+					</tr>
+					<tr>
+						<th scope="row">가입일</th>
+						<td>${user.registDate}</td>
+					</tr>
+					<tr>
+						<th scope="row">방문횟수</th>
+						<td>${user.visitCnt}</td>
+					</tr>
+					<tr>
+						<th scope="row">연동서비스명</th>
+						<td>${user.relId}</td>
+					</tr>
+					<tr>
+						<th scope="row">연동계정</th>
+						<td>${user.relLoginId}</td>
+					</tr>
+					<tr>
+						<th scope="row">성별</th>
+						<td>${user.sex}</td>
+					</tr>
+					<tr>
+						<th scope="row">학력</th>
+						<td>${user.grad}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<p>
 
 		<a class="btn btn-secondary btn-sm" href="/admin/user" role="button">회원목록</a>

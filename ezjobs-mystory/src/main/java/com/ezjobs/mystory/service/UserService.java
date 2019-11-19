@@ -1,6 +1,7 @@
 package com.ezjobs.mystory.service;
 
 import java.io.PrintStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.jasper.tagplugins.jstl.core.Out;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -39,6 +41,12 @@ public class UserService {
 	
 
 	public void login(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+
+	}
+	public void out(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
 	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
@@ -77,6 +85,7 @@ public class UserService {
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		User user=mapper.convertValue(map, User.class);//board로 변환
+		user.setRegistDate(new Date());
 		userRepository.save(user);		
 	}
 	
@@ -109,12 +118,43 @@ public class UserService {
 	}
 
 
-	
+	/*
 	public void info(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
-		String userId=modelMap.get("name").toString();
+		String userId=modelMap.get("loginId").toString();
+		String name=modelMap.get("name").toString();
+		Resume resume=new Resume();
+		Resume resume1=new Resume();
+		resume.setUserId(userId);
+		resume.setUserId(name);
+		model.addAttribute("resume",resume);
+		model.addAttribute("resume1",resume1);
+	}
+	*/
+	
+
+	public void info(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		String userId=modelMap.get("loginId").toString();
+		User user=new User();
+		System.out.println(userId);
+		user.setLoginId(userId);
+		List<User> users=userRepository.findAll(Example.of(user));
+		user=userRepository.findOne(Example.of(user)).get();
+		model.addAttribute("user",user);
+		System.out.println(users.size());
+	}
+
+	
+	public void list(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		String userId=modelMap.get("loginId").toString();
+		String name=modelMap.get("name").toString();
 		Resume resume=new Resume();
 		resume.setUserId(userId);
+		resume.setUserId(name);
 	}
 }

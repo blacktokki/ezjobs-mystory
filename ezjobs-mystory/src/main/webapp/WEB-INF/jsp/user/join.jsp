@@ -2,10 +2,6 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-<!DOCTYPE html>
-<html>
-<head>
-
 <style>
 .board_list {width: 500px; margin: 0 auto;}
 .board_list tfoot {text-align: center;}
@@ -13,8 +9,7 @@
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
-</head>
-<body>
+
  <form method="post" action="/user/join">
  <table class="board_list">
 
@@ -100,6 +95,5 @@
  </table>
 </form>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
-</body>
-</html>
+
 

@@ -10,11 +10,6 @@
 
 <form id="frm" method="post" action="/user/login">
  <table class="board_list">
-  <colgroup>
-  </colgroup>
-  
-  <thead>
-  </thead>
   <tbody>
    <tr>
     <th scope="row">아이디</th>
@@ -36,8 +31,5 @@
   
 </form>
 
-  
-</form>
 </body>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
-</html>

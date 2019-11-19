@@ -28,8 +28,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class UserService {
-	
-	private static final PrintStream out = null;
 
 	@Inject
 	UserRepository userRepository;
@@ -53,6 +51,7 @@ public class UserService {
 	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 
 	}
+	
 
 	 public void user(Model model) throws Exception{
 	      Map<String,Object> modelMap=model.asMap();
@@ -107,6 +106,13 @@ public class UserService {
 		int id=Integer.parseInt(modelMap.get("id").toString());
 		User user=userRepository.findById(id).get();//id로 board 찾기
 		model.addAttribute("user",user);
+	}	
+	
+	public void info(Model model) {
+		// TODO Auto-generated method stub
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		User user=userRepository.findById(id).get();//id로 board 찾기
+		model.addAttribute("user",user);
 	}
-
 }

@@ -12,10 +12,12 @@
 			aria-labelledby="heading${status.index}" data-parent="#accordion1">
 			<form>
 				<div class="card-body">
+					<%--
 					<c:forEach var="item2" items="${resumesSplit[status.index]}">
 						${item2}<br>
 					</c:forEach>
-					<!--${item.answer}-->
+					--%>
+					${item.answer}
 					<input type="hidden" name="id" value="${item.question}"/>
 				</div>
 			</form>

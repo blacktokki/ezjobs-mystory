@@ -10,13 +10,13 @@
 			data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="첫번째 이미지">
 				</div>
 				<div class="carousel-item" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="두번째 이미지">
 				</div>
 				<div class="carousel-item" data-interval="10000">
-					<img src="#" class="d-block w-100" alt="...">
+					<img src="#" class="d-block w-100" alt="세번째 이미지">
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleInterval"
@@ -35,74 +35,23 @@
 
 	<div class="jumbotron">
 		<div class="container">
-
-			<div class="input-group mb-3">
-				<input type="text" class="form-control"
-					placeholder="Recipient's username"
-					aria-label="Recipient's username" aria-describedby="basic-addon2">
-				<div class="input-group-append">
-					<span class="input-group-btn" id="basic-addon2"><button
-							type="button" class="btn btn-primary">검색</button></span>
-				</div>
+			<form method="post" action="#">
+			<div align="right">
+			<button class="btn btn-primary" type="submit" >검색하기</button>
 			</div>
-			<!-- 검색창 파트입니다. -->
-			<input class="btn btn-success" type="reset" value="Reset">
-			<div class="btn-group" role="group"
-				aria-label="Button group with nested dropdown">
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">기간</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
+			<p>
+			<!-- 태그 처리해야하는 부분을 넣어야합니다. -->
+				<div class="form-row">
+					<div class="col-6">
+						<input type="text" class="form-control" placeholder="태그 검색">
+					</div>
+					<div class="col-6">
+						<input type="text" class="form-control" placeholder="일반 검색">
 					</div>
 				</div>
+				
 
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">언론사</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">통합분류</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">사건사고분류</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-
-
-
-				<div class="btn-group" role="group">
-					<button id="btnGroupDrop1" type="button"
-						class="btn btn-success dropdown-toggle" data-toggle="dropdown"
-						aria-haspopup="true" aria-expanded="false">상세검색</button>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a class="dropdown-item" href="#">Dropdown link</a> <a
-							class="dropdown-item" href="#">Dropdown link</a>
-					</div>
-				</div>
-			</div>
-			<!-- 분류창 부분입니다. -->
-
+			</form>
 		</div>
 	</div>
 	<!-- 중간 위 -->
@@ -156,27 +105,23 @@
 	<!-- 중간 하 -->
 	<div class="jumbotron">
 		<div class="container">
-<table class="table table-borderless text-center">
-  <tbody>
-    <tr>
-      <td>작성 도구</td>
-    </tr>
-    <tr>
-      <td>취업 자료</td>
-    </tr>
-    <tr>
-      <td>정보 공유</td>
-    </tr>
-  </tbody>
-</table>
+			<table class="table table-borderless text-center">
+				<tbody>
+					<tr>
+						<td class="table-light">작성 도구</td>
+					</tr>
+					<tr>
+						<td class="table-light">취업 자료</td>
+					</tr>
+					<tr>
+						<td class="table-light">정보 공유</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<!-- 맨 아래 -->
 
-	<div class="jumbotron">
-		<div class="container">기업 신청란</div>
-	</div>
-	<!-- 기업 신청란 -->
 </div>
 <!-- 전체 div -->
 

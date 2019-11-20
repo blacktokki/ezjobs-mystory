@@ -99,8 +99,7 @@
 					<div class="card-header card-title">비교 하기</div>
 					<div class="card-body">
 						<ul class="card-text list-group list-group-flush"></ul>
-						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
-						<a href="#" class="btn btn-primary btn-apply">유사도검사</a>
+						<a href="#" class="btn btn-primary btn-load">유사도검사</a>
 					</div>
 				</div>
 			</div>
@@ -111,17 +110,6 @@
 <script>
 	var resume_idx = 1;
 	var resume_new = 1;
-	$("body").delegate(".tagsinput","propertychange change keyup paste input",function(e) {//태그와 태그입력값 동기화
-				var id = $(event.target).attr("id").replace("_tag", "");
-				var tags = [];
-				$("#" + id + "_tagsinput").find(".tag>span").each(
-						function(i, e) {
-							tags.push($.trim($(e).text()));
-						});
-				//console.log($("#"+id).val());
-				$("#" + id).val(tags.join(","));
-				return true;
-			});
 	$("body").delegate("#resume-create","click",function() {
 				$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
 							var $result = $(response);
@@ -239,11 +227,11 @@
 		$("#autoComplete ul").html("");
 	});
 	
-	$("#wordChange,#compare").delegate(".btn-load","click",function(e){//단어교체,비교하기 불러오기
+	$("#wordChange").delegate(".btn-load","click",function(e){//단어교체 불러오기
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
 		var form={answer:currentVal};
-		$.post("/resume/changelist", form, function(data) {
-			$(e.target).parent().find("ul").html(data).sortable();
+		$.get("/resume/changelist", form, function(data) {
+			$("#wordChange ul").html(data).sortable();
 		});
 		return false;
 	});
@@ -259,21 +247,39 @@
 		return false;
 	});
 	
-	$("#compare").delegate(".btn-apply","click",function(e){//유사도 검사
-		$("#compare ul li").each(function(i,element){
-			var currentVal = $(element).text();
-			var form={sentence:currentVal};
-			$.get("/resume/compare", form, function(data) {
-				console.log(data.result);
-			});
+	$("#compare").delegate(".btn-load","click",function(e){//유사도검사
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
+		var form={answer:currentVal};
+		$.get("/resume/changelist", form, function(data) {
+			$("#compare ul").html(data).find("li").each( function() {
+		          var sentence=$(this).html();
+		          var form={sentence:sentence};
+		          $(this).html('<div class="spinner-border" role="status">'
+		        		  +'<span class="sr-only">Loading...</span></div>');
+		          var $target=$(this);
+		          $.get("/resume/compare", form, function(data_part) {
+		        	  $target.html(data_part);
+		          });
+		    });
+			
+			
+			
 		});
 		return false;
 	});
 	
 	
+	
 	$("#accordion2").delegate("form", "submit", function(e) {//저장하기
+
+		var tags = [];
+		 $(event.target).find(".tagsinput").find(".tag>span").each(
+				function(i, e) {
+					tags.push($.trim($(e).text()));
+				});
+		$(event.target).find(".tags").val(tags.join(","));
 		var form = $(e.target).serializeJSON();
-		//console.log(form);
+		console.log(form.tags);
 		$.post("/resume/content/" + form.id, form, function(data) {
 			//console.log(data);
 			$(e.target).find(".resume-id").val(data.map.id);

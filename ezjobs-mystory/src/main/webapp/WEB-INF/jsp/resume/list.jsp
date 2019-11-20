@@ -4,7 +4,7 @@
 <c:forEach var="item" items="${resumes.content}" varStatus="status">
 	<div class="card">
 		<div class="card-header" role="tab" id="heading${status.index}" style="font-size: 14px">
-			<a class="text-info resume-link" href="/resume/write/${item.id}">${item.question}</a><br>
+			<a class="text-info resume-link" href="/resume/write/${item.id}">${item.question}</a> - ${item.tags}<br>
 
 			<a class="text-info collapsed" data-toggle="collapse" href="#collapse${status.index}" aria-expanded="false" aria-controls="collapse${status.index}"></a>
 		</div>

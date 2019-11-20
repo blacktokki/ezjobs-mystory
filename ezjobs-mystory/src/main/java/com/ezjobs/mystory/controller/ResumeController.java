@@ -2,10 +2,9 @@ package com.ezjobs.mystory.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.ezjobs.mystory.service.AutoLabelService;
 import com.ezjobs.mystory.service.ResumeService;
+import com.ezjobs.mystory.service.SplitService;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class ResumeController {
 	ResumeService resumeService;
 	
 	@Inject
-	AutoLabelService autoLabelService;
+	SplitService splitService;
 	
 	@GetMapping("")//글작성 화면 
 	public String resume(HttpSession session,Model model){
@@ -97,7 +96,6 @@ public class ResumeController {
 			return ResponseEntity.badRequest().build();
 		model.addAttribute("id",id);
 		model.addAttribute("map", map);
-		System.out.println(map.get("tags"));
 		resumeService.edit(model);
 		return ResponseEntity.ok(model);
 	}
@@ -110,19 +108,18 @@ public class ResumeController {
 		return ResponseEntity.ok(model);
 	}
 	
-	@PostMapping("changelist")
+	@GetMapping("changelist")
 	public String changeList(@RequestParam String answer,Model model){
 		model.addAttribute("answer",answer);
-		autoLabelService.spliterAnswer(model);
+		splitService.spliterAnswer(model);
 		return "resume/changelist";
 	}
 	
-	@ResponseBody
 	@GetMapping("compare")
 	public String compare(@RequestParam String sentence,Model model){
 		model.addAttribute("sentence",sentence);
-		//autoLabelService.spliterAnswer(model);
-		return "resultValue";
+		resumeService.compareAll(model);
+		return "resume/compare";
 	}
 
 }

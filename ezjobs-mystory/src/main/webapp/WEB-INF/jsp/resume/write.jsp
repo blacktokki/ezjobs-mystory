@@ -30,7 +30,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="basic-addon3">태그</span>
 					</div>
-					<input name="tags" class="tags" value="dummy,dummy2,dummy3" />
+					<input name="tags" class="tags" value="${resume.tags}" />
 				</div>
 
 				<div class="input-group">

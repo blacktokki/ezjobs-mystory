@@ -2,7 +2,8 @@ package com.ezjobs.mystory.repository;
 
 import java.util.List;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ import com.ezjobs.mystory.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+	Page<User> findById(Pageable pageable, Integer id);
+	Page<User> findByLoginIdContaining(Pageable pageable, String loginId);
 	List<User> findByLoginIdAndLoginPw(String loginId, String loginPw);
 	
 	@Transactional
@@ -21,5 +24,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	@Query(value="update User u set u.loginPw = :#{#user.loginPw}"
 			+ " WHERE u.loginId = :#{#user.loginId}")
 	void update(User user);
+	
+	
 	
 }

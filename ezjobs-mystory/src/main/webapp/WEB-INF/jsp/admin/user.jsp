@@ -26,8 +26,8 @@
 				<tr>
 					<th scope="col">멤버 검색</th>
 					<th scope="col"><select name="op">
-							<option>회원번호</option>
-							<option>유저 아이디</option>
+							<option value="idSearch">회원번호</option>
+							<option value="loginSearch">유저아이디</option>
 					</select></th>
 					<th scope="col"><input type="text" name="sch"></th>
 					<th scope="col"><input type="submit" value="검색"></th>
@@ -61,7 +61,6 @@
 					<th scope="col">가입일</th>
 				</tr>
 			</thead>
-
 
 			<!-- 테이블 내용 채우기 -->
 			<tbody>
@@ -109,15 +108,25 @@
 					<tr>
 						<td colspan="7" style="padding: 0">
 							<div class="collapse" id="collapse${item.id}">
-								<div class="card">
-									<ul class="row">
-										<li>이메일 : ${item.email}</li>
-										<li>방문횟수 : ${item.visitCnt}</li>
-										<li>연동서비스 : ${item.relId}</li>
-										<li>연동계정 : ${item.relLoginId}</li>
-										<li>학력 : ${item.grad}</li>
-										<li>성별 : ${item.sex}</li>
-									</ul>
+								<div class="card text-center">
+						
+										<div class="row" style="color: #AAAAAA; font-weight:600;">
+											<div class="col">이메일</div>
+											<div class="col">성별</div>
+											<div class="col">학력</div>
+											<div class="col">방문횟수</div>
+											<div class="col">연동서비스</div>
+											<div class="col">연동계정</div>
+										</div>
+								
+									<div class="row">										
+										<div class="col">${item.email}</div>
+										<div class="col">${item.sex}</div>
+										<div class="col">${item.grad}</div>
+										<div class="col">${item.visitCnt}</div>
+										<div class="col">${item.relId}</div>
+										<div class="col">${item.relLoginId}</div>
+									</div>
 								</div>
 							</div>
 						</td>

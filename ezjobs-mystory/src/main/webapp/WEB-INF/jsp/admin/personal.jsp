@@ -7,7 +7,7 @@
 <div class="container">
 	<div class="jumbotron">
 		<h1 class="display-5">회원번호 ${user.id}</h1>
-		<p class="lead">${user.name}님의 정보</p>
+		<p class="lead">${user.name}님의정보</p>
 	</div>
 </div>
 
@@ -16,7 +16,6 @@
 	<h2>정보정보</h2>
 	<p>
 	<div class="row">
-		<div class="col-3"></div>
 
 		<div class="col-6">
 			<table class="table table-bordered table-sm">
@@ -79,11 +78,86 @@
 			</table>
 		</div>
 
-		<div class="col-3"></div>
+		<div class="col-6"></div>
+
+	</div>
+	<div class="row">
+		<div class="col-2">
+			<a class="btn btn-secondary" href="/admin/user" role="button">회원목록</a>
+		</div>
+		<div class="col offset-1">
+			<button type="button" class="btn btn-secondary" data-toggle="modal"
+				data-target="#stop">정지</button>
+			<button type="button" class="btn btn-secondary" data-toggle="modal"
+				data-target="#unStop">정지 해제시키기</button>
+			<button type="button" class="btn btn-danger" data-toggle="modal"
+				data-target="#bye">탈퇴</button>
+		</div>
 	</div>
 
-	<p>
+	<!-- Modal -->
+	<div class="modal fade" id="stop" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel">정말로 정지 시키시겠습니까?</h3>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">해당 회원은 활동이 불가능한 상태가 됩니다.</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-warning">정지 시키기</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-		<a class="btn btn-secondary btn-sm" href="/admin/user" role="button">회원목록</a>
+	<div class="modal fade" id="unStop" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel">정지 해제 시키시겠습니까?</h3>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">해당 회원은 활동 가능 상태가 됩니다.</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-primary">정지 해제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="bye" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="exampleModalLabel">정말로 탈퇴 시키시겠습니까?</h3>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">해당 회원을 탈퇴 상태가 됩니다.</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-danger">탈퇴 시키기</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

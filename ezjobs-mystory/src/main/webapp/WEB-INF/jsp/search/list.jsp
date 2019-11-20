@@ -4,36 +4,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
-
-<%@ page import="java.util.*"%>
-<%@ page import="java.net.URLDecoder"%>
-<%@ page import="java.io.*"%>
-<%@ page import="javax.servlet.*"%>
-<%@ page import="org.springframework.ui.Model"%>
-
-
-
-<head>
-
-<!-- 삭제예정 :: 스타일 참고용 주석
-	<style type="text/css">
-	
-		input::placeholder{
-			font-style: italic;
-			font-size: 11px;
-			font-weight: 500;
-		}
-		html>body {
-			width: 100%;
-		}
-		th{
-			color: white;
-		}
-		
-	</style> -->
-
-</head>
-
 <!-- body -->
 
 <div>
@@ -49,8 +19,8 @@
 			placeholder=" 검색어를 입력해주세요 .">&nbsp;&nbsp; 
 			<input type="hidden" name="page" value="1" />
 			<input type="hidden" name="searchWay" value="${searchWay}" />
-			<input type="hidden" name="numberOfSeeResume" value="${numberOfSeeResume}" />
-		<button type="submit" class="btn btn-primary resume-submit">검색</button>
+			<input type="hidden" name="numberOfSeeSentence" value="${numberOfSeeSentence}" />
+		<button type="submit" class="btn btn-primary resume-submit fa fa-search"></button>
 		<br>
 </form>
 <br>
@@ -87,11 +57,11 @@
 								<div class="card-body">
 									<div
 										style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 8px;">
-										<h5>${item.question}</h5>
+										<h5>${item.userId}</h5>
 									</div>
 									<div
 										style="font-size: 14px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; margin-bottom: 8px;">
-										${item.answer}</div>
+										${item.text}</div>
 								</div>
 							</div>
 						</td>
@@ -100,17 +70,20 @@
 			</tbody>
 		</table>
 	</div>
-<div style="position:absolute; left:-380px; top:50px;">
-한번에 볼 자기소개서 수<br>&nbsp;
-<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeResume=1'">1</button>&nbsp;
-<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeResume=3'">3</button>&nbsp;
-<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeResume=5'">5</button>&nbsp;
+<div style="position:absolute; left:480px; top:0px;">
+&nbsp;&nbsp;한번에 볼 자기소개서 수<br>&nbsp;
+<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=1'">1</button>&nbsp;
+<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=3'">3</button>&nbsp;
+<button type="button" class="btn btn-secondary" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=5'">5</button>&nbsp;
 <br>
 <br>
-조건으로 검색 <br>&nbsp;
-<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=1&numberOfSeeResume=${numberOfSeeResume }'">전체</button>&nbsp;
-<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=2&numberOfSeeResume=${numberOfSeeResume }'">소제목</button>&nbsp;
-<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=3&numberOfSeeResume=${numberOfSeeResume }'">내용</button>&nbsp;
+</div>
+
+<div style="position:absolute; left:780px; top:0px;">
+&nbsp;&nbsp;조건으로 검색 <br>&nbsp;
+<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=1&numberOfSeeSentence=${numberOfSeeSentence }'">전체</button>&nbsp;
+<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=2&numberOfSeeSentence=${numberOfSeeSentence }'">소제목</button>&nbsp;
+<button type="button" class="btn btn-info" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=3&numberOfSeeSentence=${numberOfSeeSentence }'">내용</button>&nbsp;
 </div>
 	<!-- <div style="position: absolute; top:600px;">
 <button type="button" class="btn btn-secondary">Secondary</button>
@@ -136,16 +109,16 @@
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"><a class="page-link"
-				href="?searchText=${ param.searchText }&page=${pageNavNumber*5 + ifPageZeroThenPlusOne}&searchWay=${searchWay}&numberOfSeeResume=${numberOfSeeResume }"
+				href="?searchText=${ param.searchText }&page=${pageNavNumber*5 + ifPageZeroThenPlusOne}&searchWay=${searchWay}&numberOfSeeSentence=${numberOfSeeSentence }"
 				aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 			</a></li>
 			<c:forEach var="item" begin="${pageNavNumber*5+1}"
 				end="${(pageNavNumber+1)*5}">
 				<li class="page-item"><a class="page-link"
-					href="?searchText=${ param.searchText }&page=${item}&searchWay=${searchWay}&numberOfSeeResume=${numberOfSeeResume }">${item}</a></li>
+					href="?searchText=${ param.searchText }&page=${item}&searchWay=${searchWay}&numberOfSeeSentence=${numberOfSeeSentence }">${item}</a></li>
 			</c:forEach>
 			<li class="page-item"><a class="page-link"
-				href="?searchText=${ param.searchText }&page=${(pageNavNumber+1)*5+1}&searchWay=${searchWay}&numberOfSeeResume=${numberOfSeeResume }"
+				href="?searchText=${ param.searchText }&page=${(pageNavNumber+1)*5+1}&searchWay=${searchWay}&numberOfSeeSentence=${numberOfSeeSentence }"
 				aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</ul>
@@ -163,5 +136,4 @@
 마지막 블록 : ${requestScope.lastBlock}<br>
 총 검색 자료 수 : ${requestScope.total}<br> --%>
 
-</body>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -13,6 +13,9 @@ public class Sentence {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
+	
+	@Column(name = "tags", nullable = false)
+	private String tags;
 
 	@Column(name = "text", nullable = false)
 	private String text;

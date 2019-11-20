@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<body>
-<button type="button" onclick="location.href='info'">정보수정</button> </div>
-</body>
+<button type="button" onclick="location.href='/user/info'" class="fa fa-user fa-2x"></button>
+${sessionScope.loginId}

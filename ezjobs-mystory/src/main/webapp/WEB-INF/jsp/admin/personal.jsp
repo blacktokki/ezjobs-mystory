@@ -19,6 +19,7 @@
 
 		<div class="col-6">
 			<table class="table table-bordered table-sm">
+
 				<colgroup>
 					<col width="200">
 					<col width="*">

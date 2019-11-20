@@ -4,6 +4,7 @@
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
 
+
 <div class="container">
 	<div class="jumbotron"
 		style="background-image: url(/image/admin_user_banner.png);">
@@ -130,6 +131,7 @@
 								</div>
 							</div>
 						</td>
+
 					</tr>
 
 				</c:forEach>

@@ -46,7 +46,10 @@ public class UserController {
 	public String failView(){
 		return "user/fail";
 	}
-
+	@GetMapping("/out")
+	public String outView(){
+		return "user/out";
+	}
 	
 /*
 	@GetMapping("/userJoin")
@@ -83,9 +86,15 @@ public class UserController {
 	*/
 	
 	@GetMapping("/info")
-	public String infoView(HttpSession session){
+	public String infoView(HttpSession session,Model model){
+		
 		if(session.getAttribute("loginId")==null)
 			return "user/fail";
+		
+		model.addAttribute("loginId",session.getAttribute("loginId"));
+		userService.info(model);
+		
+		
 		
 		return "user/info";
 	}
@@ -99,7 +108,7 @@ public class UserController {
 	}
 	*/
 	@PutMapping("/info") // 글수정요청 /board/write/1
-	public String Write( @RequestParam Map<Object, Object> map, HttpSession session, Model model) {
+	public String Write(@RequestParam Map<Object, Object> map, HttpSession session, Model model) {
 		Object loginId = session.getAttribute("loginId");
 		if (loginId == null)
 			return "redirect:/temp/login/fail";
@@ -107,5 +116,26 @@ public class UserController {
 		model.addAttribute("map", map);
 		userService.edit(model);
 		return "redirect:/index";
+	}
+	
+	@GetMapping("/info/{id}")
+	public String info(@PathVariable String id,@RequestParam Map<Object, Object> map, HttpSession session, Model model){
+		model.addAttribute("map", map);
+		model.addAttribute("id",id);
+		userService.info(model);
+		return "user/info";
+	}
+	public String write( @RequestParam Map<Object, Object> map, HttpSession session, Model model) {
+		Object loginId = session.getAttribute("loginId");
+		Object name = session.getAttribute("name");
+		if (loginId == null)
+			return "redirect:/temp/login/fail";
+		model.addAttribute("loginId", loginId);
+		model.addAttribute("map", map);
+		userService.edit(model);
+		model.addAttribute("name",name);
+		userService.list(model);
+		return "redirect:/index";
+
 	}
 }

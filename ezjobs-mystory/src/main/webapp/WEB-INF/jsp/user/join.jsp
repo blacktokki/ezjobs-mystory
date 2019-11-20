@@ -2,10 +2,6 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-<!DOCTYPE html>
-<html>
-<head>
-
 <style>
 .board_list {width: 500px; margin: 0 auto;}
 .board_list tfoot {text-align: center;}
@@ -13,12 +9,11 @@
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
-</head>
-<body>
+
  <form method="post" action="/user/join">
  <table class="board_list">
 
-  <caption>회원가입</caption>
+  <caption></caption>
   <tbody>
       
  <!-- <tr>
@@ -55,11 +50,13 @@
     <td></td>
    </tr>
  -->
+ <!--
   <tr>
     <th scope="row">방문자</th>
     <td><input type="text" id="user_visitCnt" name="cisit_cnt" class="wdp_90"></td>
     <td></td>
    </tr>
+    -->
    <!--
     <tr>
     <th scope="row">relId</th>
@@ -87,14 +84,16 @@
   <tfoot>
    <tr>
     <td colspan="3">
-     <button type="submit" class="btn btn-primary resume-submit">회원가입</button>
-    </td>
-   </tr>
-  </tfoot>
+     <button type="submit" class="btn btn-secondary resume-submit">회원가입</button>
+
+  <tbody>
+      
+  
+  </tbody>
+
 
  </table>
 </form>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
-</body>
-</html>
+
 

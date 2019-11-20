@@ -2,10 +2,6 @@
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-<!DOCTYPE html>
-<html>
-<head>
-
 <style>
 .board_list {width: 500px; margin: 0 auto;}
 .board_list tfoot {text-align: center;}
@@ -13,8 +9,7 @@
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
-</head>
-<body>
+
  <form method="post" action="/user/info">
  	<input type="hidden" name="_method" value="PUT">
  <table class="board_list">
@@ -31,21 +26,21 @@
     <tr>
     <tr>
     <th scope="row">비밀번호</th>
-    <td><input type="password" id="user_loginPw" name="loginPw" class="wdp_90"></td>
+    <!--<td><input type="password" id="user_loginPw" name="loginPw" class="wdp_90"></td> -->
+       <td><input type="password" id="user_loginPw" name="loginPw" class="wdp_90" value="${user.loginPw}"></td>
+   
     <td></td>
    </tr>
     <tr>
     <th scope="row">이름</th>
 
-    <td><input type="text" id="user_name" name="name" class="wdp_90"value="${user.name}"> </td>
-
-    <td><input type="text" id="user_name" name="name" class="wdp_90"></td>
+    <td><input type="text" id="user_name" name="name" class="wdp_90" value="${user.name}"> </td>
 
     <td></td>
    </tr>
     <tr>
     <th scope="row">이메일</th>
-    <td><input type="text" id="user_email" name="email" class="wdp_90"></td>
+    <td><input type="text" id="user_email" name="email" class="wdp_90" value="${user.email}"></td>
     <td></td>
    </tr>
    <!-- 
@@ -55,11 +50,14 @@
     <td></td>
    </tr>
  -->
+ <!-- 
   <tr>
     <th scope="row">방문자</th>
     <td><input type="text" id="user_visitCnt" name="cisit_cnt" class="wdp_90"></td>
     <td></td>
    </tr>
+    -->
+    
    <!--
     <tr>
     <th scope="row">relId</th>
@@ -74,12 +72,12 @@
   -->
  <tr>
     <th scope="row">성별</th>
-    <td><input type="text" id="user_sex" name="sex" class="wdp_90"></td>
+    <td><input type="text" id="user_sex" name="sex" class="wdp_90" value="${user.sex}"></td>
     <td></td>
    </tr>
      <tr>
     <th scope="row">학력</th>
-    <td><input type="text" id="user_grad" name="grad" class="wdp_90"></td>
+    <td><input type="text" id="user_grad" name="grad" class="wdp_90" value="${user.grad}"></td>
     <td></td>
    </tr>
   
@@ -88,6 +86,7 @@
    <tr>
     <td colspan="3">
      <button type="submit" class="btn btn-primary resume-submit">수정</button>
+   <button type="button" onclick="location.href='out'" class="btn btn-primary resume-submit">탈퇴</button>
     </td>
    </tr>
   </tfoot>
@@ -95,5 +94,3 @@
  </table>
 </form>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
-</body>
-</html>

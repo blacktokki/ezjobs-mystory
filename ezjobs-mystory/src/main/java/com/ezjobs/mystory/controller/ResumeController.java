@@ -112,6 +112,15 @@ public class ResumeController {
 	public String changeList(@RequestParam String answer,Model model){
 		model.addAttribute("answer",answer);
 		splitService.spliterAnswer(model);
+		splitService.changeSynonym(model);
+		return "resume/changelist";
+	}
+	
+	@GetMapping("comparelist")
+	public String compareList(@RequestParam String answer,Model model){
+		model.addAttribute("answer",answer);
+		splitService.spliterAnswer(model);
+		System.out.println("!");
 		return "resume/changelist";
 	}
 	

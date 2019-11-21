@@ -112,7 +112,7 @@ public class ResumeService {
 	}
 
 	public void compareAll(Model model) {
-		String answer=(String)model.getAttribute("sentence");
+		String answer=((String)model.getAttribute("sentence")).replaceAll("<br>","");
 		String[] strs=answer.split(" ");
 		int [] scores=new int[strs.length];
 		int rates=0;

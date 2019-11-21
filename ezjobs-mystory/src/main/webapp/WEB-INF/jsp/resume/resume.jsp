@@ -88,7 +88,7 @@
 				<div class="card" id="wordChange">
 					<div class="card-header card-title">단어 교체</div>
 					<div class="card-body">
-						<ul class="card-text list-group list-group-flush"></ul>
+						<ul class="card-text list-group list-group-flush form-inline"></ul>
 						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
 						<a href="#" class="btn btn-primary btn-apply">내용 적용하기</a>
 					</div>
@@ -231,18 +231,32 @@
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
 		var form={answer:currentVal};
 		$.get("/resume/changelist", form, function(data) {
-			$("#wordChange ul").html(data).sortable();
+			$("#wordChange ul").html(data).sortable();/*.find("select").each(function(i,element){
+				$(element).attr("name","synonym"+i).attr("size",1);
+			});*/
 		});
 		return false;
+	});
+	$("#wordChange").delegate("select","change",function(e){//단어교체
+		$("option[value="+this.value+"]",this)
+		.attr("selected",true).siblings()
+		.removeAttr("selected");
 	});
 	
 	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
 		var currentVal="";
-		$("#wordChange ul li").each(function(i,element){
+		$copy=$("#wordChange ul li").clone()
+		$copy.find("select").each(function(i,element){
+			$(element).html($(element).find("option:selected").val());
+		});
+		$copy.find()
+		$copy.each(function(i,element){
 			currentVal+=$.trim($(element).text());
+			if($(element).find("br").length)
+				currentVal+="\r\n";
 			
 		});
-		//console.log(currentVal);
+		console.log(currentVal);
 		$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
 		return false;
 	});
@@ -250,7 +264,7 @@
 	$("#compare").delegate(".btn-load","click",function(e){//유사도검사
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
 		var form={answer:currentVal};
-		$.get("/resume/changelist", form, function(data) {
+		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {
 		          var sentence=$(this).html();
 		          var form={sentence:sentence};

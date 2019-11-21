@@ -27,6 +27,18 @@ public class AdminController {
 	@GetMapping("/user")// 회원관리 페이지 /admin/user
 	public String user(@RequestParam Map<Object,Object> map,Model model){
 		model.addAttribute("map",map);
+		String nn = "notNull";
+		model.addAttribute("op",nn);
+		model.addAttribute("sch",nn);
+		adminService.user(model);
+		return "admin/user";
+	}
+	
+	@PostMapping("/user")// 회원관리 페이지 /admin/user
+	public String user(@RequestParam Map<Object,Object> map, Model model, String op, String sch){
+		model.addAttribute("map",map);
+		model.addAttribute("op",op);
+		model.addAttribute("sch",sch);
 		adminService.user(model);
 		return "admin/user";
 	}

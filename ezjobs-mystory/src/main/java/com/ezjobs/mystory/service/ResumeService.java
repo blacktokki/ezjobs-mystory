@@ -63,6 +63,32 @@ public class ResumeService {
 		model.addAttribute("resumes",resumes);
 	}
 	
+	public void listUnwrite(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Integer page=0;
+		Integer size=30;
+		String userId=modelMap.get("loginId").toString();
+		Resume resume=new Resume();
+		resume.setUserId(userId);
+		resume.setState("미작성");
+		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		model.addAttribute("resumes",resumes);
+	}
+	
+	public void listWrited(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Integer page=0;
+		Integer size=30;
+		String userId=modelMap.get("loginId").toString();
+		Resume resume=new Resume();
+		resume.setUserId(userId);
+		resume.setState("작성완료");
+		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		model.addAttribute("resumesWrited",resumes);
+	}
+	
 	public void listAll(Model model){
 		Integer page=0;
 		Integer size=32768;
@@ -85,6 +111,7 @@ public class ResumeService {
 		String userId=(String)modelMap.get("loginId");
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setUserId(userId);
+		resume.setState("미작성");
 		resume.setEditDate(new Date());
 		resumeRepository.save(resume);
 		model.addAttribute("map",resume);
@@ -96,8 +123,18 @@ public class ResumeService {
 		int id=Integer.parseInt(modelMap.get("id").toString());
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setId(id);
-		System.out.println(resume.getTags());
+		//System.out.println(resume.getTags());
 		resumeRepository.update(resume);
+	}
+	
+	public void editState(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		String state=modelMap.get("state").toString();
+		Resume resume=new Resume();//board로 변환
+		resume.setId(id);
+		resume.setState(state);
+		resumeRepository.updateState(resume);
 	}
 	
 	public void autoComplete(Model model){

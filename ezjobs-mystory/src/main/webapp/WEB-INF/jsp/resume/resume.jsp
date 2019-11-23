@@ -66,7 +66,9 @@
 			<div id="accordion2" role="tablist"></div>
 		</div>
 		<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-			<div id="accordion3" role="tablist">(준비중 입니다.)</div>
+			<div id="accordion3" role="tablist">
+				<%@ include file="/WEB-INF/jsp/resume/writedlist.jsp"%>
+			</div>
 		</div>
 	</div>
 	<div class="col-4">
@@ -108,6 +110,17 @@
 </div>
 
 <script>
+	function refreshList(){
+		$.get("/resume/content?state=미작성", function(data) {
+			//console.log(data2);
+			$("#accordion1").html(data);
+		});
+		
+		$.get("/resume/content?state=작성완료", function(data) {
+			//console.log(data2);
+			$("#accordion3").html(data);
+		});
+	}
 	var resume_idx = 1;
 	var resume_new = 1;
 	$("body").delegate("#resume-create","click",function() {
@@ -173,7 +186,32 @@
 					$(card).find(".collapse").collapse("show");
 				}
 				return false;
-			})
+			});
+	$("#accordion3").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
+		return false;
+	});
+	$("#accordion1").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
+		var href = $(this).attr("href");
+	 	//console.log(href);
+		var form = {_method:"put",state:"작성완료"};
+		$.post(href, form, function(data) {
+			//console.log(data);
+			refreshList();
+		});
+		return false;
+	});
+	
+	$("#accordion3").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
+		var href = $(this).attr("href");
+		
+		var form = {_method:"put",state:"미작성"};
+		$.post(href, form, function(data) {
+			//console.log(data);
+			refreshList();
+		});
+		return false;
+	});
+
 	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e){//제목 동기화
 				var id = $(e.target).attr("id").replace("write-question", "");
 				var currentVal=$(e.target).val();
@@ -294,14 +332,12 @@
 		$(event.target).find(".tags").val(tags.join(","));
 		var form = $(e.target).serializeJSON();
 		console.log(form.tags);
+		console.log(form.id);
 		$.post("/resume/content/" + form.id, form, function(data) {
 			//console.log(data);
 			$(e.target).find(".resume-id").val(data.map.id);
 			$(e.target).find(".resume-method").val("put");
-			$.get("/resume/content", function(data2) {
-				//console.log(data2);
-				$("#accordion1").html(data2);
-			});
+			refreshList();
 		});
 		return false;
 	});

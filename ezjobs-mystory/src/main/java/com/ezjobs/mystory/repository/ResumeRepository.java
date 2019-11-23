@@ -23,6 +23,12 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 			+ " WHERE r.id = :#{#resume.id}")
 	void update(@Param("resume") Resume resume);
 
+	@Transactional
+	@Modifying // update , delete Query
+	@Query(value = "update Resume r set r.state = :#{#resume.state} "
+			+ " WHERE r.id = :#{#resume.id}")
+	void updateState(Resume resume);
+	
 	Page<Resume> findByTypeContainingOrDeptContainingOrCompanyContainingOrQuestionContainingOrAnswerContainingOrUserIdContaining(
 			Pageable pageable, String type, String dept, String company, String question, String answer, String userId);
 	Page<Resume> findByQuestionContaining(Pageable pageable, String question);

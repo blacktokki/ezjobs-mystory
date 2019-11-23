@@ -47,17 +47,23 @@ public class TempController{
 		keywordAnalysisService.execute();
 	}*/
 	
-	@GetMapping("/resumetostc")//문장데이터생성기
+	@GetMapping("/resume/stc")//문장데이터생성기
 	public void resumetostc(Model model){
 		resumeService.listAll(model);
 		splitService.spliterResumes(model);
 		splitService.sentenceAddAll(model);
 	}
 	
-	@GetMapping("/resumetag")//태그생성기
+	@GetMapping("/resume/tag")//태그생성기
 	public void resumetag(Model model){
 		resumeService.listAll(model);
 		keywordAnalysisService.tagger(model);
+	}
+	
+	@GetMapping("/resume/tagcount")//문항유형태그개수
+	public void resumetagcount(Model model){
+		resumeService.listAll(model);
+		keywordAnalysisService.taggerCount(model);
 	}
 	
 	@GetMapping("/tagsearch")//태그검색시험용

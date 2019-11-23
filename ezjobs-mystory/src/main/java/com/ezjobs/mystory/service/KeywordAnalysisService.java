@@ -91,6 +91,31 @@ public class KeywordAnalysisService {
 		ResumeRepository.saveAll(resumes);
 	}
 	
+	public void taggerCount(Model model) {
+		Tag tagEx=new Tag();
+		tagEx.setType("유형");
+		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));
+		List<Resume> resumes=ResumeRepository.findAll();
+		Map<Integer,Integer> resumeMap=new HashMap<>();
+		PageRequest pr=PageRequest.of(0,10000);
+		for(int i=0;i<resumes.size();i++) {
+			resumes.get(i).setTags(resumes.get(i).getDept());
+			resumeMap.put(resumes.get(i).getId(),i);
+		}
+		for(Tag tag:tags) {
+			String name=tag.getName();
+			SearchQuery searchQuery=new NativeSearchQueryBuilder()
+					.withQuery(matchQuery("question",name))
+					.withIndices("intro")
+					.withPageable(pr)
+	      			//.withTypes("doc")
+					//.withSourceFilter(sourceFilter)
+					.build();
+			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
+			System.out.println(name+":"+list.size());
+		}
+	}
+	
 	
 	public void execute() {
 		//String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};

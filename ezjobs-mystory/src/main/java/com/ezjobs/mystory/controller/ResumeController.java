@@ -38,20 +38,29 @@ public class ResumeController {
 		if(loginId==null) 
 			return "redirect:/temp/login/fail";
 		model.addAttribute("loginId",loginId);
-		resumeService.list(model);
+		resumeService.listUnwrite(model);
+		resumeService.listWrited(model);
 		//autoLabelService.spliterResumes(model);
 		return "resume/resume";
 	}
 	
 	@GetMapping("content")
-	public String list(HttpSession session,Model model){
+	public String list(@RequestParam String state,HttpSession session,Model model){
 		Object loginId=session.getAttribute("loginId");
 		if(loginId==null) 
 			return "redirect:/temp/login/fail";
 		model.addAttribute("loginId",loginId);
-		resumeService.list(model);
-		//autoLabelService.spliterResumes(model);
-		return "resume/list";
+		
+		if(state.equals("작성완료")) {
+			resumeService.listWrited(model);
+			//autoLabelService.spliterResumes(model);
+			return "resume/writedlist";
+		}
+		else {
+			resumeService.listUnwrite(model);
+			//autoLabelService.spliterResumes(model);
+			return "resume/list";
+		}
 	}
 	
 	@GetMapping("content/{id}")
@@ -97,6 +106,19 @@ public class ResumeController {
 		model.addAttribute("id",id);
 		model.addAttribute("map", map);
 		resumeService.edit(model);
+		return ResponseEntity.ok(model);
+	}
+	
+	
+	@ResponseBody
+	@PutMapping("state/{id}")
+	public ResponseEntity<?> content(@PathVariable String id,@RequestParam String state,HttpSession session,Model model){
+		Object loginId=session.getAttribute("loginId");
+		if(loginId==null) 
+			return ResponseEntity.badRequest().build();
+		model.addAttribute("id",id);
+		model.addAttribute("state", state);
+		resumeService.editState(model);
 		return ResponseEntity.ok(model);
 	}
 	

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import org.elasticsearch.script.Script;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -30,34 +31,68 @@ import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.LabelSequence;
-import kr.bydelta.koala.okt.SentenceSplitter;
 
 import com.ezjobs.mystory.dto.ElasticResume;
 import com.ezjobs.mystory.entity.Resume;
-import com.ezjobs.mystory.entity.Sentence;
-import com.ezjobs.mystory.repository.SentenceRepository;
-import com.ezjobs.mystory.repository.SynonymRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.ezjobs.mystory.entity.Tag;
+import com.ezjobs.mystory.repository.ResumeRepository;
+import com.ezjobs.mystory.repository.TagRepository;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 @Service
-public class AutoLabelService {
+public class KeywordAnalysisService {
+	
+	@Inject
+	private TagRepository tagRepository;
+	
+	@Inject
+	private ResumeRepository ResumeRepository;
 	
 	@Inject
 	private ElasticsearchOperations elasticsearchTemplate;
 	
-	@Inject
-	private SynonymRepository synonymRepository;
+	public void tagger(Model model) {
+		Tag tagEx=new Tag();
+		tagEx.setType("유형");
+		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));
+		List<Resume> resumes=ResumeRepository.findAll();
+		Map<Integer,Integer> resumeMap=new HashMap<>();
+		PageRequest pr=PageRequest.of(0,10000);
+		for(int i=0;i<resumes.size();i++) {
+			resumes.get(i).setTags(resumes.get(i).getDept());
+			resumeMap.put(resumes.get(i).getId(),i);
+		}
+		for(Tag tag:tags) {
+			String name=tag.getName();
+			System.out.println(name);
+			SearchQuery searchQuery=new NativeSearchQueryBuilder()
+					.withQuery(matchQuery("question",name))
+					.withIndices("intro")
+					.withPageable(pr)
+	      			//.withTypes("doc")
+					//.withSourceFilter(sourceFilter)
+					.build();
+			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
+			System.out.println(list.size());
+			for(ElasticResume resume:list) {
+				//System.out.println(resume.getId());
+				int i=resumeMap.get(resume.getId());
+				//System.out.println(resumes.get(i).getId());
+				resumes.get(i).setTags(name+","+resumes.get(i).getTags());
+			}
+			//System.out.println(resumes.get(0).getQuestion());
+			//System.out.println(resumes.get(0).getTags());
+		}
+		/*
+		for(Resume resume:resumes) {
+			System.out.println(resume.getTags());
+		}*/
+		ResumeRepository.saveAll(resumes);
+	}
 	
-	@Inject
-	private SentenceRepository sentenceRepository;
 	
-	@Inject
-	private ObjectMapper mapper;
-	
-	public void temp() {
+	public void execute() {
 		//String[] array={"aaa bbb ccc","bbb ccc ddd","aaa ddd eee","aaa ccc","bbb ccc"};
 		Script script=new Script("List a=new ArrayList();"
 							   + "for(t in doc['answer'].values){"
@@ -66,7 +101,7 @@ public class AutoLabelService {
 							   + "}"
 							   + "return a;"
 							   );
-		Script script2=new Script("doc['question.keyword']");
+		Script script2=new Script("doc['id']");
 		//SourceFilter sourceFilter = new FetchSourceFilter(new String[]{"question"}, null);
 		PageRequest pr=PageRequest.of(0, 32768);
 		SearchQuery searchQuery=new NativeSearchQueryBuilder()
@@ -94,9 +129,9 @@ public class AutoLabelService {
 			//System.out.println(resume.getQuestion());
 			//System.out.println(str);
 		}
-		temp(al.toArray(new String[al.size()]));
+		execute(al.toArray(new String[al.size()]));
 	}
-	private void temp(String[] array) {
+	private void execute(String[] array) {
 		int numTopic=450;//maximum300
 		Pattern pattern = Pattern.compile("[\\p{L}\\p{N}_]+");
 		ArrayList<Pipe> pipelist=new ArrayList<Pipe>();
@@ -166,70 +201,5 @@ public class AutoLabelService {
 		}
 	}
 	
-	public void spliterResumes(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Object resumesObj=mapper.convertValue(modelMap.get("resumes"),Map.class).get("content");
-		List<Resume> resumes=mapper.convertValue(resumesObj,new TypeReference<List<Resume>>(){});
-		List<List<String>> resumesSplit=new ArrayList<>();
-		for(Resume resume:resumes) {
-			String str=(String)resume.getAnswer();
-			if(str!=null)
-				resumesSplit.add(spliter(str));
-			else
-				System.out.println("NULL!");
-			System.out.println("-------------------------");
-		}
-		model.addAttribute("resumesSplit",resumesSplit);
-	}
-	
-	public void spliterAnswer(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		String answer=(String)modelMap.get("answer");
-		System.out.println(answer);
-		List<String> strs = spliter(answer);
-		/*for(String str:strs){
-			
-		}*/
-		model.addAttribute("sentences",strs);
-	}
-	
-	private List<String> spliter(String str) {
-		SentenceSplitter splitter = new SentenceSplitter();
-		List<String> paragraph = splitter.sentences(str.replaceAll("다\\.", "다. "));
-		return spliterAddon(paragraph);
-	}
-	
-	private List<String> spliterAddon(List<String> strs) {
-		List<String> paragraph = new ArrayList<String>();
-		for(String s:strs) {
-			 Collections.addAll(paragraph,(s.split("\n")));
-		}
-		for(String s:paragraph)
-			System.out.println(s);
-		return paragraph;
-	}
-	
-	public void sentenceAddAll(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		List<List<String>> resumesSplit=mapper.convertValue(modelMap.get("resumesSplit"),new TypeReference<List<List<String>>>(){});	
-		List<Sentence> sentences=new ArrayList<Sentence>();
-		int mx=0;
-		for(List<String> resumeSplit:resumesSplit) {
-			int i=0;
-			for(String str:resumeSplit) {
-				Sentence sentence=new Sentence();
-				sentence.setUserId("_admin");
-				sentence.setText(str);
-				sentence.setPosition(i++);
-				sentence.setPositionMax(resumeSplit.size());
-				if(mx<str.length()) {
-					mx=str.length();
-					System.out.println(str);
-				}
-				System.out.println(mx);
-				sentences.add(sentence);
-			}
-		}
-		sentenceRepository.saveAll(sentences);
-	}
+
 }

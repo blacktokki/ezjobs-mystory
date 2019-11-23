@@ -120,7 +120,6 @@ public class ResumeController {
 	public String compareList(@RequestParam String answer,Model model){
 		model.addAttribute("answer",answer);
 		splitService.spliterAnswer(model);
-		System.out.println("!");
 		return "resume/changelist";
 	}
 	

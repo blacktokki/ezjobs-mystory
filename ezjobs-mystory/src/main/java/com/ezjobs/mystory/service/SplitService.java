@@ -108,11 +108,14 @@ public class SplitService {
 		List<String> sentences=mapper.convertValue(model.getAttribute("sentences"),new TypeReference<List<String>>(){});
 		List<String> sentences2=new ArrayList<>();
 		for(String sentence:sentences) {
+			
 			String checksum="";
 			List<?> synonyms=entityManager
 		        .createNativeQuery("SELECT distinct keyword , synonym FROM Synonym "
 		        		+ "where match(keyword) against('"+sentence+"')")
 		        .getResultList();
+			sentence="<ul class='p-0'><li class='d-inline-block align-top'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-top'>")+"&nbsp;</li></ul>";
+			//System.out.println(sentence);
 			Map<String,String> mapStr=new HashMap<>();
 			for(Object obj:synonyms) {
 				Object[] strs=(Object[])obj;

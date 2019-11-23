@@ -141,4 +141,15 @@ public class ResumeService {
 		model.addAttribute("scores",scores);
 		model.addAttribute("rates",100*rates/(size*strs.length));
 	}
+
+	public void tagsearch(Model model) {
+		/*
+		List<Sentence> sentences = entityManager
+		        .createQuery("SELECT s FROM Sentence s WHERE s.text LIKE ?1 AND s.tags LIKE ?2 AND s.tags LIKE ?3",Sentence.class)
+		        .setParameter(1,"%키워드%")
+		        .setParameter(2,"%태그1%")
+		        .setParameter(3,"%태그2%")
+		        .getResultList();
+		*/
+	}
 }

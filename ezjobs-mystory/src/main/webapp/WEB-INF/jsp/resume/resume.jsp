@@ -66,7 +66,7 @@
 			<div id="accordion2" role="tablist"></div>
 		</div>
 		<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-			<div id="accordion3" role="tablist">새 자기소개서</div>
+			<div id="accordion3" role="tablist">(준비중 입니다.)</div>
 		</div>
 	</div>
 	<div class="col-4">
@@ -88,7 +88,7 @@
 				<div class="card" id="wordChange">
 					<div class="card-header card-title">단어 교체</div>
 					<div class="card-body">
-						<ul class="card-text list-group list-group-flush form-inline"></ul>
+						<ul class="card-text list-group form-inline"></ul>
 						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
 						<a href="#" class="btn btn-primary btn-apply">내용 적용하기</a>
 					</div>
@@ -231,9 +231,9 @@
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
 		var form={answer:currentVal};
 		$.get("/resume/changelist", form, function(data) {
-			$("#wordChange ul").html(data).sortable();/*.find("select").each(function(i,element){
-				$(element).attr("name","synonym"+i).attr("size",1);
-			});*/
+			$("#wordChange ul").html(data).sortable().find("li").each(function(i,element){
+				$(element).find("ul").sortable();
+			});
 		});
 		return false;
 	});
@@ -245,11 +245,11 @@
 	
 	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
 		var currentVal="";
-		$copy=$("#wordChange ul li").clone()
+		$copy=$("#wordChange ul .list-sentence").clone();
 		$copy.find("select").each(function(i,element){
 			$(element).html($(element).find("option:selected").val());
 		});
-		$copy.find()
+		$copy.find();
 		$copy.each(function(i,element){
 			currentVal+=$.trim($(element).text());
 			if($(element).find("br").length)

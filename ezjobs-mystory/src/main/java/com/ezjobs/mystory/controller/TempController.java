@@ -59,4 +59,9 @@ public class TempController{
 		resumeService.listAll(model);
 		keywordAnalysisService.tagger(model);
 	}
+	
+	@GetMapping("/tagsearch")//태그검색시험용
+	public void tag(Model model){
+		resumeService.tagsearch(model);
+	}
 }

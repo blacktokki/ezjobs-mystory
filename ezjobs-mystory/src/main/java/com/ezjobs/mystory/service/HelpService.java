@@ -103,6 +103,21 @@ public class HelpService{
 		board.setId(id);
 		boardRepository.update(board);
 	}
+	
+	public void community(Model model){
+		
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
+		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
+		PageRequest pr=PageRequest.of(pageNum, 5,Sort.by(Sort.Direction.DESC,"editDate"));
+				
+		Board board=new Board();
+		board.setBoardType("Board");
+		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);
+		
+		model.addAttribute("boardscommunity",boards);
+	}
 
 }
 

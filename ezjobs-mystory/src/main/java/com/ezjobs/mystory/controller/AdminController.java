@@ -50,4 +50,23 @@ public class AdminController {
 		return "admin/personal";
 	}
 	
+	
+	@GetMapping("/tag")
+	public String tag(@RequestParam Map<Object,Object> map,Model model){
+		model.addAttribute("map",map);
+		adminService.tag(model);
+		return "admin/tag";
+	}
+	
+	@PostMapping("/tag")
+	public String tag(@RequestParam Map<Object,Object> map, Model model, String sch, int showNum, String upTag, String upTagId, String delTagId){
+		model.addAttribute("map",map);
+		model.addAttribute("sch",sch);
+		model.addAttribute("showNum", showNum);
+		model.addAttribute("upTagId",upTagId);
+		model.addAttribute("upTag",upTag);
+		model.addAttribute("delTagId",delTagId);
+		adminService.tag(model);
+		return "admin/tag";
+	}
 }

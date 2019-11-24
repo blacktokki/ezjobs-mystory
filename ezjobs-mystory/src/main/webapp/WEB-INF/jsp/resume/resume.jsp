@@ -305,7 +305,7 @@
 		var form={answer:currentVal};
 		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {
-		          var sentence=$(this).html();
+		          var sentence=$.trim($(this).text());
 		          var form={sentence:sentence};
 		          $(this).html('<div class="spinner-border" role="status">'
 		        		  +'<span class="sr-only">Loading...</span></div>');

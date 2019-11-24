@@ -289,7 +289,7 @@
 				$(element).html($(element).find("option:selected").val());
 			});
 			$copy.each(function(i,element){
-				currentVal+=" "+$.trim($(element).text());
+				currentVal+=" "+$.trim($(element).text().replace(/\s+/g, " "));
 				if($(element).find("br").length)
 					currentVal+="\r\n";
 				
@@ -305,7 +305,7 @@
 		var form={answer:currentVal};
 		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {
-		          var sentence=$.trim($(this).text());
+		          var sentence=$.trim($(this).text().replace(/\s+/g, " "));
 		          var form={sentence:sentence};
 		          $(this).html('<div class="spinner-border" role="status">'
 		        		  +'<span class="sr-only">Loading...</span></div>');

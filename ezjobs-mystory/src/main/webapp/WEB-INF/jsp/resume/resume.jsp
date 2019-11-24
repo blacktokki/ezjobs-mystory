@@ -284,18 +284,19 @@
 	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
 		var currentVal="";
 		$copy=$("#wordChange ul .list-sentence").clone();
-		$copy.find("select").each(function(i,element){
-			$(element).html($(element).find("option:selected").val());
-		});
-		$copy.find();
-		$copy.each(function(i,element){
-			currentVal+=$.trim($(element).text());
-			if($(element).find("br").length)
-				currentVal+="\r\n";
-			
-		});
-		console.log(currentVal);
-		$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+		if($copy.length>0){
+			$copy.find("select").each(function(i,element){
+				$(element).html($(element).find("option:selected").val());
+			});
+			$copy.each(function(i,element){
+				currentVal+=" "+$.trim($(element).text());
+				if($(element).find("br").length)
+					currentVal+="\r\n";
+				
+			});
+			console.log(currentVal);
+			$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+		}
 		return false;
 	});
 	
@@ -304,7 +305,7 @@
 		var form={answer:currentVal};
 		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {
-		          var sentence=$(this).html();
+		          var sentence=$.trim($(this).text());
 		          var form={sentence:sentence};
 		          $(this).html('<div class="spinner-border" role="status">'
 		        		  +'<span class="sr-only">Loading...</span></div>');

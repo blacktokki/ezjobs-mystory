@@ -162,7 +162,7 @@ public class ResumeService {
 					like+=strs[i+j]+" ";		
 			}
 			List<?> sentences=entityManager
-	        .createNativeQuery("SELECT text FROM Sentence "
+	        .createNativeQuery("SELECT text FROM sentence "
 	        		+ "where match(text) against('\""+like+"\"' in boolean mode)")
 	        .getResultList();
 			

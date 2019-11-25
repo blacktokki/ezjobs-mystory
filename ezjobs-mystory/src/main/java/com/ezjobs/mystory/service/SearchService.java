@@ -202,6 +202,6 @@ public class SearchService {
 	}
 
 	public void searchWordCloud(Model model) {
-
+			
 	}
 }

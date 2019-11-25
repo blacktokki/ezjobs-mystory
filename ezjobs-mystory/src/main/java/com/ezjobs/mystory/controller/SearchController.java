@@ -35,14 +35,11 @@ public class SearchController {
 			searchService.searchPauseByTags(model);
 		}
 		
-		
-		
 		return "search/list";
 	}
 	
 	@GetMapping("dashboard")
 	public String dashboard(Model model){
-		searchService.searchWordCloud(model);
 		return "search/dashboard";
 	}
 	
@@ -56,7 +53,6 @@ public class SearchController {
 	public String treeMap(Model model){
 		return "search/treeMapJson";
 	}
-	
 	
 	/* 혹시나 유저 편의로 주소맵핑
 	 * @GetMapping("list") public String dsearch1() { return "redirect:list/1"; }

@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
+<!-- Ctrl+F #워드클라우드 #차트 #트리맵 #색상 #트리맵 도메인 #JSON연결 #데이터출력수 -->
 <!-- body -->
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script
@@ -32,7 +33,7 @@
 	style="left: 50%; text-align: center; font-weight: bold; font-size:24px; color: #6e6e6e; margin: 30px 0px 40px -400px; width: 800px;">
 	자기소개서 분석 / 시각화 </div>
 
-<div id="wordcloud" align="center"></div>
+<div id="wordcloud" align="center" style="zoom:1.1;"></div>
 <!-- 워드 클라우드 -->
 
 
@@ -47,7 +48,7 @@
 document.getElementById("jsonChart").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
 document.getElementById("my_dataviz").style.display = "none";
 
-function showCloud(){ // 특정한 시각화 제공을 위한 버튼에 사용되는 함수 
+function showCloud(){ // 특정한 시각화 데이터 제공을 위한 버튼에 사용되는 함수 
 	document.getElementById("wordcloud").style.display = "block";
 	document.getElementById("jsonChart").style.display = "none";
 	document.getElementById("my_dataviz").style.display = "none";
@@ -70,7 +71,7 @@ function showTreeMap(){
 	
  	var frequency_list = $.ajax({
 		type : 'get',
-		url : '/search/wordCloudAndChartJson',
+		url : '/search/wordCloudAndChartJson', //#JSON연결
 		datatype : 'json',
 		async : false,
 		success : function() {
@@ -90,17 +91,23 @@ function showTreeMap(){
 	var r1mem = 257;
 	var fontSizePrint = 0;
 	
-	function draw(words) {
+	
+	// #워드클라우드
+	function draw(words) { 
 		d3.select("#wordcloud").append("svg").attr("width", 1600).attr(
 				"height", // 여기서 div 크기(width, height), 위치(translate) 조절
-				600).attr("class", "wordcloud").append("g").attr("transform",
-				"translate(740,200)").selectAll("text").data(words).enter()
+				600).attr("class", "wordcloud")
+				.append("g").attr("transform",
+				"translate(620,220)").selectAll("text").data(words).enter()
+				.append("a").attr("xlink:href", function(d){
+					return "/search/list?searchText="+d.text;
+				})
 				.append("text").style("font-weight", function(d) {
 					return "600";
 				}).style("font-size", function(d) {
 					return d.size + "px";
 				}).style("fill", function(d, i) {
-					while (r1 + r2 + r3 > 550 || r1mem == r1) { // 너무 흰색에 가깝지 않게 처리
+					while (r1 + r2 + r3 > 550 || r1mem == r1) { // 너무 흰색에 가깝지 않게 처리 #색상
 						r1 = parseInt(Math.random() * 255);
 						r2 = parseInt(Math.random() * 255);
 						r3 = parseInt(Math.random() * 255);
@@ -115,7 +122,7 @@ function showTreeMap(){
 							r1 = 2*r1/3;
 							r2 = 2*r2/3;
 						}
-						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)";	
+						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상
 					}
 					return c1 + c2 + c3;
 				}).attr(
@@ -123,9 +130,12 @@ function showTreeMap(){
 						function(d) {
 							return "translate(" + [ (d.x-20)/(1.1), (d.y+50)/(0.85) ] + ")rotate("
 									+ d.rotate + ")";
-						}).text(function(d) {
+						}).text(function(d, i) {
+							if(i>35){ // #데이터출력수
+								return null;
+							}
 					return d.text;
-				});
+					});
 	}
 	
 	d3.layout.cloud().size([ 1600, 600 ]).words(x).rotate(0).fontSize( // size로 div크기가 아니라, div 안에 그려지는 창의 크기 조절
@@ -135,12 +145,12 @@ function showTreeMap(){
 	}).on("end", draw).start(); // 워드 클라우드 끝
 	
 	
-	//차트 시작
+	// #차트
 	var sizeTextList = new Array(2);
 	sizeTextList[0] = new Array();
 	sizeTextList[1] = new Array();
 
-	for ( var i in x) {
+	for (var i in x) {
 		sizeTextList[0].push(x[i].doc_count);
 		sizeTextList[1].push(x[i].text);
 	}
@@ -203,6 +213,8 @@ function showTreeMap(){
 	sizeTextList[0].reverse();
 	sizeTextList[1].reverse();
 	
+	sizeTextList[0] = sizeTextList[0].slice(0,40); // #데이터출력수
+	sizeTextList[1] = sizeTextList[1].slice(0,40);
 	
 	var chartColors = new Array();
 	var chartBold = new Array();
@@ -220,7 +232,7 @@ function showTreeMap(){
 		}
 		r1mem = r1;
 		
-		chartColors[i] = "rgba(" + r1 + ", " + r2 + ", " + r3 + ", 0.2)";
+		chartColors[i] = "rgba(" + r1 + ", " + r2 + ", " + r3 + ", 0.2)"; //#색상
 		chartBold[i] = "rgba(0, 0, 0, 0.4)";
 		
 		i++;
@@ -251,14 +263,13 @@ function showTreeMap(){
 		}
 	});
 	
-	// 트리맵 시작
-
-	// set the dimensions and margins of the graph
+	
+	// #트리맵
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
   width = 1300 - margin.left - margin.right,
   height = 700 - margin.top - margin.bottom;
 
-// append the svg object to the body of the page
+
 var svg = d3.select("#my_dataviz")
 .append("svg")
   .attr("width", width + margin.left + margin.right)
@@ -267,31 +278,34 @@ var svg = d3.select("#my_dataviz")
   .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-// read json data
+
 var domainValue;
 var avg = 0;
 var j = 0;
-d3.json("/search/treeMapJson", function(data) {
-  // Give the data to this cluster layout:
+d3.json("/search/treeMapJson", function(data) { //#JSON연결
+
 	  for(j=0;j<data.children.length;j++){
 		avg = avg + data.children[j].size;  
 	  }
 	  avg = avg / data.children.length;
 	  var root = d3.hierarchy(data).sum(function(d){
-		  domainValue = (d.size + avg/5);
-		  return domainValue;}) // Here the size of each leave is given in the 'value' field in input data
+		  domainValue = (d.size + avg/5); // #트리맵 도메인
+		  return domainValue;})
 	  
-  // Then d3.treemap computes the position of each element of the hierarchy
+
   d3.treemap()
     .size([width, height])
     .padding(2)
     (root)
     
-  // use this information to add rectangles:
+  
   svg
     .selectAll("rect")
     .data(root.leaves())
     .enter()
+    .append("a").attr("xlink:href", function(d){
+					return "/search/list?searchTags="+d.data.text;
+				})
     .append("rect")
       .attr('x', function (d) { return d.x0; })
       .attr('y', function (d) { return d.y0; })
@@ -299,28 +313,34 @@ d3.json("/search/treeMapJson", function(data) {
       .attr('height', function (d) { return d.y1 - d.y0; })
       .style("stroke", "black")
       .style("fill", function (d) {
-    	  return randomColor[d.data.type];
+    	  return randomColor[d.data.type]; // #색상
     	  })
-  // and to add the text labels
-    svg
-    .selectAll("text")
-    .data(root.leaves())
-    .enter()
-    .append("text")
-      .attr("x", function(d){ return d.x0+5})    // +10 to adjust position (more right)
-      .attr("y", function(d){ return d.y0+10})    // +20 to adjust position (lower)
-      .text(function(d){
-    	  return d.data.text;
-    	   })
-      .attr("font-size", "9px")
-      .attr("fill", "#FFFFFF")
-      .attr("font-weight", "bold")
-      .append("tspan")
-      .text(function(d){
-    	  return " => " + d.data.size;
-	   })
-	  .attr('x', function(d){ return d.x0})
-      .attr('dy', '1em')
+  
+    svg.selectAll('text')
+      .data(root.leaves())
+      .enter()
+      .append('text')
+      .selectAll('tspan')
+      .data(d => {
+          return d.data.text.split(/(?=[\s]+)/g) // split the name of movie
+              .map(v => { 
+                  return {
+                      text: v,
+                      x0: d.x0,
+                      y0: d.y0
+                  }
+              });
+      })
+      .enter()
+      .append("a").attr("xlink:href", function(d){
+					return "/search/list?searchTags="+d.text;
+				})
+      .append('tspan')
+      .attr("x", (d) => d.x0 + 5)
+      .attr("y", (d, i) => d.y0 + 15 + (i * 10)) 
+      .text((d) =>  d.text.replace(/(\s*)/g, ""))
+      .attr("font-size", "0.6em")
+      .attr("fill", "white") // #색상
 })
 
 </script>

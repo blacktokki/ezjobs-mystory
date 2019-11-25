@@ -112,15 +112,51 @@
 			<table class="table">
 				<tbody>
 					<tr>
-						<td class="table-light">작성 도구</td>
+						<td class="table-light">
+						<div>
+						<div style="float:left">
+						<h3><strong>방대한 자료</strong></h3>
+						<p><h5>합격한 자소서 수집</h5></p>
+						<p>자료를 문항 단위별 분리<br> 선정된 키워드를 기준으로 독특한 소개서 분리</p>
+						</div>
+						<div style="float:right">
+						<img src="/image/content1.jpg" width="200px" height="200px" alt="자료를 불러오는 중입니다">
+						</div>
+						</div>
+						</td>
 					</tr>
 					<tr>
-						<td class="table-light">취업 자료</td>
+						<td class="table-light">
+						<div>
+						<div style="float:left">
+						<h3><strong>작성 도구</strong></h3>
+						<p><h5>자소서 작성 시 편리</h5></p>
+						<p>어두를 적으면 어두로 시작하는 문장, 문단 목록 추천<br>
+						 자소서의 문장,문단 위치를 마우스만으로도 손쉽게 이동 가능<br>
+						 이미 완성된 자소서들과의 유사도 검사 가능</p>
+						</div>
+						<div style="float:right">
+						<img src="/image/content2.jpg" width="200px" height="200px" alt="자료를 불러오는 중입니다">
+						</div>
+						</div>
+						</td>
 					</tr>
 					<tr>
-						<td class="table-light">정보 공유</td>
+						<td class="table-light">
+						<div>
+						<div style="float:left">
+						<h3><strong>커뮤니티 구축</strong></h3>
+						<p><h5>정보 공유를 위한 게시판</h5></p>
+						<p>회원과 비회원 모두 사용 가능한
+						<br>게시판을 통한 회사, 자소서 등의 여러가지 정보를 공유</p>
+						</div>
+						<div style="float:right">
+						<img src="/image/content3.jpg" width="200px" height="200px" alt="자료를 불러오는 중입니다">
+						</div>
+						</div>
+						</td>
 					</tr>
-				</tbody>
+					</tbody>
 			</table>
 		</div>
 	</div>

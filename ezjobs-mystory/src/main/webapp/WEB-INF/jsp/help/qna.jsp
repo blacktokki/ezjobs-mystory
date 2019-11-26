@@ -43,7 +43,7 @@
 		</tbody>
 	</table>
 <!-- 우측정렬 하기 -->
-<a class="btn btn-primary btn-sm" href="#" role="button">문의하기</a>
+<a class="btn btn-primary btn-sm" href="/help/qnawrite" role="button">문의하기</a>
 </div>
 <p>
 

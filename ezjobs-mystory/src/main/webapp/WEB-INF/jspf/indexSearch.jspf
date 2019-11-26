@@ -17,21 +17,3 @@
 					<input type="hidden" name="numberOfSeeSentence" value="${numberOfSeeSentence}" />
 				</div>
 </form>
-
-
-<!-- <form method="post" action="/search/list">
-				<div align="right">
-					<button class="btn btn-primary" type="submit">검색하기</button>
-				</div>
-				<p>
-				<div class="form-row">
-					<div class="col-6">
-						<input type="text" class="form-control" name="" placeholder="태그 검색">
-					</div>
-					<div class="col-6">
-						<input type="text" class="form-control" name="" placeholder="일반 검색">
-					</div>
-				</div>
-
-
-			</form> -->

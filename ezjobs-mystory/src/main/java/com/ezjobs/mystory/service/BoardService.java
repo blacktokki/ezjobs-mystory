@@ -33,7 +33,7 @@ public class BoardService {
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
 		Board board=new Board();
-		board.setBoardType("board");
+		board.setBoardType("Board");
 		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
 		model.addAttribute("boards",boards);
 		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
@@ -59,7 +59,7 @@ public class BoardService {
 		Board board=mapper.convertValue(map, Board.class);//board로 변환
 		board.setUserId(userId);
 		board.setEditDate(new Date());
-		board.setBoardType("board");
+		board.setBoardType("Board");
 		boardRepository.save(board);
 	}
 	

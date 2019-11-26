@@ -74,7 +74,6 @@
 						<c:forEach var="item" items="${boardscommunity.content}">
 							<tr>
 								<td><a href="/board/content/${item.id}">${item.title}&nbsp;</a></td>
-								<td align="center">${item.editDate}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

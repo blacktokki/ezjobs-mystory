@@ -10,24 +10,11 @@
 	<img src="/image/building.jpg" width="1520" height="340">
 </div>
 
-<form method="get" action="/search/list" style="left:50%; font-size: 16px; position: absolute; width: 660px; height: 200px; border: 3px solid gray; text-align: center; vertical-align: middle; background-color: white; padding-top:34px; margin : -230px 0px 0px -300px;">
-		<div
-			style="float: left; font-size: 20px; color: blue; font-weight: bolder; margin: 15px 0px 0px 20px;">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label for="Search">자기소개서 검색</label>
-		</div>
-		<input type="text" name="searchText" id="Search" placeholder=" 자기소개서 내용 검색" style="width:300px; margin: 0px 0px 0px -60px;" value="${userSearchWord}">&nbsp;&nbsp; 
-		<input type="hidden" name="page" value="1" />
-		<input type="hidden" name="searchWay" value="${searchWay}" />
-		<input type="hidden" name="numberOfSeeSentence" value="${numberOfSeeSentence}" />
-		<div
-			style="float: left; font-size: 22px; color: #7bf09f; font-weight: bolder; margin: 85px 0px 0px -140px;">
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;태그 추가
-		</div>
-		<div style="margin:20px 0px 0px 238px;"><input name="searchTags" id="tags" value="${searchTags}"/></div>
-		<button type="submit" class="btn btn-primary resume-submit fa fa-search" style="margin: -220px 0px 2px 530px; width:50px; height: 35px;"></button>
-		
-</form>
-
+<div class="jumbotron">
+		<div class="container">
+<%@ include file="/WEB-INF/jspf/indexSearch.jspf"%>
+</div>
+</div>
 <%-- <form method="get" action="/search/list" style="left:50%; font-size: 16px; position: absolute; width: 440px; height:20px; text-align: center; vertical-align: middle; background-color: white; margin : -150px 0px 0px -120px;">
 			<!-- <div style="margin:0px 0px 0px 60px;"><input name="searchTags" id="tags" value="foo,bar,baz"/></div> --> 
 			<input type="hidden" name="page" value="1" />
@@ -86,9 +73,9 @@
     페이지 당 자료 수
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=1&searchTags=${searchTags}'" style="text-align: right;">1개&nbsp;&nbsp;&nbsp;&nbsp;</button>
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=3&searchTags=${searchTags}'" style="text-align: right;">3개&nbsp;&nbsp;&nbsp;&nbsp;</button>
     <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=5&searchTags=${searchTags}'" style="text-align: right;">5개&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=10&searchTags=${searchTags}'" style="text-align: right;">10개&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=20&searchTags=${searchTags}'" style="text-align: right;">20개&nbsp;&nbsp;&nbsp;&nbsp;</button>
   </div>
 </div>
 
@@ -141,8 +128,11 @@
 <script>
 $('#tags').tagsInput({
   autocomplete_url:'http://myserver.com/api/autocomplete',
-  autocomplete:{selectFirst:true,width:'100px',autoFill:true}
+  autocomplete:{selectFirst:true,width:'100px',autoFill:true},
+	'height' : '110%',
+	'width' : '92%',
 });
+
 if(${tagsError}==1){
 	alert("태그는 세개 초과하여 검색할 수 없습니다.");
 	location.href='/search/list?searchText=${userSearchWord}&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=${numberOfSeeSentence}&searchTags=${searchTagArray0}%2C${searchTagArray1}%2C${searchTagArray2}'

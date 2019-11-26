@@ -12,13 +12,7 @@
 	type="text/JavaScript"></script>
 <script src="https://d3js.org/d3.v4.js"></script>
 
-<!-- <div>
-<button type="button" class="btn btn-secondary" onclick="showCloud()">워드클라우드</button>&nbsp;
-<button type="button" class="btn btn-secondary" onclick="showChart()">차트</button>&nbsp;
-<button type="button" class="btn btn-secondary" onclick="showTreeMap()">트리맵</button>&nbsp;
-</div> -->
-
-<div class="dropdown" style="left: 85%; margin: 20px 0px 0px 0px;">
+<div class="dropdown" style="left: 85%; margin: 20px 2000px 0px 0px;">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     시각화 메뉴
   </button>
@@ -30,7 +24,7 @@
 </div>
 
 <div class="alert alert-primary" role="alert"
-	style="left: 50%; text-align: center; font-weight: bold; font-size:24px; color: #6e6e6e; margin: 30px 0px 40px -400px; width: 800px;">
+	style="left: 50%; text-align: center; font-weight: bold; font-size:24px; color: #6e6e6e; margin: 30px 1000px 40px -400px; width: 800px;">
 	자기소개서 분석 / 시각화 </div>
 
 <div id="wordcloud" align="center" style="zoom:1.1;"></div>
@@ -75,7 +69,7 @@ function showTreeMap(){
 		datatype : 'json',
 		async : false,
 		success : function() {
-			// alert("성공")
+			//alert("성공")
 		},
 		error : function() {
 			alert("스크립트 ajax 에러")
@@ -94,11 +88,11 @@ function showTreeMap(){
 	
 	// #워드클라우드
 	function draw(words) { 
-		d3.select("#wordcloud").append("svg").attr("width", 1600).attr(
+		d3.select("#wordcloud").append("svg").attr("width", 2000).attr(
 				"height", // 여기서 div 크기(width, height), 위치(translate) 조절
-				600).attr("class", "wordcloud")
+				600).attr("class", "wordcloud").attr("style", "margin:0px 0px 0px -620px")
 				.append("g").attr("transform",
-				"translate(620,220)").selectAll("text").data(words).enter()
+				"translate(1230,220)").selectAll("text").data(words).enter()
 				.append("a").attr("xlink:href", function(d){
 					return "/search/list?searchText="+d.text;
 				})
@@ -122,9 +116,9 @@ function showTreeMap(){
 							r1 = 2*r1/3;
 							r2 = 2*r2/3;
 						}
-						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상
+						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
 					}
-					return c1 + c2 + c3;
+					return c1 + c2 + c3; // #색상
 				}).attr(
 						"transform",
 						function(d) {

@@ -3,11 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
-<script src="jquery.tagsinput.js"></script>
-<link rel="stylesheet" type="text/css" href="jquery.tagsinput.css" />
 <!-- body -->
 <div>
-	<img src="/image/building.jpg" width="1520" height="340">
+	<img src="/image/building.jpg" width="100%" height="340">
 </div>
 
 <div class="jumbotron">
@@ -26,15 +24,35 @@
 
 <br>
 <br>
-
-<div
-	style="position: relative; left: 440px; top: 0px; width:1000px; padding:  0px 0px 120px 0px;">
-	<div class="pagination justify-content-center">
+ 
+<div> <!-- style="position: relative; margin: 0px 0px 120px 440px;" -->
+	<div class="pagination justify-content-center" style="margin : 0px 200px 0px 200px;">
 
 		<table class="table table-borderless">
 			<thead>
 				<tr bgcolor="#EDEDED">
-					<th><h3>&nbsp;검색 결과</h3></th>
+					<th><h3>&nbsp;검색 결과</h3></th><th>		<div class="dropdown">  <!-- style="position:absolute; left:600px; top:15px;" -->
+  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    페이지 당 자료 수
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=5&searchTags=${searchTags}'" style="text-align: right;">5개&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=10&searchTags=${searchTags}'" style="text-align: right;">10개&nbsp;&nbsp;&nbsp;&nbsp;</button>
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=20&searchTags=${searchTags}'" style="text-align: right;">20개&nbsp;&nbsp;&nbsp;&nbsp;</button>
+  </div>
+</div>
+</th>
+<th>
+<div class="dropdown"> <!-- style="position:absolute; left:840px; top:15px;" -->
+  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    검색 범위 지정
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=1&numberOfSeeSentence=${numberOfSeeSentence }&searchTags=${searchTags}'" style="text-align: right;">태그 하나 이상(OR)</button>
+    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=2&numberOfSeeSentence=${numberOfSeeSentence }&searchTags=${searchTags}'" style="text-align: right;">태그 모두 포함(AND)</button>
+  </div>
+</div>
+</th>
 				</tr>
 				<tr>
 					<th style="font-size: 12px;"><div
@@ -68,26 +86,9 @@
 			</tbody>
 		</table>
 	</div>
-<div class="dropdown" style="position:absolute; left:600px; top:15px;">
-  <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    페이지 당 자료 수
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=5&searchTags=${searchTags}'" style="text-align: right;">5개&nbsp;&nbsp;&nbsp;&nbsp;</button>
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=10&searchTags=${searchTags}'" style="text-align: right;">10개&nbsp;&nbsp;&nbsp;&nbsp;</button>
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=20&searchTags=${searchTags}'" style="text-align: right;">20개&nbsp;&nbsp;&nbsp;&nbsp;</button>
-  </div>
-</div>
 
-<div class="dropdown" style="position:absolute; left:840px; top:15px;">
-  <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    검색 범위 지정
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=1&numberOfSeeSentence=${numberOfSeeSentence }&searchTags=${searchTags}'" style="text-align: right;">태그 하나 이상(OR)</button>
-    <button class="dropdown-item" type="button" onclick="location.href = '?searchText=${ param.searchText }&page=1&searchWay=2&numberOfSeeSentence=${numberOfSeeSentence }&searchTags=${searchTags}'" style="text-align: right;">태그 모두 포함(AND)</button>
-  </div>
-</div>
+
+
 
 <%-- <div style="position:absolute; left:480px; top:0px;">
 &nbsp;&nbsp;한번에 볼 자기소개서 수<br>&nbsp;

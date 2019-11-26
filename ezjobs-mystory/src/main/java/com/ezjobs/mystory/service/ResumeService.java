@@ -1,9 +1,6 @@
 package com.ezjobs.mystory.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -66,6 +63,32 @@ public class ResumeService {
 		model.addAttribute("resumes",resumes);
 	}
 	
+	public void listUnwrite(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Integer page=0;
+		Integer size=30;
+		String userId=modelMap.get("loginId").toString();
+		Resume resume=new Resume();
+		resume.setUserId(userId);
+		resume.setState("미작성");
+		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		model.addAttribute("resumes",resumes);
+	}
+	
+	public void listWrited(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Integer page=0;
+		Integer size=30;
+		String userId=modelMap.get("loginId").toString();
+		Resume resume=new Resume();
+		resume.setUserId(userId);
+		resume.setState("작성완료");
+		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		model.addAttribute("resumesWrited",resumes);
+	}
+	
 	public void listAll(Model model){
 		Integer page=0;
 		Integer size=32768;
@@ -88,6 +111,7 @@ public class ResumeService {
 		String userId=(String)modelMap.get("loginId");
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setUserId(userId);
+		resume.setState("미작성");
 		resume.setEditDate(new Date());
 		resumeRepository.save(resume);
 		model.addAttribute("map",resume);
@@ -99,7 +123,18 @@ public class ResumeService {
 		int id=Integer.parseInt(modelMap.get("id").toString());
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setId(id);
+		//System.out.println(resume.getTags());
 		resumeRepository.update(resume);
+	}
+	
+	public void editState(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		String state=modelMap.get("state").toString();
+		Resume resume=new Resume();//board로 변환
+		resume.setId(id);
+		resume.setState(state);
+		resumeRepository.updateState(resume);
 	}
 	
 	public void autoComplete(Model model){
@@ -111,5 +146,47 @@ public class ResumeService {
 		System.out.println(pageList.getNumberOfElements());
 		List<Sentence> list=pageList.getContent();
 		model.addAttribute("list",list);
+	}
+
+	public void compareAll(Model model) {
+		String answer=((String)model.getAttribute("sentence"));
+		String[] strs=answer.split("\\s+");
+		int [] scores=new int[strs.length];
+		int rates=0;
+		int size=5;
+		for(int i=0;i<strs.length;i++) {
+			String like="";
+			int j;
+			for(j=0;j<size && i+j<strs.length;j++) {
+				if(strs[i+j].length()>1)
+					like+=strs[i+j]+" ";		
+			}
+			List<?> sentences=entityManager
+	        .createNativeQuery("SELECT text FROM sentence "
+	        		+ "where match(text) against('\""+like+"\"' in boolean mode)")
+	        .getResultList();
+			
+			for(j=0;j<size && i+j<strs.length;j++) {
+				int add=Math.min(sentences.size(),size-scores[i+j]);
+				scores[i+j]+=add;
+				rates+=add;
+			}
+			if(j<size)
+				break;
+		}
+		model.addAttribute("results",strs);
+		model.addAttribute("scores",scores);
+		model.addAttribute("rates",100*rates/(size*strs.length));
+	}
+
+	public void tagsearch(Model model) {
+		/*
+		List<Sentence> sentences = entityManager
+		        .createQuery("SELECT s FROM Sentence s WHERE s.text LIKE ?1 AND s.tags LIKE ?2 AND s.tags LIKE ?3",Sentence.class)
+		        .setParameter(1,"%키워드%")
+		        .setParameter(2,"%태그1%")
+		        .setParameter(3,"%태그2%")
+		        .getResultList();
+		*/
 	}
 }

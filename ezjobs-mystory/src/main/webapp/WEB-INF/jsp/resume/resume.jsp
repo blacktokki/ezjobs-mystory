@@ -66,7 +66,9 @@
 			<div id="accordion2" role="tablist"></div>
 		</div>
 		<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-			<div id="accordion3" role="tablist">새 자기소개서</div>
+			<div id="accordion3" role="tablist">
+				<%@ include file="/WEB-INF/jsp/resume/writedlist.jsp"%>
+			</div>
 		</div>
 	</div>
 	<div class="col-4">
@@ -88,7 +90,7 @@
 				<div class="card" id="wordChange">
 					<div class="card-header card-title">단어 교체</div>
 					<div class="card-body">
-						<ul class="card-text list-group list-group-flush"></ul>
+						<ul class="card-text list-group form-inline"></ul>
 						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
 						<a href="#" class="btn btn-primary btn-apply">내용 적용하기</a>
 					</div>
@@ -99,8 +101,7 @@
 					<div class="card-header card-title">비교 하기</div>
 					<div class="card-body">
 						<ul class="card-text list-group list-group-flush"></ul>
-						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
-						<a href="#" class="btn btn-primary btn-apply">유사도검사</a>
+						<a href="#" class="btn btn-primary btn-load">유사도검사</a>
 					</div>
 				</div>
 			</div>
@@ -109,19 +110,19 @@
 </div>
 
 <script>
+	function refreshList(){
+		$.get("/resume/content?state=미작성", function(data) {
+			//console.log(data2);
+			$("#accordion1").html(data);
+		});
+		
+		$.get("/resume/content?state=작성완료", function(data) {
+			//console.log(data2);
+			$("#accordion3").html(data);
+		});
+	}
 	var resume_idx = 1;
 	var resume_new = 1;
-	$("body").delegate(".tagsinput","propertychange change keyup paste input",function(e) {//태그와 태그입력값 동기화
-				var id = $(event.target).attr("id").replace("_tag", "");
-				var tags = [];
-				$("#" + id + "_tagsinput").find(".tag>span").each(
-						function(i, e) {
-							tags.push($.trim($(e).text()));
-						});
-				//console.log($("#"+id).val());
-				$("#" + id).val(tags.join(","));
-				return true;
-			});
 	$("body").delegate("#resume-create","click",function() {
 				$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
 							var $result = $(response);
@@ -185,7 +186,32 @@
 					$(card).find(".collapse").collapse("show");
 				}
 				return false;
-			})
+			});
+	$("#accordion3").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
+		return false;
+	});
+	$("#accordion1").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
+		var href = $(this).attr("href");
+	 	//console.log(href);
+		var form = {_method:"put",state:"작성완료"};
+		$.post(href, form, function(data) {
+			//console.log(data);
+			refreshList();
+		});
+		return false;
+	});
+	
+	$("#accordion3").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
+		var href = $(this).attr("href");
+		
+		var form = {_method:"put",state:"미작성"};
+		$.post(href, form, function(data) {
+			//console.log(data);
+			refreshList();
+		});
+		return false;
+	});
+
 	$("#accordion2").delegate(".write-question","propertychange change keyup paste input", function(e){//제목 동기화
 				var id = $(e.target).attr("id").replace("write-question", "");
 				var currentVal=$(e.target).val();
@@ -239,49 +265,80 @@
 		$("#autoComplete ul").html("");
 	});
 	
-	$("#wordChange,#compare").delegate(".btn-load","click",function(e){//단어교체,비교하기 불러오기
+	$("#wordChange").delegate(".btn-load","click",function(e){//단어교체 불러오기
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
 		var form={answer:currentVal};
-		$.post("/resume/changelist", form, function(data) {
-			$(e.target).parent().find("ul").html(data).sortable();
+		$.get("/resume/changelist", form, function(data) {
+			$("#wordChange ul").html(data).sortable().find("li").each(function(i,element){
+				$(element).find("ul").sortable();
+			});
 		});
 		return false;
+	});
+	$("#wordChange").delegate("select","change",function(e){//단어교체
+		$("option[value="+this.value+"]",this)
+		.attr("selected",true).siblings()
+		.removeAttr("selected");
 	});
 	
 	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
 		var currentVal="";
-		$("#wordChange ul li").each(function(i,element){
-			currentVal+=$.trim($(element).text());
-			
-		});
-		//console.log(currentVal);
-		$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+		$copy=$("#wordChange ul .list-sentence").clone();
+		if($copy.length>0){
+			$copy.find("select").each(function(i,element){
+				$(element).html($(element).find("option:selected").val());
+			});
+			$copy.each(function(i,element){
+				currentVal+=" "+$.trim($(element).text().replace(/\s+/g, " "));
+				if($(element).find("br").length)
+					currentVal+="\r\n";
+				
+			});
+			console.log(currentVal);
+			$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+		}
 		return false;
 	});
 	
-	$("#compare").delegate(".btn-apply","click",function(e){//유사도 검사
-		$("#compare ul li").each(function(i,element){
-			var currentVal = $(element).text();
-			var form={sentence:currentVal};
-			$.get("/resume/compare", form, function(data) {
-				console.log(data.result);
-			});
+	$("#compare").delegate(".btn-load","click",function(e){//유사도검사
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
+		var form={answer:currentVal};
+		$.get("/resume/comparelist", form, function(data) {
+			$("#compare ul").html(data).find("li").each( function() {
+		          var sentence=$.trim($(this).text().replace(/\s+/g, " "));
+		          var form={sentence:sentence};
+		          $(this).html('<div class="spinner-border" role="status">'
+		        		  +'<span class="sr-only">Loading...</span></div>');
+		          var $target=$(this);
+		          $.get("/resume/compare", form, function(data_part) {
+		        	  $target.html(data_part);
+		          });
+		    });
+			
+			
+			
 		});
 		return false;
 	});
+	
 	
 	
 	$("#accordion2").delegate("form", "submit", function(e) {//저장하기
+
+		var tags = [];
+		 $(event.target).find(".tagsinput").find(".tag>span").each(
+				function(i, e) {
+					tags.push($.trim($(e).text()));
+				});
+		$(event.target).find(".tags").val(tags.join(","));
 		var form = $(e.target).serializeJSON();
-		//console.log(form);
+		console.log(form.tags);
+		console.log(form.id);
 		$.post("/resume/content/" + form.id, form, function(data) {
 			//console.log(data);
 			$(e.target).find(".resume-id").val(data.map.id);
 			$(e.target).find(".resume-method").val("put");
-			$.get("/resume/content", function(data2) {
-				//console.log(data2);
-				$("#accordion1").html(data2);
-			});
+			refreshList();
 		});
 		return false;
 	});

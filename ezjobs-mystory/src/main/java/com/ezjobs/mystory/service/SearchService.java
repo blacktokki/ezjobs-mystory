@@ -49,7 +49,7 @@ public class SearchService {
 		int searchWay = (int) model.getAttribute("searchWay"); // 유저의 검색조건(AND, OR)
 		int numberOfSeeSentence = (int) model.getAttribute("numberOfSeeSentence"); // 한 페이지 당 보이는 문장 카드 수
 		if (numberOfSeeSentence <= 0) {
-			numberOfSeeSentence = 3;
+			numberOfSeeSentence = 10;
 		}
 
 		int pageNum = Integer.parseInt(nowPage) - 1;// 값이없을경우 0

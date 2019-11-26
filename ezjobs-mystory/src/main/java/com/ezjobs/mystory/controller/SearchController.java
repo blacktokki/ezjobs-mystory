@@ -18,8 +18,7 @@ public class SearchController {
 	private SearchService searchService;
 	
 	@GetMapping("list")
-	public String search(@RequestParam(value = "searchText", required = false, defaultValue = "")String userSearchWord, @RequestParam(value="page", required=false, defaultValue="1") String nowPage, @RequestParam(value = "searchWay", required = false, defaultValue = "1")int searchWay, @RequestParam(value = "numberOfSeeSentence", required = false, defaultValue = "3")int numberOfSeeSentence,@RequestParam(value = "searchTags", required = false, defaultValue = "")String searchTags, Model model){
-		
+	public String search(@RequestParam(value = "searchText", required = false, defaultValue = "")String userSearchWord, @RequestParam(value="page", required=false, defaultValue="1") String nowPage, @RequestParam(value = "searchWay", required = false, defaultValue = "1")int searchWay, @RequestParam(value = "numberOfSeeSentence", required = false, defaultValue = "10")int numberOfSeeSentence, @RequestParam(value = "searchTags", required = false, defaultValue = "")String searchTags, Model model){
 		
 		model.addAttribute("nowPage", nowPage); // 유저가 선택한 현재 페이지(default 1)
 		model.addAttribute("userSearchWord", userSearchWord); // 유저가 검색한 단어

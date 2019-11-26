@@ -111,7 +111,7 @@ public class SplitService {
 			
 			String checksum="";
 			List<?> synonyms=entityManager
-		        .createNativeQuery("SELECT distinct keyword , synonym FROM Synonym "
+		        .createNativeQuery("SELECT distinct keyword , synonym FROM synonym "
 		        		+ "where match(keyword) against('"+sentence+"')")
 		        .getResultList();
 			sentence="<ul class='p-0'><li class='d-inline-block align-top'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-top'>")+"&nbsp;</li></ul>";

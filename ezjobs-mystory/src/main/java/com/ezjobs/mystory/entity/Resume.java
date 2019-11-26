@@ -24,6 +24,9 @@ public class Resume {
 	@Column(name = "company", nullable = false)
 	private String company;
 
+	@Column(name = "tags", nullable = false)
+	private String tags;
+	
 	@Column(name = "question", nullable = false)
 	private String question;
 

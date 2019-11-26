@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <form method="get" action="/search/list">
-		<div align="right">
-					<button class="btn btn-primary" type="submit">검색하기</button>
-				</div>
-				<p>
+    <p>
 				<div class="form-row">
 					<div class="col-6">
 						<input name="searchTags" id="tags" class="form-control" placeholder="태그 검색" value="${searchTags}">
 					</div>
 					<div class="col-6">
 						<input type="text" style="height:110%;"class="form-control" name="searchText" placeholder="일반 검색" value="${userSearchWord}">
+					</div>
+					<p>
+					<div align="right">
+					<button class="btn btn-primary" type="submit" style="margin: 10px 0px 0px 1000px">검색하기</button>
 					</div>
 					<input type="hidden" name="page" value="1" />
 					<input type="hidden" name="searchWay" value="${searchWay}" />

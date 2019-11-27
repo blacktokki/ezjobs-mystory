@@ -58,7 +58,6 @@ public class SearchService {
 		if (searchWay == 1) {
 			if (userSearchWord.isEmpty() || userSearchWord.trim() == "") { // 태그만으로 검색
 				userSearchWord = "";
-				System.out.println("태그 길이 : " + searchTagArray.length);
 
 				if (searchTagArray.length == 0) {
 					Page<Sentence> Searchs = sentenceRepository.findAll(pr);

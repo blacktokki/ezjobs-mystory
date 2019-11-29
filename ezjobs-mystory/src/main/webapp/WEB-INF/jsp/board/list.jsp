@@ -13,10 +13,10 @@
 	color: white;
 }
 </style>
-
+<!-- 
 요소:${boards.numberOfElements}/${boards.size}<br>
 페이지:${boards.number+1}/${boards.totalPages}<br>
-총개수:${boards.totalElements}
+총개수:${boards.totalElements}-->
 	<div class="container">
 		<div class="jumbotron">
 			<h1 class="display-4">자유게시판</h1>

@@ -15,8 +15,10 @@ import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.Sentence;
+import com.ezjobs.mystory.entity.Synonym;
 import com.ezjobs.mystory.repository.ResumeRepository;
 import com.ezjobs.mystory.repository.SentenceRepository;
+import com.ezjobs.mystory.repository.SynonymRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -27,6 +29,9 @@ public class ResumeService {
 	
 	@Inject
 	SentenceRepository sentenceRepository;
+	
+	@Inject
+	SynonymRepository synonymRepository;
 	
 	@Inject
 	ObjectMapper mapper;
@@ -188,5 +193,15 @@ public class ResumeService {
 		        .setParameter(3,"%태그2%")
 		        .getResultList();
 		*/
+	}
+
+	public void addSynonym(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String userId=(String)modelMap.get("loginId");
+		Synonym synonym=mapper.convertValue(map, Synonym.class);//board로 변환
+		synonym.setUserId(userId);
+		synonym.setValid((userId.equals("_admin")));
+		synonymRepository.save(synonym);
 	}
 }

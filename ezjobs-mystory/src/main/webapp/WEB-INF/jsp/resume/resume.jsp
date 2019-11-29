@@ -289,18 +289,24 @@
 		var change=this.value;
 		if(change=="_add"){
 			change=prompt("단어 추가",first);
-			$("option[value=_add]",this).text(change).attr("value",change);
-			$("<option value='_add'>추가..</option>").appendTo($(this))
-			var form={
-				keyword:first,
-				synonym:change
+			console.log(change);
+			if (change!=""&&change!=null){
+				$("option[value=_add]",this).text(change).attr("value",change);
+				$("<option value='_add'>추가..</option>").appendTo($(this))
+				var form={
+					keyword:first,
+					synonym:change
+				}
+				$.post("/resume/synonym/", form, function(data) {
+					//console.log(data);
+					$(e.target).find(".resume-id").val(data.map.id);
+					$(e.target).find(".resume-method").val("put");
+					refreshList();
+				});
 			}
-			$.post("/resume/synonym/", form, function(data) {
-				//console.log(data);
-				$(e.target).find(".resume-id").val(data.map.id);
-				$(e.target).find(".resume-method").val("put");
-				refreshList();
-			});
+			else{
+				change=first;
+			}
 		}
 		$("option[value="+change+"]",this)
 		.attr("selected",true).siblings()

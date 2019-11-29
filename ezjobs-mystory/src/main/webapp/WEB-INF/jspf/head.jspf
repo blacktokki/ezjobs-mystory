@@ -90,7 +90,7 @@
 				      </a>
 				      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink4">
 				      <a class="dropdown-item" href="/admin/user">회원관리</a>
-				        <a class="dropdown-item" href="/admin/resume">자기소개서 관리</a>
+				       <!-- <a class="dropdown-item" href="/admin/resume">자기소개서 관리</a>-->
 				        <a class="dropdown-item" href="/admin/tag">태그 관리</a>
 				      </div>
 				    </li>

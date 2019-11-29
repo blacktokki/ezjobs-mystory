@@ -118,7 +118,7 @@ function showTreeMap(){
 						}
 						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
 					}
-					return c1 + c2 + c3; // #색상
+					return "#"+c1 + c2 + c3; // #색상
 				}).attr(
 						"transform",
 						function(d) {

@@ -111,7 +111,7 @@ public class SplitService {
 			
 			List<?> synonyms=entityManager
 		        .createNativeQuery("SELECT distinct keyword , synonym FROM synonym "
-		        		+ "where match(keyword) against('"+sentence+"')")
+		        		+ "where match(keyword) against('"+sentence+"') ORDER BY LENGTH(keyword) DESC")
 		        .getResultList();
 			sentence="<ul class='p-0'><li class='d-inline-block align-top'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-top'>")+"&nbsp;</li></ul>";
 			//System.out.println(sentence);
@@ -132,7 +132,7 @@ public class SplitService {
 			}
 			i=0;
 			for(Map.Entry<String, String> elem : mapStr.entrySet() ) {
-				sentence=sentence.replaceAll("<"+i+">",elem.getValue()+"</select>");
+				sentence=sentence.replaceAll("<"+i+">",elem.getValue()+"<option value='_add'>추가..</option></select>");
 				i++;
 			}
 			sentences2.add(sentence);

@@ -137,6 +137,17 @@ public class ResumeController {
 		splitService.changeSynonym(model);
 		return "resume/changelist";
 	}
+	@PostMapping("synonym")
+	public ResponseEntity<?> synonym(@RequestParam Map<Object, Object> map,HttpSession session,Model model) {
+		Object loginId=session.getAttribute("loginId");
+		if(loginId==null)
+			return ResponseEntity.badRequest().build();
+		model.addAttribute("loginId",loginId);
+		model.addAttribute("map", map);
+		resumeService.addSynonym(model);
+		return ResponseEntity.ok(model);
+	}
+	
 	
 	@GetMapping("comparelist")
 	public String compareList(@RequestParam String answer,Model model){

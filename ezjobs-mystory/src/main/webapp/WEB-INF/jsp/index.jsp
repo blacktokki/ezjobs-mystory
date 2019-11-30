@@ -38,24 +38,24 @@
 
 	<div class="jumbotron">
 		<div class="container">
-			<form method="post" action="#">
+		<%@ include file="/WEB-INF/jspf/indexSearch.jspf"%>
+			<!-- <form method="post" action="/search/list">
 				<div align="right">
 					<button class="btn btn-primary" type="submit">검색하기</button>
 				</div>
 				<p>
-					<!-- 태그 처리해야하는 부분을 넣어야합니다. -->
 				<div class="form-row">
 					<div class="col-6">
-						<input type="text" class="form-control" placeholder="태그 검색">
+						<input type="text" class="form-control" name="" placeholder="태그 검색">
 					</div>
 					<div class="col-6">
-						<input type="text" class="form-control" placeholder="일반 검색">
+						<input type="text" class="form-control" name="" placeholder="일반 검색">
 					</div>
 				</div>
 
 
 			</form>
-		</div>
+ -->		</div>
 	</div>
 	<!-- 중간 위 -->
 	<div class="jumbotron">
@@ -74,7 +74,6 @@
 						<c:forEach var="item" items="${boardscommunity.content}">
 							<tr>
 								<td><a href="/board/content/${item.id}">${item.title}&nbsp;</a></td>
-								<td align="center">${item.editDate}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -164,5 +163,13 @@
 
 </div>
 <!-- 전체 div -->
+<script>
+$('#tags').tagsInput({
+  autocomplete_url:'http://myserver.com/api/autocomplete',
+  autocomplete:{selectFirst:true,width:'100px',autoFill:true},
+	'height' : '110%',
+	'width' : '92%',	
+}); 
+</script>
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

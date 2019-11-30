@@ -19,6 +19,10 @@
 [data-toggle="collapse"].collapsed:after {
 	transform: rotate(0deg);
 }
+
+.list-sentence li:hover{
+	background:#BBBBBB;
+}
 </style>
 
 <nav aria-label="breadcrumb">
@@ -220,33 +224,35 @@
 	
 	timer_auto=null;
 	keyword=null;
-	$("#accordion2").delegate(".write-answer","propertychange change paste input click", function(e){//내용 자동검색
-		var currentVal=$(e.target).html();
+	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//내용 자동검색
+		var currentVal=$(e.target).val();
+		//console.log(currentVal);
 		var pos=$(e.target).get(0).selectionEnd;
 		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
 		keyword=keywords[keywords.length-1];
+		
 		var form={keyword:$.trim(keyword)};
-		//console.log(form);
+		console.log(form);
 		if(timer_auto){
 			clearTimeout(timer_auto);
 		}
 		timer_auto = setTimeout(function(){
 			$.get("/resume/auto", form, function(data) {
-				console.log(data);
+				//console.log(data);
 				var $frag=$(document.createDocumentFragment());
 				data.list.forEach(function(e,i){
-					var text=e.text.replace()
-					$frag.append("<li class='list-group-item p-1'><font size='2'><a href='#'>"
-							+e.text+"</a></font></li>");
+					var text=e.text.replace(form.keyword,"<strong>"+form.keyword+"</strong>");
+					$frag.append("<li class='list-group-item list-group-item-action p-1'><font size='3' style='cursor:default'>"
+							+text+"</font></li>");
 				});
 				$("#autoComplete ul").html("").append($frag);
 			});	
 		},300); 
 	});
-	$("#autoComplete ul").delegate("a","click",function(e){//자동완성 입력
-		var currentVal=$(e.target).html();
+	$("#autoComplete ul").delegate("li","click",function(e){//자동완성 입력
+		var currentVal=$(e.target).text()+" ";
 		var $target=$("#accordion2 .card").find(".show").find(".write-answer");
-		var beforeVal=$target.html();
+		var beforeVal=$target.val();
 		console.log(currentVal);
 		console.log(beforeVal);
 		var pos=$target.get(0).selectionEnd;
@@ -254,19 +260,22 @@
 			beforeVal.substring(0,pos-keyword.length)
 			+currentVal+" "
 			+beforeVal.substring(pos,beforeVal.length);
-		$target.html(result);
+		$target.val(result).focus();
+		$target.get(0).selectionEnd=pos-keyword.length+currentVal.length;
 		keyword=null;
 		$("#autoComplete ul").html("");
+		clearTimeout(timer_auto);
 		return false;
 	});
 	
 	$("#accordion2").delegate(".card-header","click",function(e){
 		keyword=null;
 		$("#autoComplete ul").html("");
+		clearTimeout(timer_auto);
 	});
 	
 	$("#wordChange").delegate(".btn-load","click",function(e){//단어교체 불러오기
-		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
 		var form={answer:currentVal};
 		$.get("/resume/changelist", form, function(data) {
 			$("#wordChange ul").html(data).sortable().find("li").each(function(i,element){
@@ -276,9 +285,27 @@
 		return false;
 	});
 	$("#wordChange").delegate("select","change",function(e){//단어교체
-		$("option[value="+this.value+"]",this)
+		var first=$("option",this).first().val();
+		var change=this.value;
+		if(change=="_add"){
+			change=prompt("단어 추가",first);
+			$("option[value=_add]",this).text(change).attr("value",change);
+			$("<option value='_add'>추가..</option>").appendTo($(this))
+			var form={
+				keyword:first,
+				synonym:change
+			}
+			$.post("/resume/synonym/", form, function(data) {
+				//console.log(data);
+				$(e.target).find(".resume-id").val(data.map.id);
+				$(e.target).find(".resume-method").val("put");
+				refreshList();
+			});
+		}
+		$("option[value="+change+"]",this)
 		.attr("selected",true).siblings()
 		.removeAttr("selected");
+		
 	});
 	
 	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
@@ -295,13 +322,13 @@
 				
 			});
 			console.log(currentVal);
-			$("#accordion2 .card").find(".show").find(".write-answer").html(currentVal);
+			$("#accordion2 .card").find(".show").find(".write-answer").val(currentVal);
 		}
 		return false;
 	});
 	
 	$("#compare").delegate(".btn-load","click",function(e){//유사도검사
-		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").html();
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
 		var form={answer:currentVal};
 		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 
 
 @Controller
@@ -17,39 +18,40 @@ public class SearchController {
 	private SearchService searchService;
 	
 	@GetMapping("list")
-	public String search(@RequestParam(value = "searchText", required = false, defaultValue = "")String userSearchWord, @RequestParam(value="page", required=false, defaultValue="1") String nowPage, @RequestParam(value = "searchWay", required = false, defaultValue = "1")int searchWay, @RequestParam(value = "numberOfSeeSentence", required = false, defaultValue = "3")int numberOfSeeSentence, Model model){
+	public String search(@RequestParam(value = "searchText", required = false, defaultValue = "")String userSearchWord, @RequestParam(value="page", required=false, defaultValue="1") String nowPage, @RequestParam(value = "searchWay", required = false, defaultValue = "1")int searchWay, @RequestParam(value = "numberOfSeeSentence", required = false, defaultValue = "10")int numberOfSeeSentence, @RequestParam(value = "searchTags", required = false, defaultValue = "")String searchTags, Model model){
 		
 		model.addAttribute("nowPage", nowPage); // 유저가 선택한 현재 페이지(default 1)
 		model.addAttribute("userSearchWord", userSearchWord); // 유저가 검색한 단어
 		model.addAttribute("searchWay", searchWay); // 유저가 검색하고자 하는 범위 조건 지정
 		model.addAttribute("numberOfSeeSentence", numberOfSeeSentence); // 유저가 한 페이지에 볼 자소서 수
-		searchService.searchAct(model);
+		model.addAttribute("searchTags", searchTags);
+		int tagsCount = StringUtils.countOccurrencesOf(searchTags, ",");
+		
+		if(tagsCount<3)
+		{
+			searchService.searchAct(model);
+		}else {
+			searchService.searchPauseByTags(model);
+		}
 		
 		return "search/list";
 	}
 	
 	@GetMapping("dashboard")
 	public String dashboard(Model model){
-		searchService.searchWordCloud(model);
 		return "search/dashboard";
 	}
 	
-	@GetMapping("word")
-	public String wordcloud(Model model){
+	@GetMapping("wordCloudAndChartJson")
+	public String wordCloud(Model model){
 		searchService.searchWordCloud(model);
-		return "search/word";
+		return "search/wordCloudAndChartJson";
 	}
 	
-	@GetMapping("test1")
-	public String t1(Model model){
-		return "search/test1";
+	@GetMapping("treeMapJson")
+	public String treeMap(Model model){
+		return "search/treeMapJson";
 	}
-	@GetMapping("test2")
-	public String t2(Model model){
-		return "search/test2";
-	}
-	
-	
 	
 	/* 혹시나 유저 편의로 주소맵핑
 	 * @GetMapping("list") public String dsearch1() { return "redirect:list/1"; }

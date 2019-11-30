@@ -46,7 +46,7 @@ public class TempController{
 	public void autolabel(){
 		keywordAnalysisService.execute();
 	}*/
-	
+	/*
 	@GetMapping("/resume/stc")//문장데이터생성기
 	public void resumetostc(Model model){
 		resumeService.listAll(model);
@@ -58,7 +58,7 @@ public class TempController{
 	public void resumetag(Model model){
 		resumeService.listAll(model);
 		keywordAnalysisService.tagger(model);
-	}
+	}*/
 	
 	@GetMapping("/resume/tagcount")//문항유형태그개수
 	public void resumetagcount(Model model){

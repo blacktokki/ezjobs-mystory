@@ -24,25 +24,6 @@ public class AdminController {
 	@Inject
 	private AdminService adminService;
 	
-	@GetMapping("/user")// 회원관리 페이지 /admin/user
-	public String user(@RequestParam Map<Object,Object> map,Model model){
-		model.addAttribute("map",map);
-		String nn = "notNull";
-		model.addAttribute("op",nn);
-		model.addAttribute("sch",nn);
-		adminService.user(model);
-		return "admin/user";
-	}
-	
-	@PostMapping("/user")// 회원관리 페이지 /admin/user
-	public String user(@RequestParam Map<Object,Object> map, Model model, String op, String sch){
-		model.addAttribute("map",map);
-		model.addAttribute("op",op);
-		model.addAttribute("sch",sch);
-		adminService.user(model);
-		return "admin/user";
-	}
-	
 	@GetMapping("/personal/{id}")//글내용 보기 /board/content
 	public String content(@PathVariable String id,Model model){
 		model.addAttribute("id",id);
@@ -50,9 +31,25 @@ public class AdminController {
 		return "admin/personal";
 	}
 	
+	@GetMapping("/user")
+	public String user(@RequestParam Map<Object,Object> map, Model model){
+		model.addAttribute("map",map);
+		adminService.user(model);
+		return "admin/user";
+	}
+	
+	@PostMapping("/user")
+	public String user(@RequestParam Map<Object,Object> map, Model model, String op, String sch, int showNum){
+		model.addAttribute("map",map);
+		model.addAttribute("op",op);
+		model.addAttribute("sch",sch);
+		model.addAttribute("showNum", showNum);
+		adminService.user(model);
+		return "admin/user";
+	}
 	
 	@GetMapping("/tag")
-	public String tag(@RequestParam Map<Object,Object> map,Model model){
+	public String tag(@RequestParam Map<Object,Object> map, Model model){
 		model.addAttribute("map",map);
 		adminService.tag(model);
 		return "admin/tag";
@@ -68,5 +65,24 @@ public class AdminController {
 		model.addAttribute("delTagId",delTagId);
 		adminService.tag(model);
 		return "admin/tag";
+	}
+	
+	@GetMapping("/resume")
+	public String resume(@RequestParam Map<Object,Object> map, Model model){
+		model.addAttribute("map",map);
+	//	adminService.resume(model);
+		adminService.tag(model); // 아직 자소서관리 안돌아가서 일단 이렇게 해놧어요 ㅠㅠ
+		return "admin/resume";
+	}
+	
+	@PostMapping("/resume")
+	public String resume(@RequestParam Map<Object,Object> map, Model model, String op, String sch, int showNum){
+		model.addAttribute("map",map);
+		model.addAttribute("op",op);
+		model.addAttribute("sch",sch);
+		model.addAttribute("showNum", showNum);
+	//	adminService.resume(model);
+		adminService.tag(model); // 아직 자소서관리 안돌아가서 일단 이렇게 해놧어요 ㅠㅠ
+		return "admin/resume";
 	}
 }

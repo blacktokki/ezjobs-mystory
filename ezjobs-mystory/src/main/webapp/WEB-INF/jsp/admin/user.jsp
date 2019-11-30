@@ -15,27 +15,54 @@
 	<h2>우리의 회원들</h2>
 
 	<!-- 겁색창 -->
-	<form method="post" action="#">
-		<table class="table">
-			<colgroup>
-				<col width="100">
-				<col width="100">
-				<col width="200">
-				<col width="*">
-			</colgroup>
-			<thead>
-				<tr>
-					<th scope="col">멤버 검색</th>
-					<th scope="col"><select name="op">
+	<div class="card card-title" style="padding: 10px">
+		<div class="row">
+			<div class="col-6">
+				<form method="post" action="#">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="inGroup01">검색 옵션</label>
+						</div>
+						<select class="custom-select" id="inGroup01" name="op">
 							<option value="idSearch">회원번호</option>
 							<option value="loginSearch">유저아이디</option>
-					</select></th>
-					<th scope="col"><input type="text" name="sch"></th>
-					<th scope="col"><input type="submit" value="검색"></th>
-				</tr>
-			</thead>
-		</table>
-	</form>
+						</select> <input name="sch" type="text" class="form-control"
+							placeholder="검색어" aria-label="Recipient's username"
+							aria-describedby="button-addon2">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" type="submit"
+								id="button-addon2">검색</button>
+						</div>
+					</div>
+					<input type="hidden" name="showNum" value="${showNum }">
+					<input type="hidden" name="page" value="${ pageNavNumber + 1}">
+				</form>
+			</div>
+			<div class="col offset-3">
+				<div class="input-group">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="inGroup02">페이지 당</label>
+						</div>
+					<form method="get" action="#">
+						<input type="hidden" name="page" value="${ pageNavNumber + 1}">
+						<select class="custom-select" id="inGroup02" name="showNum"
+							onchange="this.form.submit()">
+							<option selected>현재 ${showNum} 명</option>
+							<option value=10>10 명 보기</option>
+							<option value=20>20 명 보기</option>
+							<option value=30>30 명 보기</option>
+							<option value=50>50 명 보기</option>
+							<option value=100>100 명 보기</option>
+						</select>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 검색창 끝 -->
 
 	<div class="pagination justify-content-center">
 		<table class="table table-sm table-hover">
@@ -110,17 +137,17 @@
 						<td colspan="7" style="padding: 0">
 							<div class="collapse" id="collapse${item.id}">
 								<div class="card text-center">
-						
-										<div class="row" style="color: #AAAAAA; font-weight:600;">
-											<div class="col">이메일</div>
-											<div class="col">성별</div>
-											<div class="col">학력</div>
-											<div class="col">방문횟수</div>
-											<div class="col">연동서비스</div>
-											<div class="col">연동계정</div>
-										</div>
-								
-									<div class="row">										
+
+									<div class="row" style="color: #AAAAAA; font-weight: 600;">
+										<div class="col">이메일</div>
+										<div class="col">성별</div>
+										<div class="col">학력</div>
+										<div class="col">방문횟수</div>
+										<div class="col">연동서비스</div>
+										<div class="col">연동계정</div>
+									</div>
+
+									<div class="row">
 										<div class="col">${item.email}</div>
 										<div class="col">${item.sex}</div>
 										<div class="col">${item.grad}</div>
@@ -139,7 +166,7 @@
 		</table>
 	</div>
 
-
+	<!-- 페이징 바 -->
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"><a class="page-link"
@@ -148,7 +175,8 @@
 			</a></li>
 			<c:forEach var="item" begin="${pageNavNumber*5+1}"
 				end="${(pageNavNumber+1)*5}">
-				<li class="page-item"><a class="page-link" href="?page=${item}">${item}</a></li>
+				<li class="page-item"><a class="page-link"
+					href="?page=${item}&showNum=${showNum}">${item}</a></li>
 			</c:forEach>
 			<li class="page-item"><a class="page-link"
 				href="?page=${(pageNavNumber+1)*5+1}" aria-label="Next"> <span
@@ -157,6 +185,7 @@
 		</ul>
 	</nav>
 </div>
+<!-- 페이징 바 끝-->
 
 <script>
 	function checkAll() {

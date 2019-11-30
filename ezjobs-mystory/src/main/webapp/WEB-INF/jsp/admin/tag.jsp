@@ -14,9 +14,8 @@
 
 	<!-- 겁색창 -->
 	<div class="card card-title" style="padding: 10px">
-
 		<div class="row">
-			<div class="col-5">
+			<div class="col-4">
 				<form method="post" action="#">
 					<div class="input-group">
 						<input name="sch" type="text" class="form-control"
@@ -27,6 +26,8 @@
 								id="button-addon2">검색</button>
 						</div>
 					</div>
+					<input type="hidden" name="showNum" value="${showNum }">
+					<input type="hidden" name="page" value="${ pageNavNumber + 1}">
 				</form>
 			</div>
 
@@ -35,11 +36,12 @@
 					삭제</button>
 			</div>
 
-			<div class="col offset">
-					<div class="input-group">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="inputGroupSelect01">페이지 당</label>
-						</div>
+			<div class="col offset-2">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inputGroupSelect01">페이지
+							당</label>
+					</div>
 					<form method="get" action="#">
 						<input type="hidden" name="page" value="${ pageNavNumber + 1}">
 						<select class="custom-select" id="inputGroupSelect01"
@@ -78,7 +80,8 @@
 						<!-- 테이블 제목 -->
 						<thead class="thead-light text-center">
 							<tr>
-								<th scope="col"><c:set var="name" value="${ i }" /> <c:if test="${name eq 1}">
+								<th scope="col"><c:set var="name" value="${ i }" /> <c:if
+										test="${name eq 1}">
 										<input type="checkbox" name="checkAll" id="th_checkAll"
 											onclick='checkAll();' />
 									</c:if></th>
@@ -193,7 +196,7 @@
 
 	</div>
 
-<!-- 페이징 바 -->
+	<!-- 페이징 바 -->
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
 			<li class="page-item"><a class="page-link"

@@ -143,11 +143,13 @@ public class ResumeService {
 	}
 	
 	public void autoComplete(Model model){
-		String keyword=(String)model.getAttribute("keyword");
+		Map<?,?> map=(Map<?,?>)model.getAttribute("map");
+		String keyword=(String)map.get("keyword");
+		String keywordInclude=(String)map.get("keywordInclude");
 		Integer page=0;
 		Integer size=30;
 		PageRequest pr=PageRequest.of(page,size);
-		Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%", pr);
+		Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%"+keywordInclude+"%", pr);
 		System.out.println(pageList.getNumberOfElements());
 		List<Sentence> list=pageList.getContent();
 		model.addAttribute("list",list);

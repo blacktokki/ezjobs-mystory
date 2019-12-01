@@ -8,7 +8,7 @@
 <!-- body -->
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script
-	src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
+src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
 	type="text/JavaScript"></script>
 <script src="https://d3js.org/d3.v4.js"></script>
 
@@ -24,48 +24,56 @@
 </div>
 
 <div class="alert alert-primary" role="alert"
-	style="left: 50%; text-align: center; font-weight: bold; font-size:24px; color: #6e6e6e; margin: 30px 1000px 40px -400px; width: 800px;">
+	style="left: 50%; text-align: center; font-weight: bold; font-size:24px; color: #6e6e6e; margin: 30px 1000px 45px -400px; width: 800px;">
 	자기소개서 분석 / 시각화 </div>
 
-<div id="wordcloud" align="center" style="zoom:1.1;"></div>
+<div id="wordcloud" align="center" style="height:600px; zoom:1.6;" >
+#워드클라우드 : 워드클라우드 단어의 크기는 자기소개서에서 사용한 단어의 빈도에 비례합니다.<br><br>
+<p style="font-size:6.5px;"> *단어 클릭시 문장검색으로 이동합니다. </p>
+</div>
 <!-- 워드 클라우드 -->
 
 
-<div class="chart-container" id="jsonChart"
+<div class="chart-container" id="jsonChart" align="center" 
 	style="height: 100vh; width: 80vw; margin: 0px 0px 0px 160px;">
+	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 직무유형으로 분류되어진 태그입니다. 직무유형 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
 	<canvas id="myChart"></canvas>
 </div>
 
+<div id="vizTreeMap" style="margin: 0px 0px 100px 0px;" align="center">
+#트리맵 : 자기소개서의 태그에 관한 데이터입니다. 차트에 사용된 데이터는 문항유형으로 분류되어진 태그입니다. 공간의 크기는 문항유형 태그의 빈도에 따라 비례합니다.<br><br>
+<p style="font-size:10px;"> *단어 혹은 공간 클릭시 문장검색으로 이동합니다. </p>
+</div>
 
-<div id="my_dataviz" style="margin: 0px 0px 100px 115px;"></div>
+
 <script>
 document.getElementById("jsonChart").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
-document.getElementById("my_dataviz").style.display = "none";
+document.getElementById("vizTreeMap").style.display = "none";
 
 function showCloud(){ // 특정한 시각화 데이터 제공을 위한 버튼에 사용되는 함수 
 	document.getElementById("wordcloud").style.display = "block";
 	document.getElementById("jsonChart").style.display = "none";
-	document.getElementById("my_dataviz").style.display = "none";
+	document.getElementById("vizTreeMap").style.display = "none";
 }
 
 function showChart(){
 	document.getElementById("wordcloud").style.display = "none";
 	document.getElementById("jsonChart").style.display = "block";
-	document.getElementById("my_dataviz").style.display = "none";
+	document.getElementById("vizTreeMap").style.display = "none";
 }
 
 function showTreeMap(){
 	document.getElementById("wordcloud").style.display = "none";
 	document.getElementById("jsonChart").style.display = "none";
-	document.getElementById("my_dataviz").style.display = "block";
+	document.getElementById("vizTreeMap").style.display = "block";
 }
 
 
 	var randomColor = new Array(3); // 트리맵 색상 일치 용도, 워드 클라우드의 랜덤색상을 하나씩 따감
 	
- 	var frequency_list = $.ajax({
+	var frequency_list = $.ajax({
 		type : 'get',
-		url : '/search/wordCloudAndChartJson', //#JSON연결
+		url : '/search/wordCloudJson', //#JSON연결
 		datatype : 'json',
 		async : false,
 		success : function() {
@@ -78,6 +86,22 @@ function showTreeMap(){
 
 	var x = JSON.parse(frequency_list); // x에 배열로써 JSON 파싱
 	
+ 	var chartJsonList = $.ajax({
+		type : 'get',
+		url : '/search/chartJson', //#JSON연결
+		datatype : 'json',
+		async : false,
+		success : function() {
+			//alert("차트성공")
+		},
+		error : function() {
+			alert("스크립트 ajax 에러")
+		}
+	}).responseText;
+
+	var y = JSON.parse(chartJsonList); 
+	
+	
 	var seed = parseInt(Math.random() * 3);
 	var r1 = parseInt(Math.random() * 256); // 색상을 랜덤 부여하기 위한 변수 1,2,3
 	var r2 = parseInt(Math.random() * 256);
@@ -86,8 +110,8 @@ function showTreeMap(){
 	var fontSizePrint = 0;
 	
 	
-	// #워드클라우드
-	function draw(words) { 
+	// #워드클라우드 이전 꺼임
+	/* function draw(words) { 
 		d3.select("#wordcloud").append("svg").attr("width", 2000).attr(
 				"height", // 여기서 div 크기(width, height), 위치(translate) 조절
 				600).attr("class", "wordcloud").attr("style", "margin:0px 0px 0px -620px")
@@ -136,17 +160,42 @@ function showTreeMap(){
 	function(d) {
 		fontSizePrint = d.doc_count;
 		return (fontSizePrint/60);
-	}).on("end", draw).start(); // 워드 클라우드 끝
+	}).on("end", draw).start(); */
+	// 이전 워드 클라우드 끝
 	
+	
+	
+	for(var i=0;i<3;i++){
+		r1 = parseInt(Math.random() * 255);
+		r2 = parseInt(Math.random() * 255);
+		r3 = ((seed+i)*127%381)%256;
+		if(r3>250){
+			r1 = 2*r1/3;
+			r2 = 2*r2/3;
+		}
+			randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
+	}
+	
+	
+	
+	// #워드클라우드
+	$('#wordcloud').jQCloud(x, {
+		  classPattern: null,
+		  colors: ["#800026", "#bd0026", "#e31a1c", "#fc4e2a", "#fd8d3c", "#feb24c", "#fed976"],
+		  fontSize: {
+		    from: 0.07,
+		    to: 0.01
+		  }
+		});
 	
 	// #차트
 	var sizeTextList = new Array(2);
 	sizeTextList[0] = new Array();
 	sizeTextList[1] = new Array();
 
-	for (var i in x) {
-		sizeTextList[0].push(x[i].doc_count);
-		sizeTextList[1].push(x[i].text);
+	for (var i in y) {
+		sizeTextList[0].push(y[i].doc_count);
+		sizeTextList[1].push(y[i].text);
 	}
 	
 	function swap(_arr, _firstIndex, _secondIndex) // 이하의 세개의 함수는 차트 높은순 정렬 용도
@@ -235,11 +284,11 @@ function showTreeMap(){
 	
 	var chart = document.getElementById('myChart').getContext('2d');
 	var myChart = new Chart(chart, {
-		type : 'bar',
+		type : 'horizontalBar',
 		data : {
 			labels : sizeTextList[1],
 			datasets : [ {
-				label : '# 검색 빈도',
+				label : '# 직무유형 태그 빈도',
 				data : sizeTextList[0],
 				backgroundColor : chartColors,
 				borderColor : chartBold,
@@ -264,7 +313,7 @@ var margin = {top: 10, right: 10, bottom: 10, left: 10},
   height = 700 - margin.top - margin.bottom;
 
 
-var svg = d3.select("#my_dataviz")
+var svg = d3.select("#vizTreeMap")
 .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)

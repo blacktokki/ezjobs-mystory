@@ -70,8 +70,8 @@ public class AdminController {
 	@GetMapping("/resume")
 	public String resume(@RequestParam Map<Object,Object> map, Model model){
 		model.addAttribute("map",map);
-	//	adminService.resume(model);
-		adminService.tag(model); // 아직 자소서관리 안돌아가서 일단 이렇게 해놧어요 ㅠㅠ
+		adminService.resume(model);
+		//adminService.tag(model);
 		return "admin/resume";
 	}
 	

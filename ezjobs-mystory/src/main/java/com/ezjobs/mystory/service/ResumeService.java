@@ -95,8 +95,9 @@ public class ResumeService {
 	}
 	
 	public void listAll(Model model){
-		Integer page=0;
-		Integer size=32768;
+		Map<?,?> map=(Map<?,?>)model.getAttribute("map");
+		Integer page=Optional.of((Integer)map.get("page")).orElse(0);
+		Integer size=Optional.of((Integer)map.get("size")).orElse(32768);
 		Resume resume=new Resume();
 		PageRequest pr=PageRequest.of(page,size);
 		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);

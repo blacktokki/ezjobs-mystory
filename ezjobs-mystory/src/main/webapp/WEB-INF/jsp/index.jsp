@@ -5,7 +5,7 @@
 <!-- body -->
 
 <div>
-	<div class="jumbotron text-center">
+	<div class="jumbotron text-center  mb-0 p-0">
 		<div id="carouselExampleInterval" class="carousel slide"
 			data-ride="carousel">
 			<div class="carousel-inner">
@@ -36,8 +36,8 @@
 	</div>
 	<!-- 제일 위 -->
 
-	<div class="jumbotron">
-		<div class="container">
+	<div class="jumbotron  mb-0 px-5 py-5 bg-dark">
+		<div class="container px-0">
 		<%@ include file="/WEB-INF/jspf/indexSearch.jspf"%>
 			<!-- <form method="post" action="/search/list">
 				<div align="right">
@@ -58,8 +58,8 @@
  -->		</div>
 	</div>
 	<!-- 중간 위 -->
-	<div class="jumbotron">
-		<div class="container" style="background-color: white">
+	<div class="jumbotron mb-0 py-4">
+		<div class="container bg-white px-0">
 			<div>
 				<table class="table">
 					<!-- 테이블 제목 -->
@@ -106,8 +106,8 @@
 		</div>
 	</div>
 	<!-- 중간 하 -->
-	<div class="jumbotron">
-		<div class="container">
+	<div class="jumbotron mb-0 pb-4 pt-0">
+		<div class="container px-0">
 			<table class="table">
 				<tbody>
 					<tr>

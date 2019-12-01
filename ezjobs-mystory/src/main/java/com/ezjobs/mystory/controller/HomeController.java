@@ -16,7 +16,7 @@ public class HomeController{
 	@Inject
 	private HelpService helpService;
 	
-	@GetMapping("index")
+	@GetMapping({"index","/"})
 	public String index(@RequestParam Map<Object, Object> map, Model model) {
 		model.addAttribute("map", map);
 		helpService.notice(model);

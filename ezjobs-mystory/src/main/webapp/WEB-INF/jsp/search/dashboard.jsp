@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 
-<!-- Ctrl+F #워드클라우드 #차트 #트리맵 #색상 #트리맵 도메인 #JSON연결 #데이터출력수 -->
+<!-- Ctrl+F #워드클라우드 #차트 #트리맵 #색상 #트리맵 도메인 #JSON연결 #데이터출력수 #특수문자주소 -->
 <!-- body -->
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script
@@ -29,20 +29,21 @@ src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
 
 <div id="wordcloud" align="center" style="height:600px; zoom:1.6;" >
 #워드클라우드 : 워드클라우드 단어의 크기는 자기소개서에서 사용한 단어의 빈도에 비례합니다.<br><br>
-<p style="font-size:6.5px;"> *단어 클릭시 문장검색으로 이동합니다. </p>
+<p style="font-size:6.5px;"> *단어 클릭시 문장검색으로 이동하여 검색합니다. </p>
 </div>
 <!-- 워드 클라우드 -->
 
 
 <div class="chart-container" id="jsonChart" align="center" 
 	style="height: 100vh; width: 80vw; margin: 0px 0px 0px 160px;">
-	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 직무유형으로 분류되어진 태그입니다. 직무유형 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
+	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 직무 유형으로 분류되어진 태그입니다. 직무 유형 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
+	<p style="font-size:10px;"> *차트의 막대(bar)를 클릭 시 문장검색으로 이동하여 검색합니다. </p>
 	<canvas id="myChart"></canvas>
 </div>
 
 <div id="vizTreeMap" style="margin: 0px 0px 100px 0px;" align="center">
-#트리맵 : 자기소개서의 태그에 관한 데이터입니다. 차트에 사용된 데이터는 문항유형으로 분류되어진 태그입니다. 공간의 크기는 문항유형 태그의 빈도에 따라 비례합니다.<br><br>
-<p style="font-size:10px;"> *단어 혹은 공간 클릭시 문장검색으로 이동합니다. </p>
+#트리맵 : 자기소개서의 태그에 관한 데이터입니다. 차트에 사용된 데이터는 문항 유형으로 분류되어진 태그입니다. 공간의 크기는 문항 유형 태그의 빈도에 따라 비례합니다.<br><br>
+<p style="font-size:10px;"> *단어 혹은 공간 클릭시 문장검색으로 이동하여 검색합니다. </p>
 </div>
 
 
@@ -164,7 +165,6 @@ function showTreeMap(){
 	// 이전 워드 클라우드 끝
 	
 	
-	
 	for(var i=0;i<3;i++){
 		r1 = parseInt(Math.random() * 255);
 		r2 = parseInt(Math.random() * 255);
@@ -182,6 +182,29 @@ function showTreeMap(){
 	$('#wordcloud').jQCloud(x, {
 		  classPattern: null,
 		  colors: ["#800026", "#bd0026", "#e31a1c", "#fc4e2a", "#fd8d3c", "#feb24c", "#fed976"],
+		  fontSize: {
+		    from: 0.07,
+		    to: 0.01
+		  }
+		});
+	
+	for(var i=0;i<3;i++){
+		r1 = parseInt(Math.random() * 255)*2/3;
+		r2 = parseInt(Math.random() * 255)*2/3;
+		r3 = ((seed+i)*127%381)%256;
+		if(r3>250){
+			r1 = 2*r1/3;
+			r2 = 2*r2/3;
+		}
+			randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
+	}
+	
+	
+	
+	// #워드클라우드
+	$('#wordcloud').jQCloud(x, {
+		  classPattern: null,
+		  colors: ["#600000","#800000", "#880000", "#881700","#901a00", "#904a00","#a04a00", "#a06a00"],
 		  fontSize: {
 		    from: 0.07,
 		    to: 0.01
@@ -282,13 +305,17 @@ function showTreeMap(){
 	}
 	
 	
+	String.prototype.replaceAll = function(org, dest) {
+	    return this.split(org).join(dest);
+	}
+	
 	var chart = document.getElementById('myChart').getContext('2d');
 	var myChart = new Chart(chart, {
 		type : 'horizontalBar',
 		data : {
 			labels : sizeTextList[1],
 			datasets : [ {
-				label : '# 직무유형 태그 빈도',
+				label : '# 직무 유형 태그 빈도',
 				data : sizeTextList[0],
 				backgroundColor : chartColors,
 				borderColor : chartBold,
@@ -296,6 +323,15 @@ function showTreeMap(){
 			} ]
 		},
 		options : {
+			 onClick: function(evt, active) { // 클릭시 링크
+			      var Id = active[0]._index;
+			      var charConvert = sizeTextList[1][Id]; 
+			   // #특수문자주소 : 특수문자 주소를 변환하는 곳
+			      charConvert = charConvert.replaceAll("&", "%26");
+			      charConvert = charConvert.replaceAll("(", "%28");
+			      charConvert = charConvert.replaceAll(")", "%29");
+			      location.href ="/search/list?searchTags="+charConvert;
+			    },
 			scales : {
 				yAxes : [ {
 					ticks : {
@@ -333,7 +369,8 @@ d3.json("/search/treeMapJson", function(data) { //#JSON연결
 	  avg = avg / data.children.length;
 	  var root = d3.hierarchy(data).sum(function(d){
 		  domainValue = (d.size + avg/5); // #트리맵 도메인
-		  return domainValue;})
+		  return domainValue;
+		  })
 	  
 
   d3.treemap()
@@ -380,9 +417,9 @@ d3.json("/search/treeMapJson", function(data) { //#JSON연결
 				})
       .append('tspan')
       .attr("x", (d) => d.x0 + 5)
-      .attr("y", (d, i) => d.y0 + 15 + (i * 10)) 
+      .attr("y", (d, i) => d.y0 + 15 + (i * 17)) 
       .text((d) =>  d.text.replace(/(\s*)/g, ""))
-      .attr("font-size", "0.6em")
+      .attr("font-size", "0.8em")
       .attr("fill", "white") // #색상
 })
 

@@ -59,7 +59,7 @@
 							style="float: left; font-weight: bold; font-size: 14px; color: #197fd9;">${param.searchText}</div>&nbsp;에
 						대한 검색 결과입니다.
 						<div style="float: right">
-							검색된 자소서 수 :
+							검색된 문장 수 :
 							<div
 								style="float: right; font-size: 15px; color: #008d62; font-weight: bold">&nbsp;&nbsp;${recordCount}
 								</div>

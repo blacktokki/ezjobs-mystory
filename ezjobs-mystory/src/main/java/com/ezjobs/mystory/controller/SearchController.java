@@ -42,15 +42,20 @@ public class SearchController {
 		return "search/dashboard";
 	}
 	
-	@GetMapping("wordCloudAndChartJson")
+	@GetMapping("wordCloudJson")
 	public String wordCloud(Model model){
 		searchService.searchWordCloud(model);
-		return "search/wordCloudAndChartJson";
+		return "search/wordCloudJson";
 	}
 	
 	@GetMapping("treeMapJson")
 	public String treeMap(Model model){
 		return "search/treeMapJson";
+	}
+	
+	@GetMapping("chartJson")
+	public String chart(Model model){
+		return "search/chartJson";
 	}
 	
 	/* 혹시나 유저 편의로 주소맵핑

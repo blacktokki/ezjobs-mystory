@@ -15,13 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 
-/*************
- * 
- * 
- * @author YDH
- *
- *************/
-
 @Controller
 @RequestMapping("/resume")//상위 서브도메인
 public class ResumeController {
@@ -124,8 +117,8 @@ public class ResumeController {
 	
 	@ResponseBody
 	@GetMapping("auto")
-	public ResponseEntity<?> auto(@RequestParam String keyword,Model model){
-		model.addAttribute("keyword",keyword);
+	public ResponseEntity<?> auto(@RequestParam Map<Object, Object> map,Model model){
+		model.addAttribute("map",map);
 		resumeService.autoComplete(model);
 		return ResponseEntity.ok(model);
 	}

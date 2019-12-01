@@ -66,8 +66,7 @@
 		<table class="table table-sm table-hover">
 			<colgroup>
 				<col width="20">
-				<col width="50">
-				<col width="80">
+				<col width="75">
 				<col width="*">
 				<col width="300">
 				<col width="100">
@@ -84,7 +83,6 @@
 					<th scope="col">#</th>
 					<th scope="col">태그</th>
 					<th scope="col">자기소개서 문항</th>
-					<th scope="col">자기소개서 내용</th>
 					<th scope="col">회사명</th>
 					<th scope="col">작성자</th>
 					<th scope="col">수정</th>
@@ -95,31 +93,12 @@
 			<!-- 테이블 내용 채우기 -->
 			<tbody class="text-center">
 				<!-- 각 행들 -->
-				
-				<tr>
-					<td><input type="checkbox" name="tmp" value="null"/></td>
-						<td>1</td>
-						<td align="left">학업 취업</td>
-						<td align="left">동아대학교 테스트 자기소개서</td>
-						<td align="left">안녕하세요. 저는 테스트 내용입니다.</td>
-						<td>동아대학교</td>
-						<td>test78697</td>
-						<td><button style="border: 0; background: 0;">
-								<i class="fa fa-pencil"></i>
-							</button></td>
-						<td><button style="border: 0; background: 0;">
-								<i class="fa fa-times-circle" style="color: #FF8585"></i>
-							</button></td>
-				</tr>
-				
-				
 				<c:forEach var="item" items="${resumes.content}">
 					<tr>
 						<td><input type="checkbox" name="checkRow" value="${item.id}" /></td>
 						<td>${item.id}</td>
 						<td align="left">${item.tags}</td>
 						<td align="left">${item.question}</td>
-						<td align="left">${item.answer}</td>
 						<td>${item.company}</td>
 						<td>${item.userId}</td>
 						<td><button>
@@ -148,7 +127,7 @@
 								</div>
 								<form method="post" action="#">
 									<div class="modal-body">
-										<p>정말로 "${item.id }. ${item.name }" 태그를 삭제 하시겠습니까?</p>
+										<p>정말로 "${item.id }. ${item.question }" 태그를 삭제 하시겠습니까?</p>
 									</div>
 									<div class="modal-footer">
 										<button type="cancel" class="btn btn-secondary"

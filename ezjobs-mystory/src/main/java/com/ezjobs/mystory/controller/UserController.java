@@ -39,7 +39,7 @@ public class UserController {
 			model.addAttribute("login_message", "로그인이 필요합니다.");
 			return "user/fail";
 		}
-		return "/index";
+		return "redirect:/index";
 	}
 	
 	@GetMapping("/fail")

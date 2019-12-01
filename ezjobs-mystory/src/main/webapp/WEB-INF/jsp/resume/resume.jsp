@@ -86,7 +86,21 @@
 			<div class="tab-pane fade show active" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
 				<div class="card" id="autoComplete">
 					<div class="card-header card-title">자동 검색</div>
-					<ul class="list-group list-group-flush card-text">
+					  <form>
+						  <div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">검색어</span>
+							</div>
+							<input type="text" name="keyword" class="form-control bg-light" id="autoComplete-keyword" readonly/>
+					      </div>
+						  <div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text">단어 포함</span>
+							</div>
+							<input type="text" name="keywordInclude" class="form-control" id="autoComplete-include"/>
+					      </div>
+					  </form>
+					  <ul class="list-group list-group-flush card-text">
 					  </ul>
 					</div>
 				</div>
@@ -114,6 +128,9 @@
 </div>
 
 <script>
+	var resume_idx = 1;
+	var resume_new = 1;
+	var	timer_auto=null;
 	function refreshList(){
 		$.get("/resume/content?state=미작성", function(data) {
 			//console.log(data2);
@@ -125,8 +142,27 @@
 			$("#accordion3").html(data);
 		});
 	}
-	var resume_idx = 1;
-	var resume_new = 1;
+	function autoComplete(){
+		var form=$("#autoComplete form").serializeJSON();
+		form.keyword=$.trim(form.keyword);
+		console.log(form);
+		if(timer_auto){
+			clearTimeout(timer_auto);
+		}
+		timer_auto = setTimeout(function(){
+			$.get("/resume/auto", form, function(data) {
+				//console.log(data);
+				var $frag=$(document.createDocumentFragment());
+				data.list.forEach(function(e,i){
+					var text=e.text.replace(form.keyword,"<strong>"+form.keyword+"</strong>")
+								.replace(form.keywordInclude,"<strong>"+form.keywordInclude+"</strong>");
+					$frag.append("<li class='list-group-item list-group-item-action p-1'><font size='3' style='cursor:default'>"
+							+text+"</font></li>");
+				});
+				$("#autoComplete ul").html("").append($frag);
+			});	
+		},300);
+	}
 	$("body").delegate("#resume-create","click",function() {
 				$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
 							var $result = $(response);
@@ -221,38 +257,24 @@
 				var currentVal=$(e.target).val();
 				$("#heading-write" + id + " a").html(currentVal);
 			});
-	
-	timer_auto=null;
-	keyword=null;
-	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//내용 자동검색
+	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//자동검색 키워드 불러오기
 		var currentVal=$(e.target).val();
 		//console.log(currentVal);
 		var pos=$(e.target).get(0).selectionEnd;
 		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
-		keyword=keywords[keywords.length-1];
-		
-		var form={keyword:$.trim(keyword)};
-		console.log(form);
-		if(timer_auto){
-			clearTimeout(timer_auto);
-		}
-		timer_auto = setTimeout(function(){
-			$.get("/resume/auto", form, function(data) {
-				//console.log(data);
-				var $frag=$(document.createDocumentFragment());
-				data.list.forEach(function(e,i){
-					var text=e.text.replace(form.keyword,"<strong>"+form.keyword+"</strong>");
-					$frag.append("<li class='list-group-item list-group-item-action p-1'><font size='3' style='cursor:default'>"
-							+text+"</font></li>");
-				});
-				$("#autoComplete ul").html("").append($frag);
-			});	
-		},300); 
+		$("#autoComplete-keyword").val(keywords[keywords.length-1]);
+		autoComplete();
 	});
+	
+	$("#autoComplete").delegate("form","propertychange change paste input",function(e){//자동검색 진행
+		autoComplete();
+	});
+	
 	$("#autoComplete ul").delegate("li","click",function(e){//자동완성 입력
 		var currentVal=$(e.target).text()+" ";
 		var $target=$("#accordion2 .card").find(".show").find(".write-answer");
 		var beforeVal=$target.val();
+		var keyword=$("#autoComplete-keyword").val();
 		console.log(currentVal);
 		console.log(beforeVal);
 		var pos=$target.get(0).selectionEnd;
@@ -262,14 +284,14 @@
 			+beforeVal.substring(pos,beforeVal.length);
 		$target.val(result).focus();
 		$target.get(0).selectionEnd=pos-keyword.length+currentVal.length;
-		keyword=null;
+		$("#autoComplete-keyword").val("");
 		$("#autoComplete ul").html("");
 		clearTimeout(timer_auto);
 		return false;
 	});
 	
 	$("#accordion2").delegate(".card-header","click",function(e){
-		keyword=null;
+		$("#autoComplete-keyword").val("");
 		$("#autoComplete ul").html("");
 		clearTimeout(timer_auto);
 	});
@@ -289,18 +311,24 @@
 		var change=this.value;
 		if(change=="_add"){
 			change=prompt("단어 추가",first);
-			$("option[value=_add]",this).text(change).attr("value",change);
-			$("<option value='_add'>추가..</option>").appendTo($(this))
-			var form={
-				keyword:first,
-				synonym:change
+			console.log(change);
+			if (change!=""&&change!=null){
+				$("option[value=_add]",this).text(change).attr("value",change);
+				$("<option value='_add'>추가..</option>").appendTo($(this))
+				var form={
+					keyword:first,
+					synonym:change
+				}
+				$.post("/resume/synonym/", form, function(data) {
+					//console.log(data);
+					$(e.target).find(".resume-id").val(data.map.id);
+					$(e.target).find(".resume-method").val("put");
+					refreshList();
+				});
 			}
-			$.post("/resume/synonym/", form, function(data) {
-				//console.log(data);
-				$(e.target).find(".resume-id").val(data.map.id);
-				$(e.target).find(".resume-method").val("put");
-				refreshList();
-			});
+			else{
+				change=first;
+			}
 		}
 		$("option[value="+change+"]",this)
 		.attr("selected",true).siblings()

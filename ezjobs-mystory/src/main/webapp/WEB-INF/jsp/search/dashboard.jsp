@@ -176,31 +176,6 @@ function showTreeMap(){
 			randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
 	}
 	
-	
-	
-	// #워드클라우드
-	$('#wordcloud').jQCloud(x, {
-		  classPattern: null,
-		  colors: ["#800026", "#bd0026", "#e31a1c", "#fc4e2a", "#fd8d3c", "#feb24c", "#fed976"],
-		  fontSize: {
-		    from: 0.07,
-		    to: 0.01
-		  }
-		});
-	
-	for(var i=0;i<3;i++){
-		r1 = parseInt(Math.random() * 255)*2/3;
-		r2 = parseInt(Math.random() * 255)*2/3;
-		r3 = ((seed+i)*127%381)%256;
-		if(r3>250){
-			r1 = 2*r1/3;
-			r2 = 2*r2/3;
-		}
-			randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
-	}
-	
-	
-	
 	// #워드클라우드
 	$('#wordcloud').jQCloud(x, {
 		  classPattern: null,

@@ -59,7 +59,7 @@
 							style="float: left; font-weight: bold; font-size: 14px; color: #197fd9;">${param.searchText}</div>&nbsp;에
 						대한 검색 결과입니다.
 						<div style="float: right">
-							검색된 자소서 수 :
+							검색된 문장 수 :
 							<div
 								style="float: right; font-size: 15px; color: #008d62; font-weight: bold">&nbsp;&nbsp;${recordCount}
 								</div>
@@ -138,6 +138,7 @@ if(${tagsError}==1){
 	alert("태그는 세개 초과하여 검색할 수 없습니다.");
 	location.href='/search/list?searchText=${userSearchWord}&page=${nowPage}&searchWay=${searchWay}&numberOfSeeSentence=${numberOfSeeSentence}&searchTags=${searchTagArray0}%2C${searchTagArray1}%2C${searchTagArray2}'
 }
+
 </script>
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

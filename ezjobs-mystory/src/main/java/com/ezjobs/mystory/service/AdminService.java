@@ -163,10 +163,10 @@ public class AdminService {
 			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
 		}
 		else { // 전체 출력
-			Resume resume=new Resume();
-			Page<Resume> re=resumeRepository.findAll(Example.of(resume), pr);
+			Page<Resume> re=resumeRepository.findAll(pr);
 			model.addAttribute("resumes", re);
 			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
 		}
+		System.out.println("!");
 	}
 }

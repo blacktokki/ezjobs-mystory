@@ -21,7 +21,7 @@
 <script src="/webjars/chart.js/dist/Chart.min.js"></script>
 <script src="/webjars/jquery.serializeJSON/jquery.serializejson.min.js"></script>
 <script src="/webjars/jquery-tagsinput/jquery.tagsinput.min.js"></script>
-<script src="/webjars/jquery-ui-touch-punch/jquery.jquery-ui-touch-punch.min.js"></script>
+<script src="/webjars/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="true" src="https://www.googletagmanager.com/gtag/js?id=UA-152621707-3"></script>
 <script>

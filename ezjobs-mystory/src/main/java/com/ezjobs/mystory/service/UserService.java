@@ -1,7 +1,5 @@
 package com.ezjobs.mystory.service;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -35,14 +33,21 @@ public class UserService {
 	public User getUser(User user){
 	      //System.out.println("입력값:"+id+"\n"+pw);
 	      return userRepository.findOne(Example.of(user)).orElse(null);
-	   }
+	}
 
+	public void clearFailureCount(String loginId) {	
+		userRepository.clearLoginFailureCount(loginId);
+	}
+	
+	public void addFailureCount(String loginId) {	
+		userRepository.addLoginFailureCount(loginId);
+	}
+	
 	public void write(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setRegistDate(new Date());
 		userRepository.save(user);		
 	}
 
@@ -50,10 +55,11 @@ public class UserService {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		String loginId=modelMap.get("loginId").toString();
+		String userId=modelMap.get("userId").toString();
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setLoginId(loginId);
+		user.setLoginId(userId);
 		userRepository.update(user);
+		model.addAttribute("user",user);
 	}
 
 	public void info(Model model) {
@@ -61,12 +67,9 @@ public class UserService {
 		Map<String,Object> modelMap=model.asMap();
 		String userId=modelMap.get("userId").toString();
 		User user=new User();
-		System.out.println(userId);
 		user.setLoginId(userId);
-		List<User> users=userRepository.findAll(Example.of(user));
 		user=userRepository.findOne(Example.of(user)).get();
 		model.addAttribute("user",user);
-		System.out.println(users.size());
 	}
 
 	

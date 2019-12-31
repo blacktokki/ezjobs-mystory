@@ -9,7 +9,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -26,11 +28,21 @@ public class UserController {
 		return "user/login";
 	}
 	
-	//탈퇴
+	//탈퇴,미구현
 	@GetMapping("/out")
 	public String outView(){
 		return "user/out";
 	}
+	
+	@ResponseBody
+	@GetMapping("/check_id")
+	public Boolean checkId(@RequestParam String loginId) {
+		User user=new User();
+		user.setLoginId(loginId);
+		userService.getUser(user);
+		return userService.getUser(user)==null;
+	}
+	
 	
 	@GetMapping("/join")
 	public String writeView(){
@@ -47,7 +59,7 @@ public class UserController {
 	@GetMapping("/info")
 	public String infoView(Authentication auth,Model model){
 		User user = (User) auth.getPrincipal();
-		model.addAttribute("loginId",user.getLoginId());
+		model.addAttribute("userId",user.getLoginId());
 		userService.info(model);
 		return "user/info";
 	}
@@ -58,6 +70,9 @@ public class UserController {
 		model.addAttribute("userId",user.getLoginId());
 		model.addAttribute("map", map);
 		userService.edit(model);
+		User newUser = (User)model.getAttribute("user");
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(newUser, newUser.getLoginPw(), auth.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
 		return "redirect:/index";
 	}
 }

@@ -41,7 +41,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // 로그인 설정
         http.authorizeRequests()
             // USER, ADMIN으로 권한 분리 유알엘 정의
-            .antMatchers("/admin/**").access("ADMIN")
+            .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/resume/**","/board/write/**","/user/info/**").authenticated()
             .antMatchers("/**").permitAll()
         .and()
@@ -49,8 +49,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .formLogin()
             .loginPage("/user/login")
             .defaultSuccessUrl("/")
-            //.failureHandler(authFailureHandler)
-            //.successHandler(authSuccessHandler)
+            .failureHandler(authFailureHandler)
+            .successHandler(authSuccessHandler)
             .usernameParameter("loginId")
             .passwordParameter("loginPw")
             .permitAll()

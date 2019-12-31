@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!-- body -->
 
@@ -57,9 +58,12 @@
 		${board.text}
 	</div>
 	<p>
+	<sec:authentication property="principal.loginId" var="currentUserName"/>
+	<c:if test="${currentUserName == board.userId}">
 		<a class="btn btn-secondary btn-sm" href="/board/community"
 			role="button">목록</a>
 		<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
 			role="button">수정</a>
+	</c:if>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -29,6 +29,7 @@
 	<div class="card">
 		<form method="post" action="/board/write/${board.id}">
 			<input type="hidden" name="_method" value="${method}">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<div class="card-body">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">

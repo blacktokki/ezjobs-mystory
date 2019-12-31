@@ -37,11 +37,6 @@ public class BoardService {
 		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
 		model.addAttribute("boards",boards);
 		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
-		//System.out.println(boards.getNumberOfElements());
-		//System.out.println(boards.getSize());
-		//System.out.println(boards.getNumber());
-		//System.out.println(boards.getTotalElements());
-		//System.out.println(boards.getTotalPages());
 		
 	}
 
@@ -61,6 +56,7 @@ public class BoardService {
 		board.setEditDate(new Date());
 		board.setBoardType("Board");
 		boardRepository.save(board);
+		model.addAttribute("id",board.getId());
 	}
 	
 	public void edit(Model model){
@@ -70,5 +66,12 @@ public class BoardService {
 		Board board=mapper.convertValue(map, Board.class);//board로 변환
 		board.setId(id);
 		boardRepository.update(board);
+	}
+	
+	public boolean isWrited(Integer id,String loginId){
+		Board board=new Board();
+		board.setId(id);
+		board.setUserId(loginId);
+		return boardRepository.findOne(Example.of(board)).orElse(null)!=null;
 	}
 }

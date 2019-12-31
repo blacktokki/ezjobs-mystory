@@ -42,6 +42,7 @@
 				<button type="submit" class="btn btn-primary">글올리기</button>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
 				<input type="hidden" class="resume-method" name="_method" value="${method}" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>
 		</form>
 	</div>

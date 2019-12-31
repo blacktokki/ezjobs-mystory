@@ -9,6 +9,7 @@
 
 
 <form id="frm" method="post" action="/user/login">
+ <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
  <table class="board_list">
   <tbody>
    <tr>
@@ -20,11 +21,22 @@
     <td><input type="password" id="user_pwd" name="loginPw" class="wdp_90 alert alert-dark"></td>
    </tr>
    <tr>
-   <td> 
-   <button type="submit" id="login_btn" class="btn btn-secondary resume-submit">로그인</button>
-   <button type="button" onclick="location.href='join'" class="btn btn-secondary resume-submit">회원가입</button>
-</td>
-</tr>
+    <td> 
+    <button type="submit" id="login_btn" class="btn btn-secondary resume-submit">로그인</button>
+    <button type="button" onclick="location.href='join'" class="btn btn-secondary resume-submit">회원가입</button>
+    </td>
+   </tr>
+   <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
+   <tr>
+	<td>
+		<font color="red">
+			로그인 실패<br>
+			Reason:${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+		</font>
+		<c:remove scope="session" var="SPRING_SECURITY_LAST_EXCEPTION"/>
+	</td>
+   </tr>
+   </c:if>
   </tbody>
  
  </table>

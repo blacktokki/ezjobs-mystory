@@ -58,6 +58,11 @@ public class SearchController {
 		return "search/chartJson";
 	}
 	
+	@GetMapping("prefixChartJson")
+	public String prefixChart(Model model){
+		return "search/prefixChartJson";
+	}
+	
 	/* 혹시나 유저 편의로 주소맵핑
 	 * @GetMapping("list") public String dsearch1() { return "redirect:list/1"; }
 	 * 

@@ -1,7 +1,6 @@
 package com.ezjobs.mystory.controller;
 
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.UserService;
@@ -9,8 +8,8 @@ import com.ezjobs.mystory.service.UserService;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -27,45 +26,16 @@ public class UserController {
 		return "user/login";
 	}
 	
-	@PostMapping("/login")
-	public String userLogin(HttpSession session ,@RequestParam Map<Object, Object> map, Model model){
-		model.addAttribute("map",map);
-		try {
-			userService.user(model);
-			String loginId=(String)map.get("loginId");
-			session.setAttribute("loginId", loginId);
-
-		} catch (Exception e) {
-			model.addAttribute("login_message", "로그인이 필요합니다.");
-			return "user/fail";
-		}
-		return "redirect:/index";
-	}
-	
-	@GetMapping("/fail")
-	public String failView(){
-		return "user/fail";
-	}
+	//탈퇴
 	@GetMapping("/out")
 	public String outView(){
 		return "user/out";
 	}
 	
-/*
-	@GetMapping("/userJoin")
-	public String userJoin(@RequestParam Map<Object, Object> map,Model model){
-		model.addAttribute("map",map);
-		userService.user(model);
-		return "user/userJoin";
-	}
-	*/
-	
 	@GetMapping("/join")
 	public String writeView(){
 		return "user/join";
 	}
-	
-
 	
 	@PostMapping("/join")//회원가입 요청 
 	public String Write(@RequestParam Map<Object,Object> map,Model model){
@@ -74,68 +44,20 @@ public class UserController {
 		return "redirect:login";
 	}
 	
-/*	
 	@GetMapping("/info")
-	public String writeView( HttpSession session, Model model) {
-		Object loginId = session.getAttribute("loginId");
-		if (loginId == null)
-			return "user/fail";
-		userService.content(model);
-		return "user/info";
-	}
-	*/
-	
-	@GetMapping("/info")
-	public String infoView(HttpSession session,Model model){
-		
-		if(session.getAttribute("loginId")==null)
-			return "user/fail";
-		
-		model.addAttribute("loginId",session.getAttribute("loginId"));
-		userService.info(model);
-		
-		
-		
-		return "user/info";
-	}
-	
-	/*
-	@PostMapping("/info")//정보수정 요청 
-	public String Modify(@RequestParam Map<Object,Object> map,Model model,HttpSession session){
-		model.addAttribute("map",map);
-		userService.modify(model);
-		return "redirect:login";
-	}
-	*/
-	@PutMapping("/info") // 글수정요청 /board/write/1
-	public String Write(@RequestParam Map<Object, Object> map, HttpSession session, Model model) {
-		Object loginId = session.getAttribute("loginId");
-		if (loginId == null)
-			return "redirect:/temp/login/fail";
-		model.addAttribute("loginId", loginId);
-		model.addAttribute("map", map);
-		userService.edit(model);
-		return "redirect:/index";
-	}
-	
-	@GetMapping("/info/{id}")
-	public String info(@PathVariable String id,@RequestParam Map<Object, Object> map, HttpSession session, Model model){
-		model.addAttribute("map", map);
-		model.addAttribute("id",id);
+	public String infoView(Authentication auth,Model model){
+		User user = (User) auth.getPrincipal();
+		model.addAttribute("loginId",user.getLoginId());
 		userService.info(model);
 		return "user/info";
 	}
-	public String write( @RequestParam Map<Object, Object> map, HttpSession session, Model model) {
-		Object loginId = session.getAttribute("loginId");
-		Object name = session.getAttribute("name");
-		if (loginId == null)
-			return "redirect:/temp/login/fail";
-		model.addAttribute("loginId", loginId);
+	
+	@PutMapping("/info") //정보수정 요청 
+	public String Write(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
+		User user = (User) auth.getPrincipal();
+		model.addAttribute("userId",user.getLoginId());
 		model.addAttribute("map", map);
 		userService.edit(model);
-		model.addAttribute("name",name);
-		userService.list(model);
 		return "redirect:/index";
-
 	}
 }

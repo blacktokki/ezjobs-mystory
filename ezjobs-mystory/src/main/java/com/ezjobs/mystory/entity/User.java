@@ -44,4 +44,10 @@ public class User {
     
     @Column(name="grad", nullable = false)
     private String grad;
+    
+    @Column(name="state", nullable = false)
+    private String state;
+    
+    @Column(name="is_admin", nullable = false)
+    private Boolean isAdmin;
 }

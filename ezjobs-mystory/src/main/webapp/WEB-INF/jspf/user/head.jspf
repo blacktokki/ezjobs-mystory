@@ -1,4 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<button type="button" onclick="location.href='/user/info'" class="fa fa-user fa-2x"></button>
-${sessionScope.loginId}
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<div class="pr-5">
+	<sec:authorize access="isAnonymous()">
+		<a href="/user/login" style="color:white">로그인</a>&nbsp;
+		<a href="/user/join" style="color:white">회원가입</a>
+	</sec:authorize>
+	
+	<sec:authorize access="isAuthenticated()">
+		<div class="nav-item dropdown">
+	      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white">
+      			<i class="fa fa-user fa-2x align-middle"></i>
+      			&nbsp;
+      			<sec:authentication property="principal.name"/>
+	      </a>
+	      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink4">
+	     
+	        <a class="dropdown-item" href="/user/logout">로그아웃</a>
+	        <a class="dropdown-item" href="/user/info">회원정보</a>
+	      </div>
+	    </div>
+	</sec:authorize>
+</div>

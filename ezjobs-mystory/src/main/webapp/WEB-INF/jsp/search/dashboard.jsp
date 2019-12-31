@@ -6,11 +6,9 @@
 
 <!-- Ctrl+F #워드클라우드 #차트 #트리맵 #색상 #트리맵 도메인 #JSON연결 #데이터출력수 #특수문자주소 -->
 <!-- body -->
-<script src="https://d3js.org/d3.v3.min.js"></script>
-<script
-src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
-	type="text/JavaScript"></script>
+
 <script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
 
 <div class="dropdown" style="left: 85%; margin: 20px 2000px 0px 0px;">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,7 +16,8 @@ src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
     <button class="dropdown-item" type="button" onclick="showCloud()">워드클라우드</button>
-    <button class="dropdown-item" type="button" onclick="showChart()">차트</button>
+    <button class="dropdown-item" type="button" onclick="showChart1()">차트1</button>
+    <button class="dropdown-item" type="button" onclick="showChart2()">차트2</button>
     <button class="dropdown-item" type="button" onclick="showTreeMap()">트리맵</button>
   </div>
 </div>
@@ -32,13 +31,19 @@ src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
 <p style="font-size:6.5px;"> *단어 클릭시 문장검색으로 이동하여 검색합니다. </p>
 </div>
 <!-- 워드 클라우드 -->
-
-
-<div class="chart-container" id="jsonChart" align="center" 
+<div class="chart-container" id="jsonChart1" align="center" 
 	style="height: 100vh; width: 80vw; margin: 0px 0px 0px 160px;">
 	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 직무 유형으로 분류되어진 태그입니다. 직무 유형 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
 	<p style="font-size:10px;"> *차트의 막대(bar)를 클릭 시 문장검색으로 이동하여 검색합니다. </p>
-	<canvas id="myChart"></canvas>
+	<canvas id="myChart1"></canvas>
+</div>
+
+
+<div class="chart-container" id="jsonChart2" align="center" 
+	style="height: 100vh; width: 80vw; margin: 0px 0px 0px 160px;">
+	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 문장의 시작 단어으로 분류되어진 태그입니다. 시작단어 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
+	<p style="font-size:10px;"> *차트의 막대(bar)를 클릭 시 문장검색으로 이동하여 검색합니다. </p>
+	<canvas id="myChart2"></canvas>
 </div>
 
 <div id="vizTreeMap" style="margin: 0px 0px 100px 0px;" align="center">
@@ -46,26 +51,36 @@ src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"
 <p style="font-size:10px;"> *단어 혹은 공간 클릭시 문장검색으로 이동하여 검색합니다. </p>
 </div>
 
-
 <script>
-document.getElementById("jsonChart").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
+document.getElementById("jsonChart1").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
+document.getElementById("jsonChart2").style.display = "none";
 document.getElementById("vizTreeMap").style.display = "none";
 
 function showCloud(){ // 특정한 시각화 데이터 제공을 위한 버튼에 사용되는 함수 
 	document.getElementById("wordcloud").style.display = "block";
-	document.getElementById("jsonChart").style.display = "none";
+	document.getElementById("jsonChart1").style.display = "none";
+	document.getElementById("jsonChart2").style.display = "none";
 	document.getElementById("vizTreeMap").style.display = "none";
 }
 
-function showChart(){
+function showChart1(){
 	document.getElementById("wordcloud").style.display = "none";
-	document.getElementById("jsonChart").style.display = "block";
+	document.getElementById("jsonChart1").style.display = "block";
+	document.getElementById("jsonChart2").style.display = "none";
+	document.getElementById("vizTreeMap").style.display = "none";
+}
+
+function showChart2(){
+	document.getElementById("wordcloud").style.display = "none";
+	document.getElementById("jsonChart1").style.display = "none";
+	document.getElementById("jsonChart2").style.display = "block";
 	document.getElementById("vizTreeMap").style.display = "none";
 }
 
 function showTreeMap(){
 	document.getElementById("wordcloud").style.display = "none";
-	document.getElementById("jsonChart").style.display = "none";
+	document.getElementById("jsonChart1").style.display = "none";
+	document.getElementById("jsonChart2").style.display = "none";
 	document.getElementById("vizTreeMap").style.display = "block";
 }
 
@@ -87,7 +102,7 @@ function showTreeMap(){
 
 	var x = JSON.parse(frequency_list); // x에 배열로써 JSON 파싱
 	
- 	var chartJsonList = $.ajax({
+ 	var chartJsonList1 = $.ajax({
 		type : 'get',
 		url : '/search/chartJson', //#JSON연결
 		datatype : 'json',
@@ -99,8 +114,21 @@ function showTreeMap(){
 			alert("스크립트 ajax 에러")
 		}
 	}).responseText;
+ 	var chartJsonList2 = $.ajax({
+		type : 'get',
+		url : '/search/prefixChartJson', //#JSON연결
+		datatype : 'json',
+		async : false,
+		success : function() {
+			//alert("차트성공")
+		},
+		error : function() {
+			alert("스크립트 ajax 에러")
+		}
+	}).responseText;
 
-	var y = JSON.parse(chartJsonList); 
+	var y1 = JSON.parse(chartJsonList1);
+	var y2 = JSON.parse(chartJsonList2);
 	
 	
 	var seed = parseInt(Math.random() * 3);
@@ -109,61 +137,6 @@ function showTreeMap(){
 	var r3 = parseInt(Math.random() * 256);
 	var r1mem = 257;
 	var fontSizePrint = 0;
-	
-	
-	// #워드클라우드 이전 꺼임
-	/* function draw(words) { 
-		d3.select("#wordcloud").append("svg").attr("width", 2000).attr(
-				"height", // 여기서 div 크기(width, height), 위치(translate) 조절
-				600).attr("class", "wordcloud").attr("style", "margin:0px 0px 0px -620px")
-				.append("g").attr("transform",
-				"translate(1230,220)").selectAll("text").data(words).enter()
-				.append("a").attr("xlink:href", function(d){
-					return "/search/list?searchText="+d.text;
-				})
-				.append("text").style("font-weight", function(d) {
-					return "600";
-				}).style("font-size", function(d) {
-					return d.size + "px";
-				}).style("fill", function(d, i) {
-					while (r1 + r2 + r3 > 550 || r1mem == r1) { // 너무 흰색에 가깝지 않게 처리 #색상
-						r1 = parseInt(Math.random() * 255);
-						r2 = parseInt(Math.random() * 255);
-						r3 = parseInt(Math.random() * 255);
-					}
-					r1mem = r1;
-					c1 = r1.toString(16);
-					c2 = r2.toString(16);
-					c3 = r3.toString(16);
-					if(i<3){
-						r3 = ((seed+i)*127%381)%256;
-						if(r3>250){
-							r1 = 2*r1/3;
-							r2 = 2*r2/3;
-						}
-						randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
-					}
-					return "#"+c1 + c2 + c3; // #색상
-				}).attr(
-						"transform",
-						function(d) {
-							return "translate(" + [ (d.x-20)/(1.1), (d.y+50)/(0.85) ] + ")rotate("
-									+ d.rotate + ")";
-						}).text(function(d, i) {
-							if(i>35){ // #데이터출력수
-								return null;
-							}
-					return d.text;
-					});
-	}
-	
-	d3.layout.cloud().size([ 1600, 600 ]).words(x).rotate(0).fontSize( // size로 div크기가 아니라, div 안에 그려지는 창의 크기 조절
-	function(d) {
-		fontSizePrint = d.doc_count;
-		return (fontSizePrint/60);
-	}).on("end", draw).start(); */
-	// 이전 워드 클라우드 끝
-	
 	
 	for(var i=0;i<3;i++){
 		r1 = parseInt(Math.random() * 255);
@@ -176,11 +149,6 @@ function showTreeMap(){
 			randomColor[i] = "rgba("+r1+", "+r2+", "+r3+", 0.7)"; //#색상(여기서 쓰는 색상이 아니라, 트리맵에서 사용될 색상)
 	}
 	
-	
-	
-	
-	
-	
 	// #워드클라우드
 	$('#wordcloud').jQCloud(x, {
 		  classPattern: null,
@@ -188,19 +156,11 @@ function showTreeMap(){
 		  fontSize: {
 		    from: 0.07,
 		    to: 0.01
-		  }
+		  },
+		  autoResize:true,
 		});
 	
 	// #차트
-	var sizeTextList = new Array(2);
-	sizeTextList[0] = new Array();
-	sizeTextList[1] = new Array();
-
-	for (var i in y) {
-		sizeTextList[0].push(y[i].doc_count);
-		sizeTextList[1].push(y[i].text);
-	}
-	
 	function swap(_arr, _firstIndex, _secondIndex) // 이하의 세개의 함수는 차트 높은순 정렬 용도
 	{
 		var temp = _arr[0][_firstIndex];
@@ -254,7 +214,19 @@ function showTreeMap(){
 		}
 		return _arr;
 	}
+	
+	String.prototype.replaceAll = function(org, dest) {
+	    return this.split(org).join(dest);
+	}
 
+	var sizeTextList = new Array(2);
+	sizeTextList[0] = new Array();
+	sizeTextList[1] = new Array();
+	
+	for (var i in y1) {
+		sizeTextList[0].push(y1[i].doc_count);
+		sizeTextList[1].push(y1[i].text);
+	}
 	arrSort(sizeTextList);
 	sizeTextList[0].reverse();
 	sizeTextList[1].reverse();
@@ -284,44 +256,110 @@ function showTreeMap(){
 		i++;
 	}
 	
-	
-	String.prototype.replaceAll = function(org, dest) {
-	    return this.split(org).join(dest);
-	}
-	
-	var chart = document.getElementById('myChart').getContext('2d');
-	var myChart = new Chart(chart, {
-		type : 'horizontalBar',
-		data : {
-			labels : sizeTextList[1],
-			datasets : [ {
-				label : '# 직무 유형 태그 빈도',
-				data : sizeTextList[0],
-				backgroundColor : chartColors,
-				borderColor : chartBold,
-				borderWidth : 1
-			} ]
-		},
-		options : {
-			 onClick: function(evt, active) { // 클릭시 링크
-			      var Id = active[0]._index;
-			      var charConvert = sizeTextList[1][Id]; 
-			   // #특수문자주소 : 특수문자 주소를 변환하는 곳
-			      charConvert = charConvert.replaceAll("&", "%26");
-			      charConvert = charConvert.replaceAll("(", "%28");
-			      charConvert = charConvert.replaceAll(")", "%29");
-			      location.href ="/search/list?searchTags="+charConvert;
-			    },
-			scales : {
-				yAxes : [ {
-					ticks : {
-						beginAtZero : true
-					}
+	var chartinit1={
+			type : 'horizontalBar',
+			data : {
+				labels : sizeTextList[1],
+				datasets : [ {
+					label : '# 직무 유형 태그 빈도',
+					data : sizeTextList[0],
+					backgroundColor : chartColors,
+					borderColor : chartBold,
+					borderWidth : 1
 				} ]
+			},
+			options : {
+				 onClick: function(evt, active) { // 클릭시 링크
+				      var Id = active[0]._index;
+				      var charConvert = sizeTextList[1][Id]; 
+				   // #특수문자주소 : 특수문자 주소를 변환하는 곳
+				      charConvert = charConvert.replaceAll("&", "%26");
+				      charConvert = charConvert.replaceAll("(", "%28");
+				      charConvert = charConvert.replaceAll(")", "%29");
+				      location.href ="/search/list?searchTags="+charConvert;
+				    },
+				scales : {
+					yAxes : [ {
+						ticks : {
+							beginAtZero : true
+						}
+					} ]
+				}
 			}
 		}
-	});
+	sizeTextList = new Array(2);
+	sizeTextList[0] = new Array();
+	sizeTextList[1] = new Array();
 	
+	for (var i in y2) {
+		sizeTextList[0].push(y2[i].doc_count);
+		sizeTextList[1].push(y2[i].text);
+	}
+	arrSort(sizeTextList);
+	sizeTextList[0].reverse();
+	sizeTextList[1].reverse();
+	
+	sizeTextList[0] = sizeTextList[0].slice(0,40); // #데이터출력수
+	sizeTextList[1] = sizeTextList[1].slice(0,40);
+	
+	var chartColors = new Array();
+	var chartBold = new Array();
+	r1 = parseInt(Math.random() * 256); // 색상을 랜덤 부여하기 위한 변수 1,2,3
+	r2 = parseInt(Math.random() * 256);
+	r3 = parseInt(Math.random() * 256);
+	r1mem = 257;
+	var i = 0;
+	
+	while (i < sizeTextList[0].length) { // 랜덤 색상 설정
+		while (r1 + r2 + r3 > 550 || r1mem == r1) { 
+			r1 = parseInt(Math.random() * 255);
+			r2 = parseInt(Math.random() * 255);
+			r3 = parseInt(Math.random() * 255);
+		}
+		r1mem = r1;
+		
+		chartColors[i] = "rgba(" + r1 + ", " + r2 + ", " + r3 + ", 0.2)"; //#색상
+		chartBold[i] = "rgba(0, 0, 0, 0.4)";
+		
+		i++;
+	}
+	
+	var chartinit2={
+			type : 'horizontalBar',
+			data : {
+				labels : sizeTextList[1],
+				datasets : [ {
+					label : '# 시작 단어 태그 빈도',
+					data : sizeTextList[0],
+					backgroundColor : chartColors,
+					borderColor : chartBold,
+					borderWidth : 1
+				} ]
+			},
+			options : {
+				 onClick: function(evt, active) { // 클릭시 링크
+				      var Id = active[0]._index;
+				      var charConvert = sizeTextList[1][Id]; 
+				   // #특수문자주소 : 특수문자 주소를 변환하는 곳
+				      charConvert = charConvert.replaceAll("&", "%26");
+				      charConvert = charConvert.replaceAll("(", "%28");
+				      charConvert = charConvert.replaceAll(")", "%29");
+				      location.href ="/search/list?searchTags="+charConvert;
+				    },
+				scales : {
+					yAxes : [ {
+						ticks : {
+							beginAtZero : true
+						}
+					} ]
+				}
+			}
+		}
+	
+	var chart1 = document.getElementById('myChart1').getContext('2d');
+	var myChart1 = new Chart(chart1,chartinit1);
+	var chart2 = document.getElementById('myChart2').getContext('2d');
+	var myChart2 = new Chart(chart2,chartinit2);
 	
 	// #트리맵
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
@@ -350,7 +388,7 @@ d3.json("/search/treeMapJson", function(data) { //#JSON연결
 	  var root = d3.hierarchy(data).sum(function(d){
 		  domainValue = (d.size + avg/5); // #트리맵 도메인
 		  return domainValue;
-		  })
+		  });
 	  
 
   d3.treemap()

@@ -51,7 +51,7 @@
 </form>
 <script>
 $("#imgCaptcha").click(function(){
-    $(this).attr("src", "${_ctx}/captcha/index");
+    $(this).attr("src", "/captcha/index");
 });
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

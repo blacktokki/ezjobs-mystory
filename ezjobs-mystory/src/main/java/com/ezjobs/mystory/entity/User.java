@@ -54,7 +54,4 @@ public class User {
     @Column(name="login_failure_cnt", nullable = false)
     private Integer loginFailureCnt;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="access_date", nullable = false)
-    private Date accessDate;
 }

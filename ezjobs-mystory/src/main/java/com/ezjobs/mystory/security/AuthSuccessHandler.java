@@ -1,4 +1,4 @@
-package com.ezjobs.mystory.config;
+package com.ezjobs.mystory.security;
 
 import java.io.IOException;
 

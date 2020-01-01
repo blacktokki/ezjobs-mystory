@@ -21,14 +21,21 @@
     <td><input type="password" id="user_pwd" name="loginPw" class="wdp_90 alert alert-dark"></td>
    </tr>
    <tr>
-    <td> 
+   	<th scope="row">자동입력<br>방지문자</th>
+   		<td>
+   			<img src="/captcha/index" id="imgCaptcha" style="cursor: pointer"><br>
+   			<input type="text" id="user_captcha" name="captcha" class="wdp_90 alert alert-dark">
+   		</td>
+   </tr>
+   <tr>
+    <td colspan='2'> 
     <button type="submit" id="login_btn" class="btn btn-secondary resume-submit">로그인</button>
     <button type="button" onclick="location.href='join'" class="btn btn-secondary resume-submit">회원가입</button>
     </td>
    </tr>
    <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
    <tr>
-	<td>
+	<td colspan='2'>
 		<font color="red">
 			로그인 실패<br>
 			Reason:${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
@@ -42,6 +49,9 @@
  </table>
   
 </form>
-
-</body>
+<script>
+$("#imgCaptcha").click(function(){
+    $(this).attr("src", "${_ctx}/captcha/index");
+});
+</script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.ezjobs.mystory.security.AuthFailureHandler;
+import com.ezjobs.mystory.security.AuthSuccessHandler;
+import com.ezjobs.mystory.security.CaptchaAuthenticationDetailsSource;
 import com.ezjobs.mystory.service.AuthProvider;
  
 @Configuration
@@ -22,10 +25,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     AuthProvider authProvider;
     
     @Autowired
-    AuthFailureHandler authFailureHandler;
+    private CaptchaAuthenticationDetailsSource captchaWebAuthenticationDetailsSource;
+    
+    @Autowired
+    private AuthFailureHandler authFailureHandler;
  
     @Autowired
-    AuthSuccessHandler authSuccessHandler;
+    private AuthSuccessHandler authSuccessHandler;
  
     @Override
     public void configure(WebSecurity web) {
@@ -47,10 +53,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
             // 로그인 페이지 및 성공 url, handler 그리고 로그인 시 사용되는 id, password 파라미터 정의
             .formLogin()
+            .authenticationDetailsSource(captchaWebAuthenticationDetailsSource)
             .loginPage("/user/login")
             .defaultSuccessUrl("/")
-            .failureHandler(authFailureHandler)
             .successHandler(authSuccessHandler)
+            .failureHandler(authFailureHandler)
             .usernameParameter("loginId")
             .passwordParameter("loginPw")
             .permitAll()
@@ -67,5 +74,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             // 로그인 프로세스가 진행될 provider
             .authenticationProvider(authProvider);
     }
+    /*
+    @Bean
+    public CustomAuthFilter customAuthFilter(){
+     CustomAuthFilter customFilter = new CustomAuthFilter();
+    return customFilter;
+    }*/
 }
 

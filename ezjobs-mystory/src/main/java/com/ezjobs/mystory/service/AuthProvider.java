@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
+import com.ezjobs.mystory.security.CaptchaAuthenticationDetails;
 
 @Component("authProvider")
 public class AuthProvider implements AuthenticationProvider  {
@@ -25,6 +26,7 @@ public class AuthProvider implements AuthenticationProvider  {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String id = authentication.getName();
         String password = authentication.getCredentials().toString();//HashUtil.sha256(authentication.getCredentials().toString());
+        CaptchaAuthenticationDetails details=(CaptchaAuthenticationDetails) authentication.getDetails();
         User target =new User();
         target.setLoginId(id);
         target.setLoginPw(password);
@@ -33,6 +35,10 @@ public class AuthProvider implements AuthenticationProvider  {
         if (null == user) {
         	System.out.println("notexist");
         	throw new UsernameNotFoundException("invailed username");
+        }
+        
+        if (!details.equals()) {
+        	throw new UsernameNotFoundException("invailed captcha");
         }
 
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

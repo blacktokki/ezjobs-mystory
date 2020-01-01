@@ -1,4 +1,4 @@
-package com.ezjobs.mystory.config;
+package com.ezjobs.mystory.security;
 
 import java.io.IOException;
 
@@ -24,11 +24,11 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
             AuthenticationException exception) throws IOException, ServletException {
     	System.out.println("fal");
     	System.out.println(exception.getMessage());
-    	System.out.println(request.getParameter("loginId"));
     	if(exception.getMessage().equals("invailed username")) {
     		userService.addFailureCount(request.getParameter("loginId"));
     	}
-    	response.sendRedirect("/user/login");
-    	//super.onAuthenticationFailure(request, response,exception);
+    	String str="/user/login?error";
+    	setDefaultFailureUrl(str);
+    	super.onAuthenticationFailure(request, response,exception);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.security.CaptchaAuthenticationDetails;
+import com.ezjobs.mystory.security.UserSha256;
 
 @Component("authProvider")
 public class AuthProvider implements AuthenticationProvider  {
@@ -25,20 +27,17 @@ public class AuthProvider implements AuthenticationProvider  {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String id = authentication.getName();
-        String password = authentication.getCredentials().toString();//HashUtil.sha256(authentication.getCredentials().toString());
+        String password = UserSha256.encrypt(authentication.getCredentials().toString());//HashUtil.sha256(authentication.getCredentials().toString());
         CaptchaAuthenticationDetails details=(CaptchaAuthenticationDetails) authentication.getDetails();
-        User target =new User();
-        target.setLoginId(id);
-        target.setLoginPw(password);
-        User user = userService.getUser(target);
+        User user = userService.findByLoginId(id);
         // id에 맞는 user가 없거나 비밀번호가 맞지 않는 경우.
-        if (null == user) {
+        if (null == user || !user.getLoginPw().equals(password)) {
         	System.out.println("notexist");
-        	throw new UsernameNotFoundException("invailed username");
+        	throw new UsernameNotFoundException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
         }
         
         if (!details.equals()) {
-        	throw new UsernameNotFoundException("invailed captcha");
+        	throw new BadCredentialsException("잘못된 자동입력 방지문자 입니다.");
         }
 
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

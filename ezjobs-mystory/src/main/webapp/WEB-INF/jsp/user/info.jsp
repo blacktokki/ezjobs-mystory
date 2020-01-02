@@ -9,7 +9,6 @@
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
-
  <form method="post" action="/user/info">
  	<input type="hidden" name="_method" value="PUT">
  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -17,15 +16,10 @@
 
   <caption>회원 정보 수정</caption>
   <tbody>
-    <tr>
-    <tr>
-    <th scope="row">비밀번호</th>
-       <td><input type="password" id="user_loginPw" name="loginPw" class="wdp_90" value="${user.loginPw}"></td>
-   </tr>
-   <tr>
-    <th scope="row">비밀번호 확인</th>
-    	<td><input type="password" id="user_rePw" name="rePw" class="wdp_90" value="${user.loginPw}"></td>
-   </tr>
+  	<tr>
+	    <th scope="row">비밀번호</th>
+	    <td><button type="button" onclick="location.href='/user/password/change'" class="btn btn-primary resume-submit">비밀번호 변경</button></td>
+	</tr>
     <tr>
     <th scope="row">이름</th>
     <td><input type="text" id="user_name" name="name" class="wdp_90" value="${user.name}"> </td>
@@ -85,17 +79,6 @@
 $(function(){
     $("form").validate({
     	rules: {
-            loginPw: {
-                required : true,
-                minlength : 8,
-                maxlength : 15,
-            },
-            rePw: {
-                required : true,
-                minlength : 8,
-                maxlength : 15,
-                equalTo : user_loginPw
-            },
             name: {
                 required : true,
                 minlength : 2
@@ -114,17 +97,6 @@ $(function(){
         },
         //규칙체크 실패시 출력될 메시지
         messages : {
-            loginPw: {
-                required : "필수로입력하세요",
-                minlength : "최소 {0}글자이상이어야 합니다",
-                maxlength : "최대 {0}글자이하이어야 합니다",
-            },
-            rePw: {
-                required : "필수로입력하세요",
-                minlength : "최소 {0}글자이상이어야 합니다",
-                maxlength : "최대 {0}글자이하이어야 합니다",
-                equalTo : "비밀번호가 일치하지 않습니다."
-            },
             name: {
                 required : "필수로입력하세요",
                 minlength : "최소 {0}글자이상이어야 합니다"

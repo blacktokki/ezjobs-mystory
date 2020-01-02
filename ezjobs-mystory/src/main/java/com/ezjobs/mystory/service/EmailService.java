@@ -1,15 +1,17 @@
 package com.ezjobs.mystory.service;
 
+import javax.inject.Inject;
+
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
+@Service
 public class EmailService {
+	
+	@Inject
 	JavaMailSender emailSender;
-
-	public void setJavaMailSender(JavaMailSender javaMailSender) {
-		this.emailSender = javaMailSender;
-	}
 
 	public void sendSimpleMessage(String to, String subject, String text) {
 		SimpleMailMessage message = new SimpleMailMessage();

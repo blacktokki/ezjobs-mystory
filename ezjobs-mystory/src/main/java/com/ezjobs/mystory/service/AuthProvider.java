@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.security.CaptchaAuthenticationDetails;
-import com.ezjobs.mystory.security.UserSha256;
+import com.ezjobs.mystory.util.UserSha256;
 
 @Component("authProvider")
 public class AuthProvider implements AuthenticationProvider  {

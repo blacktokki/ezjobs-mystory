@@ -1,4 +1,4 @@
-package com.ezjobs.mystory.security;
+package com.ezjobs.mystory.util;
 
 import java.security.MessageDigest;
 

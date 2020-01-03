@@ -49,6 +49,14 @@
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-oauth2-client</artifactId>
+		</dependency>
+		<dependency>
+		   <groupId>org.springframework.security</groupId>
+		   <artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
@@ -195,7 +203,6 @@
 			<artifactId>simplecaptcha</artifactId>
 			<version>1.2.1</version>
 		</dependency>
-
 	</dependencies>
 	<build>
 		<plugins>

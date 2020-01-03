@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ezjobs.mystory.security.UserSha256;
 import com.ezjobs.mystory.service.KeywordAnalysisService;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
+import com.ezjobs.mystory.util.UserSha256;
 @Controller
 @RequestMapping("/temp")//상위 서브도메인
 public class TempController{

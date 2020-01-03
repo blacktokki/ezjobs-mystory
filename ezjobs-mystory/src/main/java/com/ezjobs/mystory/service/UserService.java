@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.repository.UserRepository;
-import com.ezjobs.mystory.security.UserSha256;
+import com.ezjobs.mystory.util.UserSha256;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service

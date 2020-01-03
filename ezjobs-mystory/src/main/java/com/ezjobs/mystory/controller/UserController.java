@@ -3,9 +3,9 @@ package com.ezjobs.mystory.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ezjobs.mystory.entity.User;
-import com.ezjobs.mystory.security.UserSha256;
 import com.ezjobs.mystory.service.EmailService;
 import com.ezjobs.mystory.service.UserService;
+import com.ezjobs.mystory.util.UserSha256;
 
 import java.util.Map;
 

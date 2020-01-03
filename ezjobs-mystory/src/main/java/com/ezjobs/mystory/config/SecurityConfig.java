@@ -68,11 +68,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/**").permitAll()
         .and()
             .oauth2Login()
-            //.loginPage("/user/login/social")
+            .loginPage("/user/login")
             .authorizationEndpoint()
             .baseUri("/user/oauth2/authorization")
             .and()
-            .permitAll()
+            .defaultSuccessUrl("/")
         .and()
             // 로그인 페이지 및 성공 url, handler 그리고 로그인 시 사용되는 id, password 파라미터 정의
             .formLogin()

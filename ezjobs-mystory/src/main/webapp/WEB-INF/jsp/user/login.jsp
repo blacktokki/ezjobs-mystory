@@ -29,9 +29,9 @@
    </tr>
    <tr>
     <td colspan='2'> 
-    <button type="submit" id="login_btn" class="btn btn-secondary resume-submit">로그인</button>
-    <button type="button" onclick="location.href='join'" class="btn btn-secondary resume-submit">회원가입</button>
-    <button type="button" onclick="location.href='/user/password/new'" class="btn btn-secondary resume-submit">비밀번호 찾기</button>
+    <button type="submit" id="login_btn" class="btn btn-secondary">로그인</button>
+    <button type="button" onclick="location.href='join'" class="btn btn-secondary">회원가입</button>
+    <button type="button" onclick="location.href='/user/password/new'" class="btn btn-secondary">비밀번호 찾기</button>
     </td>
    </tr>
    <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION}">
@@ -45,6 +45,13 @@
 	</td>
    </tr>
    </c:if>
+   <tr>
+	<td colspan='2'>
+		<c:forEach var="url" items="${urls}" varStatus="status">
+		    <button type="button" onclick="location.href='${url.value}'" class="btn btn-primary">${url.key}로 로그인</button>
+		</c:forEach>
+	</td>
+   </tr>
   </tbody>
  
  </table>

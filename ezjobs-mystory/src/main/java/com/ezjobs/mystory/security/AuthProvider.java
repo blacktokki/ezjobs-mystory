@@ -1,4 +1,4 @@
-package com.ezjobs.mystory.service;
+package com.ezjobs.mystory.security;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
-import com.ezjobs.mystory.security.CaptchaAuthenticationDetails;
+import com.ezjobs.mystory.service.UserService;
 import com.ezjobs.mystory.util.UserSha256;
 
 @Component("authProvider")
@@ -43,10 +43,9 @@ public class AuthProvider implements AuthenticationProvider  {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         
         // 로그인한 계정에게 권한 부여
+        grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
         if (user.getIsAdmin()) {
             grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        } else {
-            grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
         }
  
         // 로그인 성공시 로그인 사용자 정보 반환

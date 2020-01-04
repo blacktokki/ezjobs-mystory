@@ -9,19 +9,12 @@
 .signUp_agree_textarea {text-align: center;}
 .signUp_agree_textarea textarea {resize: none;}
 </style>
- <form method="post" action="/user/info">
- 	<input type="hidden" name="_method" value="PUT">
+ <form method="post" action="/user/join/social">
  	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
  <table class="board_list">
 
   <caption>회원 정보 수정</caption>
   <tbody>
-  	<sec:authorize access="!hasAuthority('ROLE_SOCIAL')">
-  	<tr>
-	    <th scope="row">비밀번호</th>
-	    <td><button type="button" onclick="location.href='/user/password/change'" class="btn btn-primary resume-submit">비밀번호 변경</button></td>
-	</tr>
-	</sec:authorize>
     <tr>
     <th scope="row">이름</th>
     <td><input type="text" id="user_name" name="name" class="wdp_90" value="${user.name}"> </td>
@@ -44,8 +37,8 @@
     <th scope="row">성별</th>
     <td>
     	<div class="container">
-	        <input type="radio" id="user_sex" name="sex" value="남" class="wdp_90" <c:if test="${user.sex eq '남'}">checked</c:if>>남
-	        <input type="radio" id="user_sex" name="sex" value="여" class="wdp_90" <c:if test="${user.sex eq '여'}">checked</c:if>>여
+	        <input type="radio" id="user_sex" name="sex" value="남" class="wdp_90">남
+	        <input type="radio" id="user_sex" name="sex" value="여" class="wdp_90">여
         </div>
     </td>
    </tr>
@@ -54,11 +47,12 @@
     <td>
     	<div class="container">
 	    	<select id="user_grad" name="grad">
-	          <option value="중졸" <c:if test="${user.grad eq '중졸'}">selected</c:if>>중졸</option>
-	          <option value="고졸" <c:if test="${user.grad eq '고졸'}">selected</c:if>>고졸</option>
-	          <option value="초대졸" <c:if test="${user.grad eq '초대졸'}">selected</c:if>>초대졸</option>
-	          <option value="대졸" <c:if test="${user.grad eq '대졸'}">selected</c:if>>대졸</option>
-	          <option value="대학원졸" <c:if test="${user.grad eq '대학원졸'}">selected</c:if>>대학원졸</option>
+	          <option value="">선택</option>
+	          <option value="중졸">중졸</option>
+	          <option value="고졸">고졸</option>
+	          <option value="초대졸">초대졸</option>
+	          <option value="대졸">대졸</option>
+	          <option value="대학원졸">대학원졸</option>
 	       </select>
        </div>
     </td>
@@ -68,8 +62,8 @@
   <tfoot>
    <tr>
     <td colspan="3">
-     <button type="submit" class="btn btn-primary resume-submit">수정</button>
-   <button type="button" onclick="location.href='out'" class="btn btn-primary resume-submit">탈퇴</button>
+     <button type="submit" class="btn btn-primary resume-submit">저장</button>
+   <button type="button" onclick="location.href='/user/logout'" class="btn btn-primary resume-submit">취소</button>
     </td>
    </tr>
   </tfoot>

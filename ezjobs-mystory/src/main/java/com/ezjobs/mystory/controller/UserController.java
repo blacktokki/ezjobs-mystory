@@ -7,13 +7,17 @@ import com.ezjobs.mystory.service.EmailService;
 import com.ezjobs.mystory.service.UserService;
 import com.ezjobs.mystory.util.UserSha256;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -26,7 +30,6 @@ import org.springframework.ui.Model;
 public class UserController {
 
 	private static String authorizationRequestBaseUri = "oauth2/authorization";
-	Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
 	@Inject
 	private ClientRegistrationRepository clientRegistrationRepository;
@@ -42,6 +45,8 @@ public class UserController {
 		Iterable<ClientRegistration> clientRegistrations = null;
 		if (clientRegistrationRepository instanceof InMemoryClientRegistrationRepository)
 			clientRegistrations= (InMemoryClientRegistrationRepository)clientRegistrationRepository;
+		
+		Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 		clientRegistrations.forEach(registration -> oauth2AuthenticationUrls.put(registration.getClientName(),
 				authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 		model.addAttribute("urls", oauth2AuthenticationUrls);
@@ -143,5 +148,35 @@ public class UserController {
 			System.out.println("mismatch");
 			return "redirect:/user/password/change";
 		}
+	}
+	
+	@GetMapping("/join/social")
+	public String writeSocialView(Authentication auth, Model model) {
+		User user = (User) auth.getPrincipal();
+		model.addAttribute("user",user);
+		return "user/joinsocial";
+	}
+	
+	@PostMapping("/join/social") // 회원가입 요청
+	public String writeSocial(Authentication auth,@RequestParam Map<Object, Object> map, Model model) {
+		User user = (User) auth.getPrincipal();
+		map.put("loginId",user.getLoginId());
+		map.put("loginPw","**********");
+		map.put("name",user.getName());
+		map.put("email",user.getEmail());
+		map.put("isAdmin",user.getIsAdmin());
+		model.addAttribute("map", map);
+		userService.write(model);
+		
+		List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+		grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
+		grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_SOCIAL"));
+		if (user.getIsAdmin()) {
+			grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		}
+		Authentication newAuth = new UsernamePasswordAuthenticationToken(user, user.getLoginPw(),grantedAuthorityList);
+		SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+		return "redirect:/index";
 	}
 }

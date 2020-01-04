@@ -22,8 +22,6 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.ezjobs.mystory.security.*;
-import com.ezjobs.mystory.service.AuthProvider;
-import com.ezjobs.mystory.service.UserService;
  
 @Configuration
 @EnableWebSecurity
@@ -41,10 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
  
     @Autowired
     private AuthSuccessHandler authSuccessHandler;
-
     
     @Autowired
-    UserService userService;
+    OAuth2SuccessHandler oAuth2SuccessHandler;
+    
+    @Autowired
+    CustomAccessDeniedHandler customAccessDeniedHandler;
     
     @Override
     public void configure(WebSecurity web) {
@@ -63,16 +63,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/resume/**",
             			 "/board/write/**",
-            			 "/user/info/**",
-            			 "/user/password/change/**").authenticated()
+            			 "/user/password/change/**").hasAuthority("ROLE_USER")
+            .antMatchers("/user/password/change/**").not().hasAuthority("ROLE_SOCIAL")
+            .antMatchers("/user/join/social/**").authenticated()
             .antMatchers("/**").permitAll()
         .and()
             .oauth2Login()
             .loginPage("/user/login")
+            .defaultSuccessUrl("/")
+            .successHandler(oAuth2SuccessHandler)
             .authorizationEndpoint()
             .baseUri("/user/oauth2/authorization")
             .and()
-            .defaultSuccessUrl("/")
         .and()
             // 로그인 페이지 및 성공 url, handler 그리고 로그인 시 사용되는 id, password 파라미터 정의
             .formLogin()
@@ -94,7 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf()
         .and()
             // 로그인 프로세스가 진행될 provider
-            .authenticationProvider(authProvider);
+            .authenticationProvider(authProvider)
+            .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
     }
     
     

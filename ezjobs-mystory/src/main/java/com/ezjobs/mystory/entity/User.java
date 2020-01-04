@@ -27,7 +27,7 @@ public class User {
     private String email;
     
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="regist_date", nullable = false)
+    @Column(name="regist_date", nullable = false , insertable=false)
     private Date registDate;
     
     @Column(name="visit_cnt", nullable = false)
@@ -51,7 +51,7 @@ public class User {
     @Column(name="is_admin", nullable = false)
     private Boolean isAdmin;
     
-    @Column(name="login_failure_cnt", nullable = false)
+    @Column(name="login_failure_cnt", nullable = false,insertable=false)
     private Integer loginFailureCnt;
     
 }

@@ -9,10 +9,10 @@ import com.ezjobs.mystory.service.SplitService;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -28,9 +28,8 @@ public class ResumeController {
 	SplitService splitService;
 	
 	@GetMapping("")//글작성 화면 
-	public String resume(Authentication auth,Model model){
-		User user = (User) auth.getPrincipal();
-		model.addAttribute("loginId",user.getLoginId());
+	public String resume(Model model){
+		model.addAttribute("loginId",getLoginId());
 		resumeService.listUnwrite(model);
 		resumeService.listWrited(model);
 		//autoLabelService.spliterResumes(model);
@@ -38,11 +37,8 @@ public class ResumeController {
 	}
 	
 	@GetMapping("content")
-	public String list(@RequestParam String state,HttpSession session,Model model){
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null) 
-			return "redirect:/temp/login/fail";
-		model.addAttribute("loginId",loginId);
+	public String list(Authentication auth,@RequestParam String state,Model model){
+		model.addAttribute("loginId",getLoginId());
 		
 		if(state.equals("작성완료")) {
 			resumeService.listWrited(model);
@@ -69,10 +65,8 @@ public class ResumeController {
 	}
 	
 	@GetMapping("write/{id}")
-	public String write(@PathVariable String id,HttpSession session,Model model){
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null) 
-			return "redirect:/temp/login/fail";
+	public String write(@PathVariable String id,Model model){
+		model.addAttribute("loginId",getLoginId());
 		model.addAttribute("method","put");
 		model.addAttribute("id",id);
 		resumeService.content(model);
@@ -81,11 +75,8 @@ public class ResumeController {
 	
 	@ResponseBody
 	@PostMapping("content")
-	public ResponseEntity<?> content(@RequestParam Map<Object, Object> map,HttpSession session,Model model){
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null)
-			return ResponseEntity.badRequest().build();
-		model.addAttribute("loginId",loginId);
+	public ResponseEntity<?> content(@RequestParam Map<Object, Object> map,Model model){
+		model.addAttribute("loginId",getLoginId());
 		model.addAttribute("map", map);
 		resumeService.write(model);
 		return ResponseEntity.ok(model);
@@ -93,10 +84,8 @@ public class ResumeController {
 	
 	@ResponseBody
 	@PutMapping("content/{id}")
-	public ResponseEntity<?> content(@PathVariable String id,@RequestParam Map<Object, Object> map,HttpSession session,Model model){
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null) 
-			return ResponseEntity.badRequest().build();
+	public ResponseEntity<?> content(@PathVariable String id,@RequestParam Map<Object, Object> map,Model model){
+		model.addAttribute("loginId",getLoginId());
 		model.addAttribute("id",id);
 		model.addAttribute("map", map);
 		resumeService.edit(model);
@@ -106,10 +95,8 @@ public class ResumeController {
 	
 	@ResponseBody
 	@PutMapping("state/{id}")
-	public ResponseEntity<?> content(@PathVariable String id,@RequestParam String state,HttpSession session,Model model){
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null) 
-			return ResponseEntity.badRequest().build();
+	public ResponseEntity<?> content(@PathVariable String id,@RequestParam String state,Model model){
+		//model.addAttribute("loginId",getLoginId());
 		model.addAttribute("id",id);
 		model.addAttribute("state", state);
 		resumeService.editState(model);
@@ -133,11 +120,8 @@ public class ResumeController {
 	}
 	
 	@PostMapping("synonym")
-	public ResponseEntity<?> synonym(@RequestParam Map<Object, Object> map,HttpSession session,Model model) {
-		Object loginId=session.getAttribute("loginId");
-		if(loginId==null)
-			return ResponseEntity.badRequest().build();
-		model.addAttribute("loginId",loginId);
+	public ResponseEntity<?> synonym(@RequestParam Map<Object, Object> map,Model model) {
+		model.addAttribute("loginId",getLoginId());
 		model.addAttribute("map", map);
 		resumeService.addSynonym(model);
 		return ResponseEntity.ok(model);
@@ -156,5 +140,9 @@ public class ResumeController {
 		model.addAttribute("sentence",sentence);
 		resumeService.compareAll(model);
 		return "resume/compare";
+	}
+	
+	private String getLoginId() {
+		return ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getLoginId();
 	}
 }

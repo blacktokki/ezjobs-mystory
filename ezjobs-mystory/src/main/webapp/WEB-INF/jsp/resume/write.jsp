@@ -39,9 +39,9 @@
 					</div>
 					<textarea class="form-control write-answer" id=" write-answer-i" name="answer" rows="20">${resume.answer}</textarea>
 				</div>
-				<button type="submit" class="btn btn-primary">글올리기</button>
+				<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>
+				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
-				<input type="hidden" class="resume-method" name="_method" value="${method}" />
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>
 		</form>

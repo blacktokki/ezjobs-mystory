@@ -163,6 +163,20 @@
 			});	
 		},300);
 	}
+	
+	function replaceTextarea($target,start,end,text){	
+		$target.focus().get(0).selectionStart=start;
+		$target.get(0).selectionEnd=end;
+		if (document.queryCommandSupported('insertText')) {
+			document.execCommand("insertText",false,text);
+		}
+		else{
+			$target.val($target.val().substring(0, start) + text + $target.val().substring(end,$target.val().length));
+			$target.get(0).selectionStart=start+text.length;
+			$target.get(0).selectionEnd=start+text.length;
+		}
+	}
+	
 	$("body").delegate("#resume-create","click",function() {
 				$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
 							var $result = $(response);
@@ -195,7 +209,7 @@
 	$("#accordion1").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
 				var href = $(e.target).attr("href");
 				var card = href.replace("/resume/write/", "#resume-card");
-
+				console.log(card);
 				if ($(card).length == 0) {
 					$(document.createDocumentFragment()).load(
 							href,
@@ -223,11 +237,12 @@
 								resume_idx += 1;
 							});
 				} else {
+					$("#nav-profile-tab").tab("show");
 					$(card).find(".collapse").collapse("show");
 				}
 				return false;
 			});
-	$("#accordion3").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
+	$("#accordion3").delegate(".resume-link","click",function(e) {//자기소개서 불러오기(완성된)
 		return false;
 	});
 	$("#accordion1").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
@@ -273,17 +288,11 @@
 	$("#autoComplete ul").delegate("li","click",function(e){//자동완성 입력
 		var currentVal=$(e.target).text()+" ";
 		var $target=$("#accordion2 .card").find(".show").find(".write-answer");
-		var beforeVal=$target.val();
 		var keyword=$("#autoComplete-keyword").val();
 		console.log(currentVal);
-		console.log(beforeVal);
-		var pos=$target.get(0).selectionEnd;
-		var result=
-			beforeVal.substring(0,pos-keyword.length)
-			+currentVal+" "
-			+beforeVal.substring(pos,beforeVal.length);
-		$target.val(result).focus();
-		$target.get(0).selectionEnd=pos-keyword.length+currentVal.length;
+		var end=$target.get(0).selectionEnd;
+		var start=end-keyword.length;
+		replaceTextarea($target,end-keyword.length,end,currentVal);
 		$("#autoComplete-keyword").val("");
 		$("#autoComplete ul").html("");
 		clearTimeout(timer_auto);
@@ -350,7 +359,8 @@
 				
 			});
 			console.log(currentVal);
-			$("#accordion2 .card").find(".show").find(".write-answer").val(currentVal);
+			$target=$("#accordion2 .card").find(".show").find(".write-answer");
+			replaceTextarea($target,0,$target.text().length,currentVal);
 		}
 		return false;
 	});
@@ -370,28 +380,33 @@
 		          });
 		    });
 			
-			
-			
 		});
 		return false;
 	});
 	
-	
+	var saveMethod=""
+	$("#accordion2").delegate("form :submit","click",function(e){
+		saveMethod=$(e.target).val();
+	});
 	
 	$("#accordion2").delegate("form", "submit", function(e) {//저장하기
 
 		var tags = [];
 		 $(event.target).find(".tagsinput").find(".tag>span").each(
-				function(i, e) {
-					tags.push($.trim($(e).text()));
-				});
+		function(i, e) {
+			tags.push($.trim($(e).text()));
+		});
 		$(event.target).find(".tags").val(tags.join(","));
 		var form = $(e.target).serializeJSON();
-		console.log(form.tags);
-		console.log(form.id);
+		form._method=saveMethod;
+		if(saveMethod=="post")
+			form.id="";
+		saveMethod="";
+		console.log(form);
 		$.post("/resume/content/" + form.id, form, function(data) {
-			//console.log(data);
+			var id=data.map.id;
 			$(e.target).find(".resume-id").val(data.map.id);
+			$(e.target).closest(".card").attr("id","resume-card"+data.map.id);
 			$(e.target).find(".resume-method").val("put");
 			refreshList();
 		});

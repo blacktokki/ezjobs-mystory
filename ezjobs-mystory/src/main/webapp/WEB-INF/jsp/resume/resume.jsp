@@ -272,17 +272,19 @@
 				var currentVal=$(e.target).val();
 				$("#heading-write" + id + " a").html(currentVal);
 			});
-	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//자동검색 키워드 불러오기
+	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//자동검색 키워드 불러오기,글자수세기
 		var currentVal=$(e.target).val();
 		//console.log(currentVal);
 		var pos=$(e.target).get(0).selectionEnd;
 		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
 		$("#autoComplete-keyword").val(keywords[keywords.length-1]);
 		autoComplete();
+		$(e.target).closest("form").find(".counter").html("(글자수 : "+currentVal.length+" 자)");
 	});
 	
 	$("#autoComplete").delegate("form","propertychange change paste input",function(e){//자동검색 진행
 		autoComplete();
+	
 	});
 	
 	$("#autoComplete ul").delegate("li","click",function(e){//자동완성 입력

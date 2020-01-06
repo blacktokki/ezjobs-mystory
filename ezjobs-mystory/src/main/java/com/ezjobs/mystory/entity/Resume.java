@@ -36,8 +36,9 @@ public class Resume {
 	@Column(name = "user_id", nullable = false)
 	private String userId;
 
-	@Column(name = "priority", nullable = false)
-	private Integer priority;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "close_date", nullable = false)
+	private Date closeDate;
 
 	@Column(name = "state", nullable = false)
 	private String state;

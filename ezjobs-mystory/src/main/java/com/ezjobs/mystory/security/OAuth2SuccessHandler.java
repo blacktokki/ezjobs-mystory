@@ -35,18 +35,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     	OAuth2AuthenticationToken auth=(OAuth2AuthenticationToken) authentication;
     	String registrationId = auth.getAuthorizedClientRegistrationId();
     	String name=auth.getName();
-    	String id=registrationId+"-"+name;
-    	System.out.println(id);
-    	User user = userService.findByLoginId(id);
+    	User user = userService.findByLoginId(name);
     	List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
     	if(user==null) {
-    		System.out.println("!!");
     		Map<String, Object> map=auth.getPrincipal().getAttributes();
     		user=new User();
-    		user.setLoginId(id);
+    		user.setLoginId(name);
     		user.setName((String)map.get("name"));
     		user.setEmail((String)map.get("email"));
     		user.setIsAdmin(false);
+    		user.setLoginRel(registrationId);
     		setDefaultTargetUrl("/user/join/social");
     	}
     	else {

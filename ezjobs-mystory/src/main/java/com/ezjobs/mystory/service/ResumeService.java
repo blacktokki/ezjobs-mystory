@@ -57,15 +57,38 @@ public class ResumeService {
 	}
 	
 	public void list(Model model){
-		Map<String,Object> modelMap=model.asMap();
-		Integer page=0;
-		Integer size=30;
-		String userId=modelMap.get("loginId").toString();
+		Map<String, Object> modelMap = model.asMap();
+		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
+		String page = Optional.ofNullable((String) map.get("page")).orElse("1");// String으로 담음
+		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0 //shownum->size, 
+		String size = Optional.ofNullable((String) map.get("size")).orElse("20");
+		int sizeNum = Integer.parseInt(size);
+		model.addAttribute("size", sizeNum);
+		String op = String.valueOf(map.get("op"));
+		String keyword = String.valueOf(map.get("keyword"));
+		model.addAttribute("op", op);
+		model.addAttribute("keyword", keyword);
+		System.out.println(keyword);
+		System.out.println(op);
 		Resume resume=new Resume();
-		resume.setUserId(userId);
-		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
+		if (op.equals("tagSearch")) { // 태그명 검색
+			resume.setTags(keyword);
+		}
+		else if (op.equals("question")) { // 자소서 문항 검색
+			resume.setQuestion(keyword);
+		}
+		else if (op.equals("userId")) { // 작성자 검색
+			resume.setUserId(keyword);
+		}
+		else if (op.equals("company")) { // 회사명 검색
+			resume.setCompany(keyword);
+		}
+
+		PageRequest pr=PageRequest.of(pageNum,sizeNum,Sort.by(Sort.Direction.ASC,"editDate"));
 		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
-		model.addAttribute("resumes",resumes);
+		System.out.println(resumes.getContent().size());
+		model.addAttribute("resumes", resumes);
+		model.addAttribute("pageNavNumber", resumes.getNumber() / 5);
 	}
 	
 	public void listUnwrite(Model model){

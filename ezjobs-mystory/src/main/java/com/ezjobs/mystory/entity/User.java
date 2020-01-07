@@ -11,9 +11,6 @@ public class User {
     
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-	
 	@Column(name="login_id", nullable = false)
     private String loginId;
 	
@@ -30,14 +27,12 @@ public class User {
     @Column(name="regist_date", nullable = false , insertable=false)
     private Date registDate;
     
-    @Column(name="visit_cnt", nullable = false)
-    private Integer visitCnt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="visit_date", nullable = false , insertable=false)
+    private Date visitDate;
 
-    @Column(name="rel_id", nullable = false)
-    private String relId;
-    
-    @Column(name="rel_login_id", nullable = false)
-    private String relLoginId;
+    @Column(name="login_rel", nullable = false , insertable=false)
+    private String loginRel;
     
     @Column(name="sex", nullable = false)
     private String sex;

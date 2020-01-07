@@ -165,6 +165,7 @@ public class UserController {
 		map.put("name",user.getName());
 		map.put("email",user.getEmail());
 		map.put("isAdmin",user.getIsAdmin());
+		map.put("loginRel",user.getLoginRel());
 		model.addAttribute("map", map);
 		userService.write(model);
 		

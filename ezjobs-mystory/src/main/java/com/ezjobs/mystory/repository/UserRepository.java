@@ -12,7 +12,7 @@ import com.ezjobs.mystory.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-	Page<User> findById(Pageable pageable, Integer id);
+	
 	Page<User> findByLoginIdContaining(Pageable pageable, String loginId);
 	User findByLoginId(String loginId);
 	

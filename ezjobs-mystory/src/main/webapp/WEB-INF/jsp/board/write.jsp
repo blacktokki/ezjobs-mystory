@@ -43,25 +43,13 @@
 								<span class="input-group-text">글내용</span>
 							</div>
 							<textarea class="form-control" id="form-content" name="text" rows="15">${board.text}</textarea>
-							<script type="text/javascript">
-							
-							//CKEDITOR.plugins.addExternal( 'contextmenu', '/js/ckeditor/plugins/contextmenu/plugin.js' );
-							//console.log(CKEDITOR.config.plugins);
-							editor =CKEDITOR.replace('form-content'
-							 	,{
+							<script type="text/javascript">						
+								var editor =CKEDITOR.replace('form-content',{
 							 		removePlugins: 'contextmenu,tabletools,tableselection',
 									height: 500,
 									language:'korean',
-									toolbar:[
-										{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo','Redo2'] },
-										{ name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
-										{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-										{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align'], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-										{ name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-										{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-										{ name: 'about', items: [ 'About' ] }
-									]
-							    });
+									toolbar:ck_toolbar
+								 });
 								/*
 								console.log(editor);
 								editor.addCommand("mySimpleCommand", { // create named command

@@ -15,9 +15,6 @@ public class Resume {
 	@Column(name = "id")
 	private Integer id;
 
-	@Column(name = "type", nullable = false)
-	private String type;
-
 	@Column(name = "dept", nullable = false)
 	private String dept;
 
@@ -36,7 +33,7 @@ public class Resume {
 	@Column(name = "user_id", nullable = false)
 	private String userId;
 
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Column(name = "close_date", nullable = false)
 	private Date closeDate;
 

@@ -1,7 +1,5 @@
 package com.ezjobs.mystory.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,7 +17,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 	@Modifying // update , delete Query
 	@Query(value = "update Resume r set "
 			+ "r.question = :#{#resume.question}, r.tags = :#{#resume.tags}, r.answer = :#{#resume.answer},"
-			+ " r.company = :#{#resume.company} "
+			+ " r.company = :#{#resume.company}, r.closeDate = :#{#resume.closeDate} "
 			+ " WHERE r.id = :#{#resume.id}")
 	void update(@Param("resume") Resume resume);
 
@@ -29,11 +27,4 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 			+ " WHERE r.id = :#{#resume.id}")
 	void updateState(Resume resume);
 	
-	Page<Resume> findByTypeContainingOrDeptContainingOrCompanyContainingOrQuestionContainingOrAnswerContainingOrUserIdContaining(
-			Pageable pageable, String type, String dept, String company, String question, String answer, String userId);
-	Page<Resume> findByQuestionContaining(Pageable pageable, String question);
-	Page<Resume> findByAnswerContaining(Pageable pageable, String answer);
-	Page<Resume> findByTagsContaining(Pageable pageable, String sch);
-	Page<Resume> findByUserIdContaining(Pageable pageable, String sch);
-	Page<Resume> findByCompanyContaining(Pageable pageable, String sch);
 }

@@ -120,6 +120,7 @@
 					<div class="card-body">
 						<ul class="card-text list-group list-group-flush"></ul>
 						<a href="#" class="btn btn-primary btn-load">유사도검사</a>
+						<a href="#" class="btn btn-primary btn-check">맞춤법검사</a>
 					</div>
 				</div>
 			</div>
@@ -131,6 +132,7 @@
 	var resume_idx = 1;
 	var resume_new = 1;
 	var	timer_auto=null;
+	
 	function refreshList(){
 		$.get("/resume/content?state=미작성", function(data) {
 			//console.log(data2);
@@ -163,6 +165,36 @@
 			});	
 		},300);
 	}
+	function Export2Doc(content, filename){
+	    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+	    var postHtml = "</body></html>";
+	    var html = preHtml+content+postHtml;
+	    var blob = new Blob(['\ufeff', html], {
+	        type: 'application/msword'
+	    });
+	    
+	    // Specify link url
+	    var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+	    // Specify file name
+	    filename = filename?filename+'.doc':'document.doc';
+	    // Create download link element
+	    if(navigator.msSaveOrOpenBlob ){
+	        navigator.msSaveOrOpenBlob(blob, filename);
+	    }else{
+	    	var downloadLink = document.createElement("a");
+		    document.body.appendChild(downloadLink);
+	        // Create a link to the file
+	        downloadLink.href = url;
+	        // Setting the file name
+	        downloadLink.download = filename;
+	        //triggering the function
+	        downloadLink.click();
+	        document.body.removeChild(downloadLink);   
+	    }
+	}
+	function wordCounter($target,text){
+		$target.find(".counter").html("(글자수 : "+text.length+" 자)");
+	};
 	
 	function replaceTextarea($target,start,end,text){	
 		$target.focus().get(0).selectionStart=start;
@@ -194,6 +226,9 @@
 									.val("새 자기소개서 " + resume_new);
 							$result.find(".collapse").find(".write-answer").attr("id","write-answer" + resume_idx);
 							$result.find(".tags").attr("id","tags-write" + resume_idx);
+							$result.find(".write-date").datepicker({
+							    dateFormat: 'yy-mm-dd'
+							  });
 							$("#nav-profile-tab").tab("show");
 							$result.appendTo("#accordion2").find(".collapse")
 									.collapse("show");
@@ -201,6 +236,16 @@
 								'height' : '100%',
 								'width' : '80%',
 							});
+							wordCounter($result.find("form"),$result.find(".write-answer").val());
+							console.log(CKEDITOR.plugins);
+							console.log(CKEDITOR.config.plugins);
+							var editor=CKEDITOR.replace("write-answer" + resume_idx,{
+								height: 500,
+								language:'korean',
+								toolbar:ck_toolbar
+							 });
+							var ac=new CKEDITOR.plugins.autocomplete( editor, config );
+
 							resume_idx += 1;
 							resume_new += 1;
 						});
@@ -209,7 +254,7 @@
 	$("#accordion1").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
 				var href = $(e.target).attr("href");
 				var card = href.replace("/resume/write/", "#resume-card");
-				console.log(card);
+				//console.log(card);
 				if ($(card).length == 0) {
 					$(document.createDocumentFragment()).load(
 							href,
@@ -226,14 +271,26 @@
 									.find(".write-question")
 									.attr("id","write-question" + resume_idx);
 								$result.find(".collapse").find(".write-answer").attr("id","write-answer" + resume_idx);
-								$result.find(".tags")
-									.attr("id","tags-write" + resume_idx);
+								$result.find(".tags").attr("id","tags-write" + resume_idx);
+								$result.find(".write-date").datepicker({
+								    dateFormat: 'yy-mm-dd'
+								  });
 								$("#nav-profile-tab").tab("show");
 								$result.appendTo("#accordion2").find(".collapse").collapse("show");
 								$("#tags-write" + resume_idx).tagsInput({
 									'height' : '100%',
 									'width' : '80%',
 								});
+								wordCounter($result.find("form"),$result.find(".write-answer").val());
+								var editor=CKEDITOR.replace("write-answer" + resume_idx,{
+									height: 500,
+									language:'korean',
+									toolbar:ck_toolbar
+								 });
+								var ac=new CKEDITOR.plugins.autocomplete( editor, config );
+								ac.getHtmlToInsert=function(item){
+									return this.outputTemplate.output(item);
+								}
 								resume_idx += 1;
 							});
 				} else {
@@ -279,7 +336,7 @@
 		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
 		$("#autoComplete-keyword").val(keywords[keywords.length-1]);
 		autoComplete();
-		$(e.target).closest("form").find(".counter").html("(글자수 : "+currentVal.length+" 자)");
+		wordCounter($(e.target).closest("form"),currentVal);
 	});
 	
 	$("#autoComplete").delegate("form","propertychange change paste input",function(e){//자동검색 진행
@@ -383,6 +440,26 @@
 		    });
 			
 		});
+		return false;
+	});
+	
+	$("#compare").delegate(".btn-check","click",function(e){//맞춤법검사
+		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
+		
+		var url = "http://www.saramin.co.kr/zf_user/tools/spell-check?content="+currentVal;
+        var $script = $("<script><\/script>");
+        $script.attr("type","application/json").attr("src",url);
+        console.log($script.appendTo("head").text());
+      
+		return false;
+	});
+	
+	$("#accordion2").delegate(".resume-export","click",function(e){//내보내기
+		var form=$(e.target).closest("form").serializeJSON();
+		//console.log(form.answer);
+		var text=form.question+" - "+form.company+"<p>"
+		+form.answer;
+		Export2Doc(text,form.question);
 		return false;
 	});
 	

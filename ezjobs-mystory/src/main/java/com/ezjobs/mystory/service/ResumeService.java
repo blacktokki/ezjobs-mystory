@@ -169,6 +169,7 @@ public class ResumeService {
 	public void autoComplete(Model model){
 		Map<?,?> map=(Map<?,?>)model.getAttribute("map");
 		String keyword=(String)map.get("keyword");
+		System.out.println(keyword);
 		String keywordInclude=(String)map.get("keywordInclude");
 		Integer page=0;
 		Integer size=30;

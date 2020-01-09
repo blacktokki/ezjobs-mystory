@@ -132,6 +132,19 @@
 	var resume_idx = 1;
 	var resume_new = 1;
 	var	timer_auto=null;
+	var ck_config={
+		height: 500,
+		language:'korean',
+		toolbar:[
+			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo','Redo2'] },
+			{ name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
+			{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+			{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align'], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+			{ name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+			{ name: 'about', items: [ 'About' ] }
+		]
+	 }
 	
 	function refreshList(){
 		$.get("/resume/content?state=미작성", function(data) {
@@ -239,11 +252,7 @@
 							wordCounter($result.find("form"),$result.find(".write-answer").val());
 							console.log(CKEDITOR.plugins);
 							console.log(CKEDITOR.config.plugins);
-							var editor=CKEDITOR.replace("write-answer" + resume_idx,{
-								height: 500,
-								language:'korean',
-								toolbar:ck_toolbar
-							 });
+							var editor=CKEDITOR.replace("write-answer" + resume_idx,ck_config);
 							var ac=new CKEDITOR.plugins.autocomplete( editor, config );
 
 							resume_idx += 1;
@@ -282,11 +291,7 @@
 									'width' : '80%',
 								});
 								wordCounter($result.find("form"),$result.find(".write-answer").val());
-								var editor=CKEDITOR.replace("write-answer" + resume_idx,{
-									height: 500,
-									language:'korean',
-									toolbar:ck_toolbar
-								 });
+								var editor=CKEDITOR.replace("write-answer" + resume_idx,ck_config);
 								var ac=new CKEDITOR.plugins.autocomplete( editor, config );
 								ac.getHtmlToInsert=function(item){
 									return this.outputTemplate.output(item);

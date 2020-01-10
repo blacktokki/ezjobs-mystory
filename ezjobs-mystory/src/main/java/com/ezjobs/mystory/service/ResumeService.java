@@ -97,7 +97,8 @@ public class ResumeService {
 		Integer size=30;
 		String userId=modelMap.get("loginId").toString();
 		Resume resume=new Resume();
-		resume.setUserId(userId);
+		if(!(Boolean)modelMap.get("isAdmin"))
+			resume.setUserId(userId);
 		resume.setState("미작성");
 		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
 		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
@@ -110,7 +111,8 @@ public class ResumeService {
 		Integer size=30;
 		String userId=modelMap.get("loginId").toString();
 		Resume resume=new Resume();
-		resume.setUserId(userId);
+		if(!(Boolean)modelMap.get("isAdmin"))
+			resume.setUserId(userId);
 		resume.setState("작성완료");
 		PageRequest pr=PageRequest.of(page,size,Sort.by(Sort.Direction.ASC,"editDate"));
 		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);

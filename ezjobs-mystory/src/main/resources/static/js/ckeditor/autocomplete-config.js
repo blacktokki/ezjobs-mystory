@@ -1,4 +1,4 @@
-config={}
+ac_config={}
 function textTestCallback( range ) {
     // You do not want to autocomplete a non-empty selection.
     if ( !range.collapsed ) {
@@ -21,7 +21,7 @@ function matchCallback( text, offset ) {
     return { start: offset-keyword.length, end: offset };
 }
 
-config.textTestCallback = textTestCallback;
+ac_config.textTestCallback = textTestCallback;
 
 // Returns (through its callback) the suggestions for the current query.
 function dataCallback( matchInfo, callback ) {
@@ -48,8 +48,8 @@ function dataCallback( matchInfo, callback ) {
 	});
 }
 
-config.dataCallback = dataCallback;
+ac_config.dataCallback = dataCallback;
 
-config.itemTemplate = '<li data-id="{id}"><mark><strong>{front}</strong></mark>{back}</li>';
-config.outputTemplate = ' {name}';
-config.throttle = 300;
+ac_config.itemTemplate = '<li data-id="{id}"><mark><strong>{front}</strong></mark>{back}</li>';
+ac_config.outputTemplate = ' {name}';
+ac_config.throttle = 300;

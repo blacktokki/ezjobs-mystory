@@ -45,10 +45,10 @@
 					</div>
 					<textarea class="form-control write-answer" id=" write-answer-i" name="answer" rows="20">${resume.answer}</textarea>
 				</div>
+				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#exampleModal">검토하기</button>
 				<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>
 				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
 				<button type="button" class="btn btn-primary resume-export">내보내기</button>
-				&nbsp;<span style="color:#aaa;" class="counter">(글자수 : 0 자)</span>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>

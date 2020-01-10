@@ -30,7 +30,7 @@
 		<div class="nav nav-tabs col-2 " id="nav-tab-left" role="tablist">
 			<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create" href="#"> 새 자기소개서 </a>
 		</div>
-		<div class="nav nav-tabs accordion justify-content-center col-6" id="nav-tab" role="tablist">
+		<div class="nav nav-tabs accordion justify-content-center col-8" id="nav-tab" role="tablist">
 			<a class="nav-item nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
 				aria-controls="nav-home" aria-selected="true">작성 목록</a>
 			<!-- 작성중,작성중:내용없음 -->
@@ -44,23 +44,17 @@
 				role="tab" aria-controls="nav-contact" aria-selected="false">작성 기록</a>
 			-->
 		</div>
-		<div class="col-4">
-			<div class="nav nav-tabs justify-content-right" id="nav-tab-right" role="tablist">
-				<a class="nav-item nav-link breadcrumb-item text-right active" id="nav-search-tab" data-toggle="tab" href="#nav-search"
-					role="tab" aria-controls="nav-search" aria-selected="false">자동 검색</a>
-				<a class="nav-item nav-link breadcrumb-item text-right" id="nav-change-tab" data-toggle="tab" href="#nav-change"
-					role="tab" aria-controls="nav-change" aria-selected="false">단어 교체</a>
-				<a class="nav-item nav-link breadcrumb-item text-right" id="nav-compare-tab" data-toggle="tab" href="#nav-compare"
-					role="tab" aria-controls="nav-compare" aria-selected="false">비교 하기</a>
+		<div class="col-2">
+			<div class="justify-content-right" id="nav-tab-right">
 			</div>
 		</div>
 	</div>
 </nav>
 <!--  -->
 <div class="container-fluid row" style="min-height:66vh">
-	<div class="col-1">
+	<div class="col-2">
 	</div>
-	<div class="tab-content col-7" id="nav-tabContent">
+	<div class="tab-content col-8" id="nav-tabContent">
 		<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 			<div id="accordion1" role="tablist">
 				<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
@@ -75,76 +69,34 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-4">
-		<div class="card">
-			<div class="card-header card-title">메모</div>
-			<div class="card-body card-text">
-				<textarea class="form-control" rows="6"></textarea>
-			</div>
-		</div>
-		<div class="tab-content" id="nav-tabContent">
-			<div class="tab-pane fade show active" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
-				<div class="card" id="autoComplete">
-					<div class="card-header card-title">자동 검색</div>
-					  <form>
-						  <div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">검색어</span>
-							</div>
-							<input type="text" name="keyword" class="form-control bg-light" id="autoComplete-keyword" readonly/>
-					      </div>
-						  <div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">단어 포함</span>
-							</div>
-							<input type="text" name="keywordInclude" class="form-control" id="autoComplete-include"/>
-					      </div>
-					  </form>
-					  <ul class="list-group list-group-flush card-text">
-					  </ul>
-					</div>
-				</div>
-			<div class="tab-pane fade" id="nav-change" role="tabpanel" aria-labelledby="nav-change-tab">
-				<div class="card" id="wordChange">
-					<div class="card-header card-title">단어 교체</div>
-					<div class="card-body">
-						<ul class="card-text list-group form-inline"></ul>
-						<a href="#" class="btn btn-primary btn-load">내용 가져오기</a>
-						<a href="#" class="btn btn-primary btn-apply">내용 적용하기</a>
-					</div>
-				</div>
-			</div>
-			<div class="tab-pane fade" id="nav-compare" role="tabpanel" aria-labelledby="nav-compare-tab">
-				<div class="card" id="compare">
-					<div class="card-header card-title">비교 하기</div>
-					<div class="card-body">
-						<ul class="card-text list-group list-group-flush"></ul>
-						<a href="#" class="btn btn-primary btn-load">유사도검사</a>
-						<a href="#" class="btn btn-primary btn-check">맞춤법검사</a>
-					</div>
-				</div>
-			</div>
-		</div>
+	<div class="col-2">
 	</div>
 </div>
-
+<%@ include file="/WEB-INF/jsp/resume/review.jsp"%>
 <script>
 	var resume_idx = 1;
 	var resume_new = 1;
 	var	timer_auto=null;
 	var ck_config={
+		width: "100%",
 		height: 500,
 		language:'korean',
 		toolbar:[
 			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo','Redo2'] },
 			{ name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
-			{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-			{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align'], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
-			{ name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-			{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
 			{ name: 'about', items: [ 'About' ] }
-		]
+		],
+		wordcount:{
+			showWordCount: true,
+			showCharCount: true,
+			showParagraphs: false,
+			countSpacesAsChars: true,
+		}
 	 }
+	//console.log(CKEDITOR.plugins);
+	//console.log(CKEDITOR.config.plugins);
+	//console.log(CKEDITOR.config);
+	CKEDITOR.config.extraPlugins = 'wordcount';
 	
 	function refreshList(){
 		$.get("/resume/content?state=미작성", function(data) {
@@ -157,27 +109,7 @@
 			$("#accordion3").html(data);
 		});
 	}
-	function autoComplete(){
-		var form=$("#autoComplete form").serializeJSON();
-		form.keyword=$.trim(form.keyword);
-		console.log(form);
-		if(timer_auto){
-			clearTimeout(timer_auto);
-		}
-		timer_auto = setTimeout(function(){
-			$.get("/resume/auto", form, function(data) {
-				//console.log(data);
-				var $frag=$(document.createDocumentFragment());
-				data.list.forEach(function(e,i){
-					var text=e.text.replace(form.keyword,"<strong>"+form.keyword+"</strong>")
-								.replace(form.keywordInclude,"<strong>"+form.keywordInclude+"</strong>");
-					$frag.append("<li class='list-group-item list-group-item-action p-1'><font size='3' style='cursor:default'>"
-							+text+"</font></li>");
-				});
-				$("#autoComplete ul").html("").append($frag);
-			});	
-		},300);
-	}
+
 	function Export2Doc(content, filename){
 	    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
 	    var postHtml = "</body></html>";
@@ -205,105 +137,78 @@
 	        document.body.removeChild(downloadLink);   
 	    }
 	}
-	function wordCounter($target,text){
-		$target.find(".counter").html("(글자수 : "+text.length+" 자)");
-	};
-	
-	function replaceTextarea($target,start,end,text){	
-		$target.focus().get(0).selectionStart=start;
-		$target.get(0).selectionEnd=end;
-		if (document.queryCommandSupported('insertText')) {
-			document.execCommand("insertText",false,text);
-		}
-		else{
-			$target.val($target.val().substring(0, start) + text + $target.val().substring(end,$target.val().length));
-			$target.get(0).selectionStart=start+text.length;
-			$target.get(0).selectionEnd=start+text.length;
-		}
+	function reviewText(){
+		var currentVal="";
+		$copy=$("#wordChange ul .list-sentence").clone();
+		if($copy.length>0){
+			$copy.find("select").each(function(i,element){
+				$(element).html($(element).find("option:selected").val());
+			});
+			$copy.each(function(i,element){
+				currentVal+=" "+$.trim($(element).text().replace(/\s+/g, " "));
+				if($(element).find("br").length)
+					currentVal+="\r\n";	
+			});
+			console.log(currentVal);
+		};
+		return currentVal;
+	}
+	function writePageBuild($result,callback){
+		$result.find(".card-header")
+			.attr("id","heading-write" + resume_idx)
+			.find("a")
+			.attr("href","#collapse-write" + resume_idx)
+			.attr("aria-controls","collapse-write" + resume_idx);
+		$result.find(".collapse")
+			.attr("id","collapse-write" + resume_idx)
+			.attr("aria-labelledby","heading-write" + resume_idx)
+			.find(".write-question")
+			.attr("id","write-question" + resume_idx);
+		$result.find(".collapse").find(".write-answer").attr("id","write-answer" + resume_idx).ckeditor(ck_config);
+		$result.find(".tags").attr("id","tags-write" + resume_idx);
+		$result.find(".write-date").datepicker({
+		    dateFormat: 'yy-mm-dd'
+	  	});
+		callback($result);
+	}
+	function writePageAppend($result){
+		$("#nav-profile-tab").tab("show");
+		$result.appendTo("#accordion2").find(".collapse").collapse("show");
+		$("#tags-write" + resume_idx).tagsInput({
+			'height' : '100%',
+			'width' : '80%',
+		});
+		var editor=$("#write-answer" + resume_idx).ckeditor().editor;
+		var ac=new CKEDITOR.plugins.autocomplete(editor, ac_config );
 	}
 	
 	$("body").delegate("#resume-create","click",function() {
-				$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
-							var $result = $(response);
-							$result.find(".card-header")
-									.attr("id","heading-write" + resume_idx)
-									.find("a")
-									.attr("href","#collapse-write" + resume_idx)
-									.attr("aria-controls","collapse-write" + resume_idx)
-									.html("새 자기소개서 " + resume_new);
-							$result.find(".collapse")
-							.attr("id","collapse-write" + resume_idx)
-							.attr("aria-labelledby","heading-write" + resume_idx)
-									.find(".write-question")
-									.attr("id","write-question" + resume_idx)
-									.val("새 자기소개서 " + resume_new);
-							$result.find(".collapse").find(".write-answer").attr("id","write-answer" + resume_idx);
-							$result.find(".tags").attr("id","tags-write" + resume_idx);
-							$result.find(".write-date").datepicker({
-							    dateFormat: 'yy-mm-dd'
-							  });
-							$("#nav-profile-tab").tab("show");
-							$result.appendTo("#accordion2").find(".collapse")
-									.collapse("show");
-							$("#tags-write" + resume_idx).tagsInput({
-								'height' : '100%',
-								'width' : '80%',
-							});
-							wordCounter($result.find("form"),$result.find(".write-answer").val());
-							console.log(CKEDITOR.plugins);
-							console.log(CKEDITOR.config.plugins);
-							var editor=CKEDITOR.replace("write-answer" + resume_idx,ck_config);
-							var ac=new CKEDITOR.plugins.autocomplete( editor, config );
-
-							resume_idx += 1;
-							resume_new += 1;
-						});
-				return false;
+		$(document.createDocumentFragment()).load("/resume/write",function(response) {//새 자기소개서
+			writePageBuild($(response),function($result){
+				$result.find(".write-question").val("새 자기소개서 " + resume_new);
+				$result.find(".card-header a").html("새 자기소개서 " + resume_new);
+				writePageAppend($result);
 			});
+			resume_idx += 1;
+			resume_new += 1;
+		});
+		return false;
+	});
 	$("#accordion1").delegate(".resume-link","click",function(e) {//자기소개서 불러오기
-				var href = $(e.target).attr("href");
-				var card = href.replace("/resume/write/", "#resume-card");
-				//console.log(card);
-				if ($(card).length == 0) {
-					$(document.createDocumentFragment()).load(
-							href,
-							function(response) {
-								var $result = $(response);
-								$result.find(".card-header").attr("id",
-										"heading-write" + resume_idx)
-										.find("a")
-										.attr("href","#collapse-write" + resume_idx)
-										.attr("aria-controls","collapse-write" + resume_idx)
-								$result.find(".collapse")
-									.attr("id","collapse-write" + resume_idx)
-									.attr("aria-labelledby","heading-write" + resume_idx)
-									.find(".write-question")
-									.attr("id","write-question" + resume_idx);
-								$result.find(".collapse").find(".write-answer").attr("id","write-answer" + resume_idx);
-								$result.find(".tags").attr("id","tags-write" + resume_idx);
-								$result.find(".write-date").datepicker({
-								    dateFormat: 'yy-mm-dd'
-								  });
-								$("#nav-profile-tab").tab("show");
-								$result.appendTo("#accordion2").find(".collapse").collapse("show");
-								$("#tags-write" + resume_idx).tagsInput({
-									'height' : '100%',
-									'width' : '80%',
-								});
-								wordCounter($result.find("form"),$result.find(".write-answer").val());
-								var editor=CKEDITOR.replace("write-answer" + resume_idx,ck_config);
-								var ac=new CKEDITOR.plugins.autocomplete( editor, config );
-								ac.getHtmlToInsert=function(item){
-									return this.outputTemplate.output(item);
-								}
-								resume_idx += 1;
-							});
-				} else {
-					$("#nav-profile-tab").tab("show");
-					$(card).find(".collapse").collapse("show");
-				}
-				return false;
+		var href = $(e.target).attr("href");
+		var card = href.replace("/resume/write/", "#resume-card");
+		//console.log(card);
+		if ($(card).length == 0) {
+			$(document.createDocumentFragment()).load(href,function(response) {
+				writePageBuild($(response),writePageAppend);
+				resume_idx += 1;
 			});
+		} else {
+			$("#nav-profile-tab").tab("show");
+			$(card).find(".collapse").collapse("show");
+		}
+		return false;
+	});
 	$("#accordion3").delegate(".resume-link","click",function(e) {//자기소개서 불러오기(완성된)
 		return false;
 	});
@@ -320,7 +225,6 @@
 	
 	$("#accordion3").delegate(".resume-link-state","click",function(e) {//자기소개서 상태변경	
 		var href = $(this).attr("href");
-		
 		var form = {_method:"put",state:"미작성"};
 		$.post(href, form, function(data) {
 			//console.log(data);
@@ -334,34 +238,6 @@
 				var currentVal=$(e.target).val();
 				$("#heading-write" + id + " a").html(currentVal);
 			});
-	$("#accordion2").delegate(".write-answer","propertychange change keyup paste input click", function(e){//자동검색 키워드 불러오기,글자수세기
-		var currentVal=$(e.target).val();
-		//console.log(currentVal);
-		var pos=$(e.target).get(0).selectionEnd;
-		var keywords=currentVal.substring(0,pos).split(/다 |\.|\n/);
-		$("#autoComplete-keyword").val(keywords[keywords.length-1]);
-		autoComplete();
-		wordCounter($(e.target).closest("form"),currentVal);
-	});
-	
-	$("#autoComplete").delegate("form","propertychange change paste input",function(e){//자동검색 진행
-		autoComplete();
-	
-	});
-	
-	$("#autoComplete ul").delegate("li","click",function(e){//자동완성 입력
-		var currentVal=$(e.target).text()+" ";
-		var $target=$("#accordion2 .card").find(".show").find(".write-answer");
-		var keyword=$("#autoComplete-keyword").val();
-		console.log(currentVal);
-		var end=$target.get(0).selectionEnd;
-		var start=end-keyword.length;
-		replaceTextarea($target,end-keyword.length,end,currentVal);
-		$("#autoComplete-keyword").val("");
-		$("#autoComplete ul").html("");
-		clearTimeout(timer_auto);
-		return false;
-	});
 	
 	$("#accordion2").delegate(".card-header","click",function(e){
 		$("#autoComplete-keyword").val("");
@@ -369,16 +245,17 @@
 		clearTimeout(timer_auto);
 	});
 	
-	$("#wordChange").delegate(".btn-load","click",function(e){//단어교체 불러오기
+	$("body").delegate(".review-modal","shown.bs.modal",function(e){//검토 하기
 		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
+		console.log(currentVal);
 		var form={answer:currentVal};
 		$.get("/resume/changelist", form, function(data) {
 			$("#wordChange ul").html(data).sortable().find("li").each(function(i,element){
 				$(element).find("ul").sortable();
 			});
 		});
-		return false;
 	});
+	
 	$("#wordChange").delegate("select","change",function(e){//단어교체
 		var first=$("option",this).first().val();
 		var change=this.value;
@@ -409,29 +286,16 @@
 		
 	});
 	
-	$("#wordChange").delegate(".btn-apply","click",function(e){//단어교체 적용하기
-		var currentVal="";
-		$copy=$("#wordChange ul .list-sentence").clone();
-		if($copy.length>0){
-			$copy.find("select").each(function(i,element){
-				$(element).html($(element).find("option:selected").val());
-			});
-			$copy.each(function(i,element){
-				currentVal+=" "+$.trim($(element).text().replace(/\s+/g, " "));
-				if($(element).find("br").length)
-					currentVal+="\r\n";
-				
-			});
-			console.log(currentVal);
-			$target=$("#accordion2 .card").find(".show").find(".write-answer");
-			replaceTextarea($target,0,$target.text().length,currentVal);
-		}
+	$("#exampleModal").delegate(".btn-apply","click",function(e){//단어교체 적용하기
+		var currentVal=reviewText();
+		$target=$("#accordion2 .card").find(".show").find(".write-answer").val(currentVal);
 		return false;
 	});
 	
-	$("#compare").delegate(".btn-load","click",function(e){//유사도검사
-		var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
-		var form={answer:currentVal};
+	$("#exampleModal").delegate(".btn-load","click",function(e){//유사도검사
+		var currentVal=reviewText();
+		//console.log(currentVal.replace(/<p>|<\/p>/g));
+		var form={answer:currentVal.replace("<p>","").replace("</p>","")};
 		$.get("/resume/comparelist", form, function(data) {
 			$("#compare ul").html(data).find("li").each( function() {
 		          var sentence=$.trim($(this).text().replace(/\s+/g, " "));
@@ -458,6 +322,7 @@
       
 		return false;
 	});
+	
 	
 	$("#accordion2").delegate(".resume-export","click",function(e){//내보내기
 		var form=$(e.target).closest("form").serializeJSON();

@@ -29,7 +29,9 @@ public class ResumeController {
 	
 	@GetMapping("")//글작성 화면 
 	public String resume(Model model){
-		model.addAttribute("loginId",getLoginId());
+		User user=getLoginUser();
+		model.addAttribute("loginId",user.getLoginId());
+		model.addAttribute("isAdmin",user.getIsAdmin());
 		resumeService.listUnwrite(model);
 		resumeService.listWrited(model);
 		//autoLabelService.spliterResumes(model);
@@ -38,8 +40,9 @@ public class ResumeController {
 	
 	@GetMapping("content")
 	public String list(Authentication auth,@RequestParam String state,Model model){
-		model.addAttribute("loginId",getLoginId());
-		
+		User user=getLoginUser();
+		model.addAttribute("loginId",user.getLoginId());
+		model.addAttribute("isAdmin",user.getIsAdmin());
 		if(state.equals("작성완료")) {
 			resumeService.listWrited(model);
 			//autoLabelService.spliterResumes(model);
@@ -66,7 +69,7 @@ public class ResumeController {
 	
 	@GetMapping("write/{id}")
 	public String write(@PathVariable String id,Model model){
-		model.addAttribute("loginId",getLoginId());
+		model.addAttribute("loginId",getLoginUser().getLoginId());
 		model.addAttribute("method","put");
 		model.addAttribute("id",id);
 		resumeService.content(model);
@@ -76,7 +79,7 @@ public class ResumeController {
 	@ResponseBody
 	@PostMapping("content")
 	public ResponseEntity<?> content(@RequestParam Map<Object, Object> map,Model model){
-		model.addAttribute("loginId",getLoginId());
+		model.addAttribute("loginId",getLoginUser().getLoginId());
 		model.addAttribute("map", map);
 		resumeService.write(model);
 		return ResponseEntity.ok(model);
@@ -85,7 +88,6 @@ public class ResumeController {
 	@ResponseBody
 	@PutMapping("content/{id}")
 	public ResponseEntity<?> content(@PathVariable String id,@RequestParam Map<Object, Object> map,Model model){
-		model.addAttribute("loginId",getLoginId());
 		model.addAttribute("id",id);
 		model.addAttribute("map", map);
 		resumeService.edit(model);
@@ -121,7 +123,7 @@ public class ResumeController {
 	
 	@PostMapping("synonym")
 	public ResponseEntity<?> synonym(@RequestParam Map<Object, Object> map,Model model) {
-		model.addAttribute("loginId",getLoginId());
+		model.addAttribute("loginId",getLoginUser().getLoginId());
 		model.addAttribute("map", map);
 		resumeService.addSynonym(model);
 		return ResponseEntity.ok(model);
@@ -142,7 +144,7 @@ public class ResumeController {
 		return "resume/compare";
 	}
 	
-	private String getLoginId() {
-		return ((User)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getLoginId();
+	private User getLoginUser() {
+		return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

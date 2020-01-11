@@ -42,7 +42,7 @@ public class BoardController {
 	@GetMapping("/write/{id}") // 글수정 화면/board/write/1
 	public String writeView(Authentication auth, @PathVariable String id, Model model) {
 		User user = (User) auth.getPrincipal();
-		if(boardService.isWrited(Integer.parseInt(id),user.getLoginId())){
+		if(boardService.isWrited(Integer.parseInt(id),user.getId())){
 			model.addAttribute("id", id);
 			model.addAttribute("method","put");
 			boardService.content(model);
@@ -56,7 +56,7 @@ public class BoardController {
 	@PostMapping("/write") // 글작성 요청 /board/write
 	public String Write(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
 		User user = (User) auth.getPrincipal();
-		model.addAttribute("userId", user.getLoginId());
+		model.addAttribute("userId", user.getId());
 		model.addAttribute("map", map);
 		boardService.write(model);
 		return "redirect:../content/"+model.getAttribute("id");
@@ -65,7 +65,7 @@ public class BoardController {
 	@PutMapping("/write/{id}") // 글수정요청 /board/write/1
 	public String Write(Authentication auth, @PathVariable String id, @RequestParam Map<Object, Object> map, Model model) {
 		User user = (User) auth.getPrincipal();
-		if(boardService.isWrited(Integer.parseInt(id),user.getLoginId())){
+		if(boardService.isWrited(Integer.parseInt(id),user.getId())){
 			model.addAttribute("id", id);
 			model.addAttribute("map", map);
 			boardService.edit(model);
@@ -76,7 +76,7 @@ public class BoardController {
 	@DeleteMapping("/write/{id}") // 글삭제요청 /board/write
 	public String Write(Authentication auth, @PathVariable String id, Model model) {
 		User user = (User) auth.getPrincipal();
-		if(boardService.isWrited(Integer.parseInt(id),user.getLoginId())){
+		if(boardService.isWrited(Integer.parseInt(id),user.getId())){
 			model.addAttribute("id", id);
 			//boardService.remove(model);//미구현
 			return "redirect:../community";

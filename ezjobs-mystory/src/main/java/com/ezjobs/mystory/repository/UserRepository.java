@@ -11,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ezjobs.mystory.entity.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, String> {
 	
 	Page<User> findByLoginIdContaining(Pageable pageable, String loginId);
-	User findByLoginId(String loginId);
 	
 	@Transactional
 	@Modifying	// update , delete Query

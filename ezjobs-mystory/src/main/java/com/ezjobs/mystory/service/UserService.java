@@ -35,7 +35,7 @@ public class UserService {
 	}*/
 	
 	public User findByLoginId(String loginId) {
-		return userRepository.findByLoginId(loginId);
+		return userRepository.findById(loginId).get();
 	}
 
 	public void clearFailureCount(String loginId) {	

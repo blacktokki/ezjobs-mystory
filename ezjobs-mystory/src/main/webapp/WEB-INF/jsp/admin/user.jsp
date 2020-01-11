@@ -112,7 +112,7 @@
 								<button class="btn dropdown-toggle" style="padding: 0"
 									type="button" id="dropdownMenu${item.id}"
 									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">${item.loginId}</button>
+									aria-expanded="false">${item.id}</button>
 								<div class="dropdown-menu"
 									aria-labelledby="dropdownMenu${item.id}">
 									<a class="dropdown-item" href="#">${item.name}님의 자기소개서</a> <a
@@ -141,18 +141,16 @@
 										<div class="col">이메일</div>
 										<div class="col">성별</div>
 										<div class="col">학력</div>
-										<div class="col">방문횟수</div>
+										<div class="col">방문일</div>
 										<div class="col">연동서비스</div>
-										<div class="col">연동계정</div>
 									</div>
 
 									<div class="row">
 										<div class="col">${item.email}</div>
 										<div class="col">${item.sex}</div>
 										<div class="col">${item.grad}</div>
-										<div class="col">${item.visitCnt}</div>
-										<div class="col">${item.relId}</div>
-										<div class="col">${item.relLoginId}</div>
+										<div class="col">${item.visitDate}</div>
+										<div class="col">${item.loginRel}</div>
 									</div>
 								</div>
 							</div>

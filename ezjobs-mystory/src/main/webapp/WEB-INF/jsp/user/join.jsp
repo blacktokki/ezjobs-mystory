@@ -17,7 +17,7 @@
   <tbody>
     <tr>
     <th scope="row">아이디</th>
-    <td><input type="text" id="user_loginId" name="loginId" placeholder="6자 이상 15자 이하" class="wdp_90"></td>
+    <td><input type="text" id="user_id" name="id" placeholder="6자 이상 15자 이하" class="wdp_90"></td>
    </tr>
     <tr>
     <th scope="row">비밀번호</th>
@@ -35,16 +35,6 @@
     <th scope="row">이메일</th>
     <td><input type="text" id="user_email" name="email" class="wdp_90"></td>
    </tr>
-   <!--
-    <tr>
-    <th scope="row">relId</th>
-    <td><input type="text" id="user_relID" name="RELID" class="wdp_90"></td>
-   </tr>
-    <tr>
-    <th scope="row">relLoginId</th>
-    <td><input type="text" id="user_relLoginId" name="RELLOGINID" class="wdp_90"></td>
-   </tr>
-  -->
    <tr>
     <th scope="row">성별</th>
     <td>
@@ -88,7 +78,7 @@
 $(function(){
     $("form").validate({
     	rules: {
-            loginId: {
+            id: {
                 required : true,
                 minlength : 6,
                 maxlength : 15,
@@ -123,7 +113,7 @@ $(function(){
         },
         //규칙체크 실패시 출력될 메시지
         messages : {
-        	loginId: {
+        	id: {
                 required : "필수로입력하세요",
                 minlength : "최소 {0}글자이상이어야 합니다",
                 maxlength : "최대 {0}글자이하이어야 합니다",

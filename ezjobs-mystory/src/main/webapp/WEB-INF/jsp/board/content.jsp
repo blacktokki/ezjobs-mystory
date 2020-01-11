@@ -58,7 +58,7 @@
 		${board.text}
 	</div>
 	<p>
-	<sec:authentication property="principal.loginId" var="currentUserName"/>
+	<sec:authentication property="principal.id" var="currentUserName"/>
 	<c:if test="${currentUserName == board.userId}">
 		<a class="btn btn-secondary btn-sm" href="/board/community"
 			role="button">목록</a>

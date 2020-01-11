@@ -30,16 +30,6 @@
     <th scope="row">이메일</th>
     <td><input type="text" id="user_email" name="email" class="wdp_90" value="${user.email}"></td>
    </tr>
-   <!--
-    <tr>
-    <th scope="row">relId</th>
-    <td><input type="text" id="user_relID" name="RELID" class="wdp_90"></td>
-   </tr>
-    <tr>
-    <th scope="row">relLoginId</th>
-    <td><input type="text" id="user_relLoginId" name="RELLOGINID" class="wdp_90"></td>
-   </tr>
-  -->
   <tr>
     <th scope="row">성별</th>
     <td>

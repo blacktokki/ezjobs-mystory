@@ -72,7 +72,20 @@ public class BoardController {
 		}
 		return "redirect:../content/"+id;
 	}
-
+	@PostMapping("/archive/{id}") // 아카이브이동
+	public String archive(Authentication auth, @PathVariable String id, Model model) {
+		User user = (User) auth.getPrincipal();
+		if(boardService.isWrited(Integer.parseInt(id),user.getId())){
+			model.addAttribute("id", id);
+			boardService.moveArchive(model);//미구현
+			return "redirect:../community";
+		}
+		else {
+			return "redirect:../content/"+id;
+		}
+	}
+	
+	/*
 	@DeleteMapping("/write/{id}") // 글삭제요청 /board/write
 	public String Write(Authentication auth, @PathVariable String id, Model model) {
 		User user = (User) auth.getPrincipal();
@@ -84,5 +97,5 @@ public class BoardController {
 		else {
 			return "redirect:../content/"+id;
 		}
-	}
+	}*/
 }

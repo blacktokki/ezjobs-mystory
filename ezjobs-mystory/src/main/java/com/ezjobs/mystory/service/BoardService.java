@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Board;
+import com.ezjobs.mystory.entity.BoardArchive;
+import com.ezjobs.mystory.entity.BoardImpl;
+import com.ezjobs.mystory.repository.BoardArchiveRepository;
 import com.ezjobs.mystory.repository.BoardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,6 +27,9 @@ public class BoardService {
 	BoardRepository boardRepository;
 	
 	@Inject
+	BoardArchiveRepository boardArchiveRepository;
+	
+	@Inject
 	ObjectMapper mapper;
 	
 	public void community(Model model){
@@ -32,9 +38,9 @@ public class BoardService {
 		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("Board");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
 		model.addAttribute("boards",boards);
 		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
 		
@@ -51,7 +57,7 @@ public class BoardService {
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String userId=(String)modelMap.get("userId");
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setUserId(userId);
 		board.setEditDate(new Date());
 		board.setBoardType("Board");
@@ -63,15 +69,25 @@ public class BoardService {
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		int id=Integer.parseInt(modelMap.get("id").toString());
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setId(id);
 		boardRepository.update(board);
 	}
 	
 	public boolean isWrited(Integer id,String loginId){
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setId(id);
 		board.setUserId(loginId);
 		return boardRepository.findOne(Example.of(board)).orElse(null)!=null;
+	}
+
+	public void moveArchive(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		Board board=(Board)boardRepository.findById(id).get();
+		BoardArchive boardArchive=mapper.convertValue(board, BoardArchive.class);//board로 변환
+		boardArchive.setRemoveDate(new Date());
+		boardArchiveRepository.save(boardArchive);
+		boardRepository.deleteById(id);
 	}
 }

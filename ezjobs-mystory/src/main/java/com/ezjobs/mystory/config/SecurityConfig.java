@@ -83,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/")
             .successHandler(authSuccessHandler)
             .failureHandler(authFailureHandler)
-            .usernameParameter("loginId")
+            .usernameParameter("id")
             .passwordParameter("loginPw")
         .and()
             // 로그아웃 관련 설정

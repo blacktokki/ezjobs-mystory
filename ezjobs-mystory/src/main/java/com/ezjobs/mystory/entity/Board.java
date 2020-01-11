@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "board")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
 public class Board {
 
@@ -34,7 +35,7 @@ public class Board {
 	private String text;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "edit_date", nullable = false)
+	@Column(name = "edit_date", nullable = false ,insertable=false)
 	private Date editDate;
 
 	@Column(name = "edit_group", nullable = false)
@@ -45,4 +46,5 @@ public class Board {
 
 	@Column(name = "bad_cnt", nullable = false)
 	private Integer badCnt;
+	
 }

@@ -80,14 +80,14 @@ public class UserController {
 	@GetMapping("/info")
 	public String infoView(Authentication auth, Model model) {
 		User user = (User) auth.getPrincipal();
-		model.addAttribute("loginId", user.getLoginId());
+		model.addAttribute("loginId", user.getId());
 		userService.info(model);
 		return "user/info";
 	}
 
 	@PutMapping("/info") // 정보수정 요청
 	public String Write(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
-		String loginId = ((User) auth.getPrincipal()).getLoginId();
+		String loginId = ((User) auth.getPrincipal()).getId();
 		model.addAttribute("loginId", loginId);
 		model.addAttribute("map", map);
 		userService.edit(model);
@@ -130,7 +130,7 @@ public class UserController {
 
 	@PutMapping("/password")
 	public String passwordChange(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
-		String loginId = ((User) auth.getPrincipal()).getLoginId();
+		String loginId = ((User) auth.getPrincipal()).getId();
 		String loginPw = UserSha256.encrypt((String) map.get("loginPw"));
 		String newPw = (String) map.get("newPw");
 		User user = userService.findByLoginId(loginId);
@@ -160,7 +160,7 @@ public class UserController {
 	@PostMapping("/join/social") // 회원가입 요청
 	public String writeSocial(Authentication auth,@RequestParam Map<Object, Object> map, Model model) {
 		User user = (User) auth.getPrincipal();
-		map.put("loginId",user.getLoginId());
+		map.put("loginId",user.getId());
 		map.put("loginPw","**********");
 		map.put("name",user.getName());
 		map.put("email",user.getEmail());

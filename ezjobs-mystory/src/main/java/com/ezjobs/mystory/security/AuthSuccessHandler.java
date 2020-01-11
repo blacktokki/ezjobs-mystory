@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.UserService;
+import com.ezjobs.mystory.util.LoginUser;
  
 @Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
@@ -24,7 +25,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws ServletException, IOException {
     	System.out.println("suc");
-    	userService.clearFailureCount(((User)authentication.getPrincipal()).getLoginId());
+    	userService.clearFailureCount(LoginUser.getId());
     	super.onAuthenticationSuccess(request, response, authentication);
     }
  

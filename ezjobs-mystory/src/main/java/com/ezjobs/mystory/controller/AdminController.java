@@ -3,6 +3,7 @@ package com.ezjobs.mystory.controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ezjobs.mystory.service.TagService;
+import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.UserService;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -61,6 +63,8 @@ public class AdminController {
 	
 	@GetMapping("/resume")
 	public String resume(@RequestParam Map<Object,Object> map, Model model){
+		User user=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("isAdmin",user.getIsAdmin());
 		model.addAttribute("map",map);
 		resumeService.list(model);
 		return "admin/resume";

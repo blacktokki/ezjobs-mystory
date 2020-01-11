@@ -62,7 +62,7 @@ public class UserService {
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String loginId=modelMap.get("loginId").toString();
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setLoginId(loginId);
+		user.setId(loginId);
 		userRepository.updateWithoutPw(user);
 	}
 
@@ -71,7 +71,7 @@ public class UserService {
 		Map<String,Object> modelMap=model.asMap();
 		String loginId=(String)modelMap.get("loginId");
 		User user=new User();
-		user.setLoginId(loginId);
+		user.setId(loginId);
 		user=userRepository.findOne(Example.of(user)).get();
 		user.setLoginPw("");
 		model.addAttribute("user",user);
@@ -106,7 +106,7 @@ public class UserService {
 	public void changePw(Model model) {
 		Map<String,Object> modelMap=model.asMap();
 		User user=new User();
-		user.setLoginId((String)modelMap.get("loginId"));
+		user.setId((String)modelMap.get("loginId"));
 		String loginPw=(String)modelMap.get("newPw");
 		//System.out.println(loginPw);
 		user.setLoginPw(UserSha256.encrypt(loginPw));

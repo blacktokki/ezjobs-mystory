@@ -13,35 +13,35 @@ import com.ezjobs.mystory.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 	
-	Page<User> findByLoginIdContaining(Pageable pageable, String loginId);
+	Page<User> findByIdContaining(Pageable pageable, String id);
 	
 	@Transactional
 	@Modifying	// update , delete Query
 	@Query(value="update User u set u.loginPw = :#{#user.loginPw}, u.name = :#{#user.name},u.email = :#{#user.email},u.sex = :#{#user.sex},u.grad = :#{#user.grad}"
-			+ " WHERE u.loginId = :#{#user.loginId}")
+			+ " WHERE u.id = :#{#user.id}")
 	void update(User user);
 
 	@Transactional
 	@Modifying
 	@Query(value="update User u set u.name = :#{#user.name},u.email = :#{#user.email},u.sex = :#{#user.sex},u.grad = :#{#user.grad}"
-	+ " WHERE u.loginId = :#{#user.loginId}")
+	+ " WHERE u.id = :#{#user.id}")
 	void updateWithoutPw(User user);
 	
 	@Transactional
 	@Modifying
 	@Query(value="update User u set u.loginPw = :#{#user.loginPw}"
-	+ " WHERE u.loginId = :#{#user.loginId}")
+	+ " WHERE u.id = :#{#user.id}")
 	void updatePw(User user);
 
 	@Transactional
 	@Modifying
 	@Query(value="update User u set u.loginFailureCnt = 0"
-			+ " WHERE u.loginId = :loginId")
-	void clearLoginFailureCount(String loginId);
+			+ " WHERE u.id = :id")
+	void clearLoginFailureCount(String id);
 	
 	@Transactional
 	@Modifying
 	@Query(value="update User u set u.loginFailureCnt = u.loginFailureCnt + 1"
-			+ " WHERE u.loginId = :loginId")
-	void addLoginFailureCount(String loginId);
+			+ " WHERE u.id = :id")
+	void addLoginFailureCount(String id);
 }

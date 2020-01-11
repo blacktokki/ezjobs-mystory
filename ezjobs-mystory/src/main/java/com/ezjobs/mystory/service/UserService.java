@@ -93,7 +93,7 @@ public class UserService {
 		
 		Page<User> re;
 		if (op.equals("loginSearch")) {
-			re = userRepository.findByLoginIdContaining(pr, keyword);
+			re = userRepository.findByIdContaining(pr, keyword);
 		}
 		else {
 			re = userRepository.findAll(pr);

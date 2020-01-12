@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ezjobs.mystory.service.TagService;
 import com.ezjobs.mystory.entity.User;
+import com.ezjobs.mystory.service.BoardService;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.UserService;
 
@@ -27,6 +28,9 @@ public class AdminController {
 	
 	@Inject
 	private ResumeService resumeService;
+	
+	@Inject
+	private BoardService boardService;
 	
 	@GetMapping("/personal/{loginId}")//글내용 보기 /board/content
 	public String content(@PathVariable String loginId,Model model){
@@ -68,6 +72,13 @@ public class AdminController {
 		model.addAttribute("map",map);
 		resumeService.list(model);
 		return "admin/resume";
+	}
+	
+	@GetMapping("/board")
+	public String board(@RequestParam Map<Object,Object> map, Model model){
+		model.addAttribute("map",map);
+		boardService.archive(model);
+		return "admin/board";
 	}
 	
 }

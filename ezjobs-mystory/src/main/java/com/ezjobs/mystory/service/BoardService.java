@@ -37,7 +37,7 @@ public class BoardService {
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
-		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
+		PageRequest pr=PageRequest.of(pageNum, 5,Sort.by(Sort.Direction.DESC,"editDate"));
 		BoardImpl board=new BoardImpl();
 		board.setBoardType("Board");
 		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
@@ -89,5 +89,32 @@ public class BoardService {
 		boardArchive.setRemoveDate(new Date());
 		boardArchiveRepository.save(boardArchive);
 		boardRepository.deleteById(id);
+	}
+	
+	public void archive(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
+		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
+		String size = Optional.ofNullable((String) map.get("size")).orElse("20");
+		int sizeNum = Integer.parseInt(size);
+		model.addAttribute("size", sizeNum);
+		PageRequest pr=PageRequest.of(pageNum, sizeNum,Sort.by(Sort.Direction.DESC,"editDate"));
+		String op = String.valueOf(map.get("op"));
+		String keyword = String.valueOf(map.get("keyword"));
+		model.addAttribute("op", op);
+		model.addAttribute("keyword", keyword);
+		
+		BoardArchive board=new BoardArchive();
+		if (op.equals("userId")) {
+			board.setUserId(keyword);
+		}
+		else if(op.equals("title")) {
+			board.setTitle(keyword);
+		}
+		Page<BoardArchive> boards=boardArchiveRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
+		model.addAttribute("boards",boards);
+		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
+		
 	}
 }

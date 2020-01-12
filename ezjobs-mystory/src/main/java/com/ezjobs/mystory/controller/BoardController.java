@@ -75,9 +75,9 @@ public class BoardController {
 	@PostMapping("/archive/{id}") // 아카이브이동
 	public String archive(Authentication auth, @PathVariable String id, Model model) {
 		User user = (User) auth.getPrincipal();
-		if(boardService.isWrited(Integer.parseInt(id),user.getId())){
+		if(boardService.isWrited(Integer.parseInt(id),user.getId())||user.getIsAdmin()){
 			model.addAttribute("id", id);
-			boardService.moveArchive(model);//미구현
+			boardService.moveArchive(model);
 			return "redirect:../community";
 		}
 		else {

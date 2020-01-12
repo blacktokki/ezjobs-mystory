@@ -25,12 +25,6 @@ public class Board {
 	@Column(name = "user_id", nullable = false)
 	private String userId;
 
-	@Column(name = "intro_dept", nullable = true)
-	private String introDept;
-
-	@Column(name = "intro_type", nullable = true)
-	private String introType;
-
 	@Column(name = "text", nullable = true)
 	private String text;
 

@@ -8,7 +8,7 @@
 <div class="container">
 	<div class="jumbotron"
 		style="background-image: url(/image/admin_user_banner.png);">
-		<h1 class="display-6">게시판관리</h1>
+		<h1 class="display-6">게시판관리(아카이브)</h1>
 		<p class="lead">게시글들을 관리해주세요</p>
 	</div>
 
@@ -18,7 +18,7 @@
 	<div class="card card-title" style="padding: 10px">
 		<div class="row">
 			<div class="col-6">
-				<form action="/admin/user">
+				<form action="/admin/board">
 					<div class="input-group">
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inGroup01">검색 옵션</label>
@@ -27,7 +27,7 @@
 							<option value="userId" <c:if test="${op eq 'userId'}">selected</c:if>>유저아이디</option>
 							<option value="title" <c:if test="${op eq 'title'}">selected</c:if>>제목</option>
 						</select> <input name="keyword" type="text" class="form-control"
-							placeholder="검색어" aria-label="Recipient's username" value=" ${keyword}"
+							placeholder="검색어" aria-label="Recipient's username" <c:if test="${keyword ne 'null'}">value="${keyword}"</c:if>
 							aria-describedby="button-addon2">
 						<div class="input-group-append">
 							<button class="btn btn-outline-secondary" type="submit"
@@ -72,7 +72,7 @@
 				<col width="120">
 				<col width="120">
 				<col width="*">
-				<col width="50">
+				<col width="120">
 				<col width="200">
 			</colgroup>
 
@@ -82,17 +82,17 @@
 					<th scope="col"><input type="checkbox" name="checkAll"
 						id="th_checkAll" onclick='checkAll();' /></th>
 					<th scope="col"></th>
-					<th scope="col">회원번호</th>
-					<th scope="col">이름</th>
+					<th scope="col">게시글번호</th>
+					<th scope="col">분류</th>
+					<th scope="col">제목</th>
 					<th scope="col">유저 아이디</th>
-					<th scope="col"><i class="fa fa-search"></i></th>
-					<th scope="col">가입일</th>
+					<th scope="col">작성일</th>
 				</tr>
 			</thead>
 
 			<!-- 테이블 내용 채우기 -->
 			<tbody>
-				<c:forEach var="item" items="${users.content}">
+				<c:forEach var="item" items="${boards.content}">
 					<tr>
 						<td><input type="checkbox" name="checkRow" value="${item.id}" /></td>
 
@@ -105,30 +105,10 @@
 							</button>
 						</td>
 						<td scope="row">${item.id}</td>
-						<td>${item.name}</td>
-
-						<!-- 드롭다운 부분 -->
-						<td>
-							<div class="dropdown">
-								<button class="btn dropdown-toggle" style="padding: 0"
-									type="button" id="dropdownMenu${item.id}"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">${item.id}</button>
-								<div class="dropdown-menu"
-									aria-labelledby="dropdownMenu${item.id}">
-									<a class="dropdown-item" href="#">${item.name}님의 자기소개서</a> <a
-										class="dropdown-item" href="#">${item.name}님의 게시글</a> <a
-										class="dropdown-item" href="#">${item.name}님 이용 정지</a>
-								</div>
-							</div>
-
-						</td>
-						<td><a href="/admin/personal/${item.id}">
-								<button class="btn" style="padding: 0" type="button">
-									<i class="fa fa-search"></i>
-								</button>
-						</a></td>
-						<td>${item.registDate}</td>
+						<td>${item.boardType}</td>
+						<td>${item.title}</td>
+						<td>${item.userId}</td>
+						<td>${item.editDate}</td>
 					</tr>
 
 
@@ -139,19 +119,18 @@
 								<div class="card text-center">
 
 									<div class="row" style="color: #AAAAAA; font-weight: 600;">
-										<div class="col">이메일</div>
-										<div class="col">성별</div>
-										<div class="col">학력</div>
-										<div class="col">방문일</div>
-										<div class="col">연동서비스</div>
+										<div class="col">추천수</div>
+										<div class="col">비추천수</div>
+										<div class="col">삭제일</div>
 									</div>
 
 									<div class="row">
-										<div class="col">${item.email}</div>
-										<div class="col">${item.sex}</div>
-										<div class="col">${item.grad}</div>
-										<div class="col">${item.visitDate}</div>
-										<div class="col">${item.loginRel}</div>
+										<div class="col">${item.goodCnt}</div>
+										<div class="col">${item.badCnt}</div>
+										<div class="col">${item.removeDate}</div>
+									</div>
+									<div class="text-left">
+										${item.text}
 									</div>
 								</div>
 							</div>

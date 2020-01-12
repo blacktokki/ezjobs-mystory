@@ -59,18 +59,25 @@
 	</div>
 	<p>
 	<sec:authorize access="isAuthenticated()">
-	<sec:authentication property="principal.id" var="currentUserName"/>
-	<c:if test="${currentUserName == board.userId}">
-		<a class="btn btn-secondary btn-sm" href="/board/community"
-			role="button">목록</a>
-		<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
-			role="button">수정</a>
-		<button type="button" data-toggle="modal"
-			data-target="#delete" data-whatever="@mdo"
-			style="border: 0; background: 0;">
-			<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
-		</button>
-	</c:if>
+		<sec:authentication property="principal.id" var="currentUserName"/>
+		<c:if test="${currentUserName == board.userId}">
+			<a class="btn btn-secondary btn-sm" href="/board/community"
+				role="button">목록</a>
+			<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
+				role="button">수정</a>
+			<button type="button" data-toggle="modal"
+				data-target="#delete" data-whatever="@mdo"
+				style="border: 0; background: 0;">
+				<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
+			</button>
+		</c:if>
+		<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+			<button type="button" data-toggle="modal"
+				data-target="#delete" data-whatever="@mdo"
+				style="border: 0; background: 0;">
+				<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
+			</button>
+		</sec:authorize>
 	</sec:authorize>
 	<div class="modal" id="delete" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">

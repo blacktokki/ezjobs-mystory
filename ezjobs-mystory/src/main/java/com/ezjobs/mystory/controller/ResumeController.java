@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
+import com.ezjobs.mystory.util.LoginUser;
 
 import java.util.Map;
 
@@ -12,7 +13,6 @@ import javax.inject.Inject;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -29,30 +29,22 @@ public class ResumeController {
 	
 	@GetMapping("")//글작성 화면 
 	public String resume(Model model){
-		User user=getLoginUser();
-		model.addAttribute("loginId",user.getLoginId());
+		User user=LoginUser.get();
+		model.addAttribute("loginId",user.getId());
 		model.addAttribute("isAdmin",user.getIsAdmin());
-		resumeService.listUnwrite(model);
-		resumeService.listWrited(model);
+		resumeService.list(model);
 		//autoLabelService.spliterResumes(model);
 		return "resume/resume";
 	}
 	
 	@GetMapping("content")
-	public String list(Authentication auth,@RequestParam String state,Model model){
-		User user=getLoginUser();
-		model.addAttribute("loginId",user.getLoginId());
+	public String list(Authentication auth,@RequestParam  Map<Object, Object> map,Model model){
+		User user=LoginUser.get();
+		model.addAttribute("loginId",user.getId());
 		model.addAttribute("isAdmin",user.getIsAdmin());
-		if(state.equals("작성완료")) {
-			resumeService.listWrited(model);
-			//autoLabelService.spliterResumes(model);
-			return "resume/writedlist";
-		}
-		else {
-			resumeService.listUnwrite(model);
-			//autoLabelService.spliterResumes(model);
-			return "resume/list";
-		}
+		model.addAttribute("map",map);
+		resumeService.list(model);
+		return "resume/list";
 	}
 	
 	@GetMapping("content/{id}")
@@ -69,7 +61,7 @@ public class ResumeController {
 	
 	@GetMapping("write/{id}")
 	public String write(@PathVariable String id,Model model){
-		model.addAttribute("loginId",getLoginUser().getLoginId());
+		model.addAttribute("loginId",LoginUser.getId());
 		model.addAttribute("method","put");
 		model.addAttribute("id",id);
 		resumeService.content(model);
@@ -79,7 +71,7 @@ public class ResumeController {
 	@ResponseBody
 	@PostMapping("content")
 	public ResponseEntity<?> content(@RequestParam Map<Object, Object> map,Model model){
-		model.addAttribute("loginId",getLoginUser().getLoginId());
+		model.addAttribute("loginId",LoginUser.getId());
 		model.addAttribute("map", map);
 		resumeService.write(model);
 		return ResponseEntity.ok(model);
@@ -106,6 +98,15 @@ public class ResumeController {
 	}
 	
 	@ResponseBody
+	@DeleteMapping("content")
+	public ResponseEntity<?> delete(@RequestParam Map<Object, Object> map,Model model){
+		model.addAttribute("loginId",LoginUser.getId());
+		model.addAttribute("map", map);
+		resumeService.delete(model);
+		return ResponseEntity.ok(model);
+	}
+	
+	@ResponseBody
 	@GetMapping("auto")
 	public ResponseEntity<?> auto(@RequestParam Map<Object, Object> map,Model model){
 		model.addAttribute("map",map);
@@ -123,7 +124,7 @@ public class ResumeController {
 	
 	@PostMapping("synonym")
 	public ResponseEntity<?> synonym(@RequestParam Map<Object, Object> map,Model model) {
-		model.addAttribute("loginId",getLoginUser().getLoginId());
+		model.addAttribute("loginId",LoginUser.getId());
 		model.addAttribute("map", map);
 		resumeService.addSynonym(model);
 		return ResponseEntity.ok(model);
@@ -144,7 +145,4 @@ public class ResumeController {
 		return "resume/compare";
 	}
 	
-	private User getLoginUser() {
-		return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
 }

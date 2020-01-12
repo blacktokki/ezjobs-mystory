@@ -41,7 +41,7 @@
 
 <div class="chart-container" id="jsonChart2" align="center" 
 	style="height: 100vh; width: 80vw; margin: 0px 0px 0px 160px;">
-	#차트 : 자기소개서의 태그 관한 데이터입니다. 차트에 사용된 데이터는 문장의 시작 단어으로 분류되어진 태그입니다. 시작단어 태그의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
+	#차트 : 자기소개서의 문장에 관한 데이터입니다. 차트에 사용된 데이터는 문장의 시작 단어으로 분류되어진 태그입니다. 시작단어의 빈도에 따라 높은 순으로 보여줍니다.<br><br>
 	<p style="font-size:10px;"> *차트의 막대(bar)를 클릭 시 문장검색으로 이동하여 검색합니다. </p>
 	<canvas id="myChart2"></canvas>
 </div>

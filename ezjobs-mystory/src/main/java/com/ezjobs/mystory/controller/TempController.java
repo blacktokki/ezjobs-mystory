@@ -4,11 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,7 +71,7 @@ public class TempController{
 	@GetMapping("/me")
     public Map<String, Object> me(OAuth2AuthenticationToken auth){
         Map<String, Object> response = new LinkedHashMap<>();
-        OAuth2User oauth2user=auth.getPrincipal();
+       //OAuth2User oauth2user=auth.getPrincipal();
        // response.put("profile",auth/*oauth2user.getAttributes()*/);
        response.put("profile",auth.getAuthorities()/*oauth2user.getAttributes()*/);
        return response;

@@ -99,11 +99,11 @@ public class ResumeService {
 		
 		Page<Resume> resumes;
 		PageRequest pr=PageRequest.of(pageNum,sizeNum,Sort.by(Sort.Direction.ASC,"editDate"));
-		if(op!=null) {
+		if(op!=null|| !isAdmin) {
 			resumes=resumeRepository.findAll(Example.of(resume), pr);
 		}
 		else {
-			List<Resume> resumeList=resumeRepository.findAll();
+			List<Resume> resumeList=resumeRepository.findAll(Example.of(resume));
 			int form=sizeNum*pageNum;
 			resumes=new PageImpl<>(resumeList.subList(form,form+sizeNum), pr, resumeList.size());
 		}

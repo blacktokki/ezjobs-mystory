@@ -5,7 +5,7 @@
 <!-- body -->
 
 <div>
-	<div class="jumbotron text-center  mb-0 p-0  d-none d-md-block">
+	<div class="jumbotron text-center  mb-0 p-0"><!-- d-none d-md-block -->
 		<div id="carouselExampleInterval" class="carousel slide"
 			data-ride="carousel">
 			<div class="carousel-inner">

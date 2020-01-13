@@ -287,20 +287,20 @@ function showTreeMap(){
 				}
 			}
 		}
-	sizeTextList = new Array(2);
-	sizeTextList[0] = new Array();
-	sizeTextList[1] = new Array();
+	var sizeTextList2 = new Array(2);
+	sizeTextList2[0] = new Array();
+	sizeTextList2[1] = new Array();
 	
 	for (var i in y2) {
-		sizeTextList[0].push(y2[i].doc_count);
-		sizeTextList[1].push(y2[i].text);
+		sizeTextList2[0].push(y2[i].doc_count);
+		sizeTextList2[1].push(y2[i].text);
 	}
-	arrSort(sizeTextList);
-	sizeTextList[0].reverse();
-	sizeTextList[1].reverse();
+	arrSort(sizeTextList2);
+	sizeTextList2[0].reverse();
+	sizeTextList2[1].reverse();
 	
-	sizeTextList[0] = sizeTextList[0].slice(0,40); // #데이터출력수
-	sizeTextList[1] = sizeTextList[1].slice(0,40);
+	sizeTextList2[0] = sizeTextList2[0].slice(0,40); // #데이터출력수
+	sizeTextList2[1] = sizeTextList2[1].slice(0,40);
 	
 	var chartColors = new Array();
 	var chartBold = new Array();
@@ -310,7 +310,7 @@ function showTreeMap(){
 	r1mem = 257;
 	var i = 0;
 	
-	while (i < sizeTextList[0].length) { // 랜덤 색상 설정
+	while (i < sizeTextList2[0].length) { // 랜덤 색상 설정
 		while (r1 + r2 + r3 > 550 || r1mem == r1) { 
 			r1 = parseInt(Math.random() * 255);
 			r2 = parseInt(Math.random() * 255);
@@ -327,10 +327,10 @@ function showTreeMap(){
 	var chartinit2={
 			type : 'horizontalBar',
 			data : {
-				labels : sizeTextList[1],
+				labels : sizeTextList2[1],
 				datasets : [ {
 					label : '# 시작 단어 태그 빈도',
-					data : sizeTextList[0],
+					data : sizeTextList2[0],
 					backgroundColor : chartColors,
 					borderColor : chartBold,
 					borderWidth : 1
@@ -339,12 +339,12 @@ function showTreeMap(){
 			options : {
 				 onClick: function(evt, active) { // 클릭시 링크
 				      var Id = active[0]._index;
-				      var charConvert = sizeTextList[1][Id]; 
+				      var charConvert = sizeTextList2[1][Id]; 
 				   // #특수문자주소 : 특수문자 주소를 변환하는 곳
 				      charConvert = charConvert.replaceAll("&", "%26");
 				      charConvert = charConvert.replaceAll("(", "%28");
 				      charConvert = charConvert.replaceAll(")", "%29");
-				      location.href ="/search/list?searchTags="+charConvert;
+				      location.href ="/search/list?searchText="+charConvert;
 				    },
 				scales : {
 					yAxes : [ {

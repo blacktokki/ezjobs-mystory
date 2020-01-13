@@ -61,8 +61,9 @@ public class UserController {
 
 	@ResponseBody
 	@GetMapping("/check_id")
-	public Boolean checkId(@RequestParam String loginId) {
-		return userService.findByLoginId(loginId) == null;
+	public Boolean checkId(@RequestParam String id) {
+		System.out.println(id);
+		return userService.findByLoginId(id) == null;
 	}
 
 	@GetMapping("/join")
@@ -105,7 +106,7 @@ public class UserController {
 
 	@PostMapping("/password")
 	public String passwordNew(@RequestParam Map<Object, Object> map, Model model) {
-		String loginId = (String) map.get("loginId");
+		String loginId = (String) map.get("id");
 		String newPw = UserService.getRamdomPassword(10);
 		String email = (String) map.get("email");
 		User user = userService.findByLoginId(loginId);

@@ -25,6 +25,7 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
             Authentication authentication) throws ServletException, IOException {
     	System.out.println("suc");
     	userService.clearFailureCount(LoginUser.getId());
+    	userService.visit(LoginUser.getId());
     	super.onAuthenticationSuccess(request, response, authentication);
     }
  

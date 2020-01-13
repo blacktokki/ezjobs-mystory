@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -63,10 +64,11 @@ public class ResumeService {
 		Boolean isAdmin=(Boolean)modelMap.get("isAdmin");
 		String page ="1";
 		String size ="20";
+		String op=null;
 		if (map!=null) {
 			page = Optional.ofNullable((String) map.get("page")).orElse(page);// String으로 담음
 			size = Optional.ofNullable((String) map.get("size")).orElse(size);
-			String op = String.valueOf(map.get("op"));
+			op = String.valueOf(map.get("op"));
 			String keyword = String.valueOf(map.get("keyword"));
 			model.addAttribute("op", op);
 			model.addAttribute("keyword", keyword);
@@ -95,8 +97,16 @@ public class ResumeService {
 		int sizeNum = Integer.parseInt(size);
 		model.addAttribute("size", sizeNum);
 		
+		Page<Resume> resumes;
 		PageRequest pr=PageRequest.of(pageNum,sizeNum,Sort.by(Sort.Direction.ASC,"editDate"));
-		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
+		if(op!=null) {
+			resumes=resumeRepository.findAll(Example.of(resume), pr);
+		}
+		else {
+			List<Resume> resumeList=resumeRepository.findAll();
+			int form=sizeNum*pageNum;
+			resumes=new PageImpl<>(resumeList.subList(form,form+sizeNum), pr, resumeList.size());
+		}
 		System.out.println(resumes.getContent().size());
 		model.addAttribute("resumes", resumes);
 		model.addAttribute("pageNavNumber", resumes.getNumber() / 5);

@@ -49,6 +49,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     	}
     	else {
     		// 로그인한 계정에게 권한 부여
+    		userService.visit(name);
     		grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
     		grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_SOCIAL"));
     		if (user.getIsAdmin()) {

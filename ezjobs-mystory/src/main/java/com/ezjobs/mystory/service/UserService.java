@@ -1,5 +1,6 @@
 package com.ezjobs.mystory.service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,6 +45,13 @@ public class UserService {
 	
 	public void addFailureCount(String loginId) {	
 		userRepository.addLoginFailureCount(loginId);
+	}
+	
+	public void visit(String loginId) {
+		User user=new User();
+		user.setId(loginId);
+		user.setVisitDate(new Date());
+		userRepository.updateVisitDate(user);
 	}
 	
 	public void write(Model model) {

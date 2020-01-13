@@ -32,6 +32,12 @@ public interface UserRepository extends JpaRepository<User, String> {
 	@Query(value="update User u set u.loginPw = :#{#user.loginPw}"
 	+ " WHERE u.id = :#{#user.id}")
 	void updatePw(User user);
+	
+	@Transactional
+	@Modifying
+	@Query(value="update User u set u.visitDate = :#{#user.visitDate}"
+	+ " WHERE u.id = :#{#user.id}")
+	void updateVisitDate(User user);
 
 	@Transactional
 	@Modifying

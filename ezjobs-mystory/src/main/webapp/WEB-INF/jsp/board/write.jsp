@@ -29,6 +29,7 @@
 	<div class="card">
 		<form method="post" action="/board/write/${board.id}">
 			<input type="hidden" name="_method" value="${method}">
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			<div class="card-body">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
@@ -41,7 +42,35 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text">글내용</span>
 							</div>
-							<textarea class="form-control" name="text" rows="15">${board.text}</textarea>
+							<textarea class="form-control" id="form-content" name="text" rows="15">${board.text}</textarea>
+							<script type="text/javascript">						
+								var editor =CKEDITOR.replace('form-content',{
+							 		removePlugins: 'contextmenu,tabletools,tableselection',
+									height: 500,
+									language:'korean',
+									toolbar:[
+										{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo','Redo2'] },
+										{ name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
+										{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+										{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align'], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+										{ name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+										{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+										{ name: 'about', items: [ 'About' ] }
+									]
+								 });
+								/*
+								console.log(editor);
+								editor.addCommand("mySimpleCommand", { // create named command
+									exec : function(edt) {
+										alert($(edt.getData()).text());
+									}
+								});
+								editor.ui.addButton('Redo2',{ // add new button and bind our command
+									label : "Click me",
+									command : 'mySimpleCommand',
+									icon : 'https://avatars1.githubusercontent.com/u/5500999?v=2&s=16'
+								});*/
+							</script>
 						</div>
 						
 				<button type="submit" class="btn btn-primary resume-submit">글올리기</button>

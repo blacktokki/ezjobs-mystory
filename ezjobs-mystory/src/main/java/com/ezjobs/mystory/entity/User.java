@@ -11,11 +11,8 @@ public class User {
     
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-	
 	@Column(name="login_id", nullable = false)
-    private String loginId;
+    private String id;
 	
     @Column(name="login_pw", nullable = false)
     private String loginPw;
@@ -27,21 +24,29 @@ public class User {
     private String email;
     
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="regist_date", nullable = false)
+    @Column(name="regist_date", nullable = false , insertable=false)
     private Date registDate;
     
-    @Column(name="visit_cnt", nullable = false)
-    private Integer visitCnt;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="visit_date", nullable = false , insertable=false)
+    private Date visitDate;
 
-    @Column(name="rel_id", nullable = false)
-    private String relId;
-    
-    @Column(name="rel_login_id", nullable = false)
-    private String relLoginId;
+    @Column(name="login_rel", nullable = false , insertable=false)
+    private String loginRel;
     
     @Column(name="sex", nullable = false)
     private String sex;
     
     @Column(name="grad", nullable = false)
     private String grad;
+    
+    @Column(name="state", nullable = false)
+    private String state;
+    
+    @Column(name="is_admin", nullable = false)
+    private Boolean isAdmin;
+    
+    @Column(name="login_failure_cnt", nullable = false,insertable=false)
+    private Integer loginFailureCnt;
+    
 }

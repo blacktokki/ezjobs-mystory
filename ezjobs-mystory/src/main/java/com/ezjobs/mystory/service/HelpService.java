@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.persistence.Id;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Board;
-import com.ezjobs.mystory.entity.Resume;
+import com.ezjobs.mystory.entity.BoardImpl;
 import com.ezjobs.mystory.repository.BoardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,9 +33,9 @@ public class HelpService{
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 5);
 		
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("notice");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);
 		
 		model.addAttribute("boards",boards);
 	}
@@ -48,9 +47,9 @@ public class HelpService{
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 5);
 		
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("qna");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);
 		
 		model.addAttribute("boards",boards);
 	}
@@ -62,9 +61,9 @@ public class HelpService{
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 5);
 		
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("faq");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);
 		System.out.println(boards.getContent().size());
 		model.addAttribute("boards",boards);
 	}
@@ -87,7 +86,7 @@ public class HelpService{
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String userId=(String)modelMap.get("userId");
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setUserId(userId);
 		board.setBoardType("Qna");
 		board.setGoodCnt(0);
@@ -99,7 +98,7 @@ public class HelpService{
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		int id=Integer.parseInt(modelMap.get("id").toString());
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setId(id);
 		boardRepository.update(board);
 	}
@@ -112,9 +111,9 @@ public class HelpService{
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
 		PageRequest pr=PageRequest.of(pageNum, 5,Sort.by(Sort.Direction.DESC,"editDate"));
 				
-		Board board=new Board();
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("Board");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);
 		
 		model.addAttribute("boardscommunity",boards);
 	}

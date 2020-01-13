@@ -24,6 +24,12 @@
 					</div>
 					<input type="text" class="form-control" name="company"
 						value="${resume.company}">
+						
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="basic-addon2">마감일</span>
+					</div>
+					<input type="text" class="form-control write-date" name="closeDate"
+						value="${resume.closeDate}">
 				</div>
 
 				<div class="input-group mb-3">
@@ -39,9 +45,12 @@
 					</div>
 					<textarea class="form-control write-answer" id=" write-answer-i" name="answer" rows="20">${resume.answer}</textarea>
 				</div>
-				<button type="submit" class="btn btn-primary">글올리기</button>
+				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#exampleModal">검토하기</button>
+				<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>
+				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
+				<button type="button" class="btn btn-primary resume-export">내보내기</button>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
-				<input type="hidden" class="resume-method" name="_method" value="${method}" />
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>
 		</form>
 	</div>

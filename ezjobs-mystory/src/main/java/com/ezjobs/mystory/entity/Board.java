@@ -7,6 +7,7 @@ import lombok.Data;
 
 @Entity
 @Table(name = "board")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
 public class Board {
 
@@ -24,17 +25,11 @@ public class Board {
 	@Column(name = "user_id", nullable = false)
 	private String userId;
 
-	@Column(name = "intro_dept", nullable = true)
-	private String introDept;
-
-	@Column(name = "intro_type", nullable = true)
-	private String introType;
-
 	@Column(name = "text", nullable = true)
 	private String text;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "edit_date", nullable = false)
+	@Column(name = "edit_date", nullable = false ,insertable=false)
 	private Date editDate;
 
 	@Column(name = "edit_group", nullable = false)
@@ -45,4 +40,5 @@ public class Board {
 
 	@Column(name = "bad_cnt", nullable = false)
 	private Integer badCnt;
+	
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
 <!-- body -->
 
@@ -57,9 +58,50 @@
 		${board.text}
 	</div>
 	<p>
-		<a class="btn btn-secondary btn-sm" href="/board/community"
-			role="button">목록</a>
-		<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
-			role="button">수정</a>
+	<sec:authorize access="isAuthenticated()">
+		<sec:authentication property="principal.id" var="currentUserName"/>
+		<c:if test="${currentUserName == board.userId}">
+			<a class="btn btn-secondary btn-sm" href="/board/community"
+				role="button">목록</a>
+			<a class="btn btn-secondary btn-sm" href="/board/write/${board.id}"
+				role="button">수정</a>
+			<button type="button" data-toggle="modal"
+				data-target="#delete" data-whatever="@mdo"
+				style="border: 0; background: 0;">
+				<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
+			</button>
+		</c:if>
+		<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+			<button type="button" data-toggle="modal"
+				data-target="#delete" data-whatever="@mdo"
+				style="border: 0; background: 0;">
+				<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
+			</button>
+		</sec:authorize>
+	</sec:authorize>
+	<div class="modal" id="delete" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">게시글 삭제</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<form method="post" action="/board/archive/${board.id}">
+						<div class="modal-body">
+							<p>정말로 "${board.id}. ${board.title}" 게시글을 삭제 하시겠습니까?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary"
+								data-dismiss="modal">취소</button>
+							<button type="submit" class="btn btn-danger">삭제</button>
+						</div>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+					</form>
+				</div>
+			</div>
+		</div>
 </div>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

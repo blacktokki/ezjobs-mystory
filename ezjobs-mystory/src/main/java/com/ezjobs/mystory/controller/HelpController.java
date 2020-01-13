@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ezjobs.mystory.service.BoardService;
 import com.ezjobs.mystory.service.HelpService;
 
 @Controller

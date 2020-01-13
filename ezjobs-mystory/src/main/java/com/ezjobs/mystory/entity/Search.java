@@ -3,8 +3,6 @@ package com.ezjobs.mystory.entity;
 import java.util.*; // 날짜
 import javax.persistence.*;
 
-import org.joda.time.DateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

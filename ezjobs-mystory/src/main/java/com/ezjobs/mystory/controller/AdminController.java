@@ -2,56 +2,54 @@ package com.ezjobs.mystory.controller;
 
 import org.springframework.web.bind.annotation.*;
 
-import com.ezjobs.mystory.service.AdminService;
+import com.ezjobs.mystory.service.TagService;
+import com.ezjobs.mystory.entity.User;
+import com.ezjobs.mystory.service.BoardService;
+import com.ezjobs.mystory.service.ResumeService;
+import com.ezjobs.mystory.service.UserService;
 
 import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
-
-/*************
- * 
- * @author CMS
- *
- *************/
 
 @Controller
 @RequestMapping("/admin")//상위 서브도메인
 public class AdminController {
 	@Inject
-	private AdminService adminService;
+	private TagService tagService;
 	
-	@GetMapping("/personal/{id}")//글내용 보기 /board/content
-	public String content(@PathVariable String id,Model model){
-		model.addAttribute("id",id);
-		adminService.personal(model);
+	@Inject
+	private UserService userService;
+	
+	@Inject
+	private ResumeService resumeService;
+	
+	@Inject
+	private BoardService boardService;
+	
+	@GetMapping("/personal/{loginId}")//글내용 보기 /board/content
+	public String content(@PathVariable String loginId,Model model){
+		model.addAttribute("loginId",loginId);
+		userService.info(model);
 		return "admin/personal";
 	}
 	
 	@GetMapping("/user")
 	public String user(@RequestParam Map<Object,Object> map, Model model){
 		model.addAttribute("map",map);
-		adminService.user(model);
-		return "admin/user";
-	}
-	
-	@PostMapping("/user")
-	public String user(@RequestParam Map<Object,Object> map, Model model, String op, String sch, int showNum){
-		model.addAttribute("map",map);
-		model.addAttribute("op",op);
-		model.addAttribute("sch",sch);
-		model.addAttribute("showNum", showNum);
-		adminService.user(model);
+		userService.list(model);
 		return "admin/user";
 	}
 	
 	@GetMapping("/tag")
 	public String tag(@RequestParam Map<Object,Object> map, Model model){
 		model.addAttribute("map",map);
-		adminService.tag(model);
+		tagService.list(model);
 		return "admin/tag";
 	}
 	
@@ -63,26 +61,24 @@ public class AdminController {
 		model.addAttribute("upTagId",upTagId);
 		model.addAttribute("upTag",upTag);
 		model.addAttribute("delTagId",delTagId);
-		adminService.tag(model);
+		tagService.list(model);
 		return "admin/tag";
 	}
 	
 	@GetMapping("/resume")
 	public String resume(@RequestParam Map<Object,Object> map, Model model){
+		User user=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("isAdmin",user.getIsAdmin());
 		model.addAttribute("map",map);
-	//	adminService.resume(model);
-		adminService.tag(model); // 아직 자소서관리 안돌아가서 일단 이렇게 해놧어요 ㅠㅠ
+		resumeService.list(model);
 		return "admin/resume";
 	}
 	
-	@PostMapping("/resume")
-	public String resume(@RequestParam Map<Object,Object> map, Model model, String op, String sch, int showNum){
+	@GetMapping("/board")
+	public String board(@RequestParam Map<Object,Object> map, Model model){
 		model.addAttribute("map",map);
-		model.addAttribute("op",op);
-		model.addAttribute("sch",sch);
-		model.addAttribute("showNum", showNum);
-	//	adminService.resume(model);
-		adminService.tag(model); // 아직 자소서관리 안돌아가서 일단 이렇게 해놧어요 ㅠㅠ
-		return "admin/resume";
+		boardService.archive(model);
+		return "admin/board";
 	}
+	
 }

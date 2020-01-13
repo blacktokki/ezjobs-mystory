@@ -1,17 +1,23 @@
 package com.ezjobs.mystory.controller;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import javax.inject.Inject;
+
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+//import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ezjobs.mystory.service.KeywordAnalysisService;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
+import com.ezjobs.mystory.util.UserSha256;
 @Controller
 @RequestMapping("/temp")//상위 서브도메인
 public class TempController{
@@ -24,22 +30,6 @@ public class TempController{
 	
 	@Inject
 	ResumeService resumeService;
-
-	@GetMapping("/login")//로그인,로그아웃후 인덱스 페이지로 넘어감 /temp/login
-	public String login(HttpSession session,Model model) {
-		if(session.getAttribute("loginId")==null)
-			session.setAttribute("loginId","DUMMY_LOGIN_ID");
-		else
-			session.removeAttribute("loginId");
-		System.out.println(session.getAttribute("loginId"));
-		return "redirect:/index";
-	}
-	
-	@GetMapping("/login/fail")//로그인 필요 메세지      /user/fail로 옮겨야 함
-	public String loginFail(RedirectAttributes redirectAttr){
-		redirectAttr.addFlashAttribute("errorMessage", "로그인이 필요합니다.");
-		return "redirect:/user/login";//    /user/login으로 옮겨야 함
-	}
 	
 	/*
 	@GetMapping("/autolabel")//키워드 분석기
@@ -70,4 +60,20 @@ public class TempController{
 	public void tag(Model model){
 		resumeService.tagsearch(model);
 	}
+	
+	@ResponseBody
+	@GetMapping("/pw")//암호화용
+	public String tag(@RequestParam String pw, Model model){
+		return UserSha256.encrypt(pw);
+	}
+	
+	@ResponseBody
+	@GetMapping("/me")
+    public Map<String, Object> me(OAuth2AuthenticationToken auth){
+        Map<String, Object> response = new LinkedHashMap<>();
+       //OAuth2User oauth2user=auth.getPrincipal();
+       // response.put("profile",auth/*oauth2user.getAttributes()*/);
+       response.put("profile",auth.getAuthorities()/*oauth2user.getAttributes()*/);
+       return response;
+    }
 }

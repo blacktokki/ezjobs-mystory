@@ -32,16 +32,8 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row">회원번호</th>
-						<td>${user.id}</td>
-					</tr>
-					<tr>
 						<th scope="row">아이디</th>
-						<td>${user.loginId}</td>
-					</tr>
-					<tr>
-						<th scope="row">비밀번호</th>
-						<td>${user.loginPw}</td>
+						<td>${user.id}</td>
 					</tr>
 					<tr>
 						<th scope="row">이름</th>
@@ -56,16 +48,12 @@
 						<td>${user.registDate}</td>
 					</tr>
 					<tr>
-						<th scope="row">방문횟수</th>
-						<td>${user.visitCnt}</td>
+						<th scope="row">방문일</th>
+						<td>${user.visitDate}</td>
 					</tr>
 					<tr>
 						<th scope="row">연동서비스명</th>
-						<td>${user.relId}</td>
-					</tr>
-					<tr>
-						<th scope="row">연동계정</th>
-						<td>${user.relLoginId}</td>
+						<td>${user.loginRel}</td>
 					</tr>
 					<tr>
 						<th scope="row">성별</th>

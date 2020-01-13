@@ -15,26 +15,25 @@
 	<div class="card card-title" style="padding: 10px">
 		<div class="row">
 			<div class="col-6">
-				<form method="post" action="#">
+				<form method="get">
 					<div class="input-group">
 						<div class="input-group-prepend">
 							<label class="input-group-text" for="inGroup01">검색 옵션</label>
 						</div>
 						<select class="custom-select" id="inGroup01" name="op">
-							<option value="tagSearch">태그 명</option>
-							<option value="question">자기소개서 문항</option>
-							<option value="answer">자기소개서 내용</option>
-							<option value="companry">회사명</option>
-							<option value="userId">작성자</option>
-						</select> <input name="sch" type="text" class="form-control"
-							placeholder="검색어" aria-label="Recipient's username"
+							<option value="tagSearch" <c:if test="${op eq 'tagSearch'}">selected</c:if>>태그 명</option>
+							<option value="question" <c:if test="${op eq 'question'}">selected</c:if>>자기소개서 문항</option>
+							<option value="company" <c:if test="${op eq 'company'}">selected</c:if>>회사명</option>
+							<option value="userId" <c:if test="${op eq 'userId'}">selected</c:if>>작성자</option>
+						</select> <input name="keyword" type="text" class="form-control"
+							placeholder="검색어" aria-label="Recipient's username" value=" ${keyword}"
 							aria-describedby="button-addon2">
 						<div class="input-group-append">
 							<button class="btn btn-outline-secondary" type="submit"
 								id="button-addon2">검색</button>
 						</div>
 					</div>
-					<input type="hidden" name="showNum" value="${showNum }"> <input
+					<input type="hidden" name="size" value="${size }"> <input
 						type="hidden" name="page" value="${ pageNavNumber + 1}">
 				</form>
 			</div>
@@ -43,11 +42,11 @@
 					<div class="input-group-prepend">
 						<label class="input-group-text" for="inGroup02">페이지 당</label>
 					</div>
-					<form method="get" action="#">
+					<form method="get">
 						<input type="hidden" name="page" value="${ pageNavNumber + 1}">
-						<select class="custom-select" id="inGroup02" name="showNum"
+						<select class="custom-select" id="inGroup02" name="size"
 							onchange="this.form.submit()">
-							<option selected>현재 ${showNum} 개</option>
+							<option selected>현재 ${size} 개</option>
 							<option value=10>10 개 보기</option>
 							<option value=20>20 개 보기</option>
 							<option value=30>30 개 보기</option>
@@ -66,8 +65,7 @@
 		<table class="table table-sm table-hover">
 			<colgroup>
 				<col width="20">
-				<col width="50">
-				<col width="80">
+				<col width="75">
 				<col width="*">
 				<col width="300">
 				<col width="100">
@@ -84,7 +82,6 @@
 					<th scope="col">#</th>
 					<th scope="col">태그</th>
 					<th scope="col">자기소개서 문항</th>
-					<th scope="col">자기소개서 내용</th>
 					<th scope="col">회사명</th>
 					<th scope="col">작성자</th>
 					<th scope="col">수정</th>
@@ -95,31 +92,12 @@
 			<!-- 테이블 내용 채우기 -->
 			<tbody class="text-center">
 				<!-- 각 행들 -->
-				
-				<tr>
-					<td><input type="checkbox" name="tmp" value="null"/></td>
-						<td>1</td>
-						<td align="left">학업 취업</td>
-						<td align="left">동아대학교 테스트 자기소개서</td>
-						<td align="left">안녕하세요. 저는 테스트 내용입니다.</td>
-						<td>동아대학교</td>
-						<td>test78697</td>
-						<td><button style="border: 0; background: 0;">
-								<i class="fa fa-pencil"></i>
-							</button></td>
-						<td><button style="border: 0; background: 0;">
-								<i class="fa fa-times-circle" style="color: #FF8585"></i>
-							</button></td>
-				</tr>
-				
-				
 				<c:forEach var="item" items="${resumes.content}">
 					<tr>
 						<td><input type="checkbox" name="checkRow" value="${item.id}" /></td>
 						<td>${item.id}</td>
 						<td align="left">${item.tags}</td>
 						<td align="left">${item.question}</td>
-						<td align="left">${item.answer}</td>
 						<td>${item.company}</td>
 						<td>${item.userId}</td>
 						<td><button>
@@ -148,13 +126,13 @@
 								</div>
 								<form method="post" action="#">
 									<div class="modal-body">
-										<p>정말로 "${item.id }. ${item.name }" 태그를 삭제 하시겠습니까?</p>
+										<p>정말로 "${item.id }. ${item.question }" 태그를 삭제 하시겠습니까?</p>
 									</div>
 									<div class="modal-footer">
 										<button type="cancel" class="btn btn-secondary"
 											data-dismiss="modal">취소</button>
 										<button type="submit" class="btn btn-danger">삭제</button>
-										<input type="hidden" name="showNum" value="${showNum}">
+										<input type="hidden" name="size" value="${size}">
 										<input type="hidden" name="delTagId" value="${item.id}">
 								</form>
 							</div>
@@ -179,7 +157,7 @@
 		<c:forEach var="item" begin="${pageNavNumber*5+1}"
 			end="${(pageNavNumber+1)*5}">
 			<li class="page-item"><a class="page-link"
-				href="?page=${item}&showNum=${showNum}">${item}</a></li>
+				href="?page=${item}&size=${size}">${item}</a></li>
 		</c:forEach>
 		<li class="page-item"><a class="page-link"
 			href="?page=${(pageNavNumber+1)*5+1}" aria-label="Next"> <span

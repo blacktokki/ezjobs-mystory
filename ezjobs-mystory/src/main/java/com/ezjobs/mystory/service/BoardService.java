@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Board;
+import com.ezjobs.mystory.entity.BoardArchive;
+import com.ezjobs.mystory.entity.BoardImpl;
+import com.ezjobs.mystory.repository.BoardArchiveRepository;
 import com.ezjobs.mystory.repository.BoardRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,6 +27,9 @@ public class BoardService {
 	BoardRepository boardRepository;
 	
 	@Inject
+	BoardArchiveRepository boardArchiveRepository;
+	
+	@Inject
 	ObjectMapper mapper;
 	
 	public void community(Model model){
@@ -31,17 +37,12 @@ public class BoardService {
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
 		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
-		PageRequest pr=PageRequest.of(pageNum, 3,Sort.by(Sort.Direction.DESC,"editDate"));
-		Board board=new Board();
+		PageRequest pr=PageRequest.of(pageNum, 5,Sort.by(Sort.Direction.DESC,"editDate"));
+		BoardImpl board=new BoardImpl();
 		board.setBoardType("Board");
-		Page<Board> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
+		Page<BoardImpl> boards=boardRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
 		model.addAttribute("boards",boards);
 		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
-		//System.out.println(boards.getNumberOfElements());
-		//System.out.println(boards.getSize());
-		//System.out.println(boards.getNumber());
-		//System.out.println(boards.getTotalElements());
-		//System.out.println(boards.getTotalPages());
 		
 	}
 
@@ -56,19 +57,64 @@ public class BoardService {
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String userId=(String)modelMap.get("userId");
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setUserId(userId);
 		board.setEditDate(new Date());
 		board.setBoardType("Board");
 		boardRepository.save(board);
+		model.addAttribute("id",board.getId());
 	}
 	
 	public void edit(Model model){
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		int id=Integer.parseInt(modelMap.get("id").toString());
-		Board board=mapper.convertValue(map, Board.class);//board로 변환
+		BoardImpl board=mapper.convertValue(map, BoardImpl.class);//board로 변환
 		board.setId(id);
 		boardRepository.update(board);
+	}
+	
+	public boolean isWrited(Integer id,String loginId){
+		BoardImpl board=new BoardImpl();
+		board.setId(id);
+		board.setUserId(loginId);
+		return boardRepository.findOne(Example.of(board)).orElse(null)!=null;
+	}
+
+	public void moveArchive(Model model) {
+		Map<String,Object> modelMap=model.asMap();
+		int id=Integer.parseInt(modelMap.get("id").toString());
+		Board board=(Board)boardRepository.findById(id).get();
+		BoardArchive boardArchive=mapper.convertValue(board, BoardArchive.class);//board로 변환
+		boardArchive.setRemoveDate(new Date());
+		boardArchiveRepository.save(boardArchive);
+		boardRepository.deleteById(id);
+	}
+	
+	public void archive(Model model){
+		Map<String,Object> modelMap=model.asMap();
+		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+		String page=Optional.ofNullable((String)map.get("page")).orElse("1");//String으로 담음
+		int pageNum=Integer.parseInt(page)-1;//값이없을경우 0
+		String size = Optional.ofNullable((String) map.get("size")).orElse("20");
+		int sizeNum = Integer.parseInt(size);
+		model.addAttribute("size", sizeNum);
+		PageRequest pr=PageRequest.of(pageNum, sizeNum,Sort.by(Sort.Direction.DESC,"editDate"));
+		String op = String.valueOf(map.get("op"));
+		String keyword = String.valueOf(map.get("keyword"));
+		model.addAttribute("op", op);
+		model.addAttribute("keyword", keyword);
+		
+		BoardArchive board=new BoardArchive();
+		if (op.equals("userId")) {
+			board.setUserId(keyword);
+		}
+		else if(op.equals("title")) {
+			board.setTitle(keyword);
+		}
+		Page<BoardArchive> boards=boardArchiveRepository.findAll(Example.of(board), pr);//pr을 기준으로 검색
+		model.addAttribute("boards",boards);
+		model.addAttribute("pageNavNumber",boards.getNumber()/5);//페이징바의 번호
+		
 	}
 }

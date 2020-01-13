@@ -1,32 +1,21 @@
 package com.ezjobs.mystory.service;
 
-import java.io.PrintStream;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.activation.CommandMap;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.jasper.tagplugins.jstl.core.Out;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.ezjobs.mystory.entity.Board;
-import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.repository.UserRepository;
+import com.ezjobs.mystory.util.UserSha256;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -38,65 +27,42 @@ public class UserService {
 	@Inject
 	ObjectMapper mapper;
 	
-	
-
-	public void login(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-
-	}
+	/*
 	public void out(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
-	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+	     Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 
+	}*/
+	
+	public User findByLoginId(String loginId) {
+		return userRepository.findById(loginId).get();
+	}
+
+	public void clearFailureCount(String loginId) {	
+		userRepository.clearLoginFailureCount(loginId);
 	}
 	
-
-	public void fail(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-
+	public void addFailureCount(String loginId) {	
+		userRepository.addLoginFailureCount(loginId);
 	}
-
-	 public void user(Model model) throws Exception{
-	      Map<String,Object> modelMap=model.asMap();
-	      Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-	      String id=(String)map.get("loginId");
-	      String pw=(String)map.get("loginPw");
-	      System.out.println("입력값:"+id+"\n"+pw);
-	      List<User> list=userRepository.findByLoginIdAndLoginPw(id, pw);
-	     // System.out.println(list.size());
-	      if(0==list.size()) {
-	    	  throw new Exception();  
-	      }
-	   }
-	 
-	private void alert(String string) {
-		// TODO Auto-generated method stub
-		
+	
+	public void visit(String loginId) {
+		User user=new User();
+		user.setId(loginId);
+		user.setVisitDate(new Date());
+		userRepository.updateVisitDate(user);
 	}
-
-
+	
 	public void write(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setRegistDate(new Date());
+		String pw=user.getLoginPw();
+		user.setLoginPw(UserSha256.encrypt(pw));
 		userRepository.save(user);		
 	}
-	
-	public void modify(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		User user=mapper.convertValue(map, User.class);//
-		userRepository.save(user);		
-	}
-
 
 	public void edit(Model model) {
 		// TODO Auto-generated method stub
@@ -104,57 +70,70 @@ public class UserService {
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
 		String loginId=modelMap.get("loginId").toString();
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setLoginId(loginId);
-		userRepository.update(user);
+		user.setId(loginId);
+		userRepository.updateWithoutPw(user);
 	}
-
-
-	public void content(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		int id=Integer.parseInt(modelMap.get("id").toString());
-		User user=userRepository.findById(id).get();//id로 board 찾기
-		model.addAttribute("user",user);
-	}
-
-
-	/*
-	public void info(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		String userId=modelMap.get("loginId").toString();
-		String name=modelMap.get("name").toString();
-		Resume resume=new Resume();
-		Resume resume1=new Resume();
-		resume.setUserId(userId);
-		resume.setUserId(name);
-		model.addAttribute("resume",resume);
-		model.addAttribute("resume1",resume1);
-	}
-	*/
-	
 
 	public void info(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
-		String userId=modelMap.get("loginId").toString();
+		String loginId=(String)modelMap.get("loginId");
 		User user=new User();
-		System.out.println(userId);
-		user.setLoginId(userId);
-		List<User> users=userRepository.findAll(Example.of(user));
+		user.setId(loginId);
 		user=userRepository.findOne(Example.of(user)).get();
+		user.setLoginPw("");
 		model.addAttribute("user",user);
-		System.out.println(users.size());
 	}
-
 	
 	public void list(Model model) {
-		// TODO Auto-generated method stub
+		Map<String, Object> modelMap = model.asMap();
+		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
+		String page = Optional.ofNullable((String) map.get("page")).orElse("1");// String으로 담음
+		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0 //shownum->size, 
+		String size = Optional.ofNullable((String) map.get("size")).orElse("20");
+		int sizeNum = Integer.parseInt(size);
+		model.addAttribute("size", sizeNum);
+		PageRequest pr = PageRequest.of(pageNum, sizeNum, Sort.by(Sort.Direction.DESC, "id"));
+		String op = String.valueOf(map.get("op"));
+		String keyword = String.valueOf(map.get("keyword"));
+		model.addAttribute("op", op);
+		model.addAttribute("keyword", keyword);
+		
+		Page<User> re;
+		if (op.equals("loginSearch")) {
+			re = userRepository.findByIdContaining(pr, keyword);
+		}
+		else {
+			re = userRepository.findAll(pr);
+			System.out.println("s:" + re.getSize());
+		}
+		model.addAttribute("users", re);
+		model.addAttribute("pageNavNumber", re.getNumber() / 5);
+	}
+	
+	public void changePw(Model model) {
 		Map<String,Object> modelMap=model.asMap();
-		String userId=modelMap.get("loginId").toString();
-		String name=modelMap.get("name").toString();
-		Resume resume=new Resume();
-		resume.setUserId(userId);
-		resume.setUserId(name);
+		User user=new User();
+		user.setId((String)modelMap.get("loginId"));
+		String loginPw=(String)modelMap.get("newPw");
+		//System.out.println(loginPw);
+		user.setLoginPw(UserSha256.encrypt(loginPw));
+		userRepository.updatePw(user);
+	}
+	
+	public static String getRamdomPassword(int len) {
+		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+				'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+		int idx = 0;
+		StringBuffer sb = new StringBuffer();
+		// System.out.println("charSet.length :::: " + charSet.length);
+
+		for (int i = 0; i < len; i++) {
+			idx = (int) (charSet.length * Math.random()); // 36 * 생성된 난수를 Int로 추출 (소숫점제거)
+			// System.out.println("idx :::: " + idx);
+			sb.append(charSet[idx]);
+		}
+		return sb.toString();
 	}
 }

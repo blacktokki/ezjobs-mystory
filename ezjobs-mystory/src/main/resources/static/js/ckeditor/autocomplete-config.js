@@ -18,6 +18,8 @@ function matchCallback( text, offset ) {
     // Get the text before the caret.
     var keywords = text.slice( 0, offset ).split(/다 |\.|\n/);
     var keyword=keywords[keywords.length-1];
+    if (offset==0)
+    	return null;
     return { start: offset-keyword.length, end: offset };
 }
 

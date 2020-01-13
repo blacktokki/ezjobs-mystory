@@ -69,7 +69,6 @@
 				<col width="30">
 				<col width="30">
 				<col width="120">
-				<col width="120">
 				<col width="*">
 				<col width="50">
 				<col width="200">
@@ -81,7 +80,6 @@
 					<th scope="col"><input type="checkbox" name="checkAll"
 						id="th_checkAll" onclick='checkAll();' /></th>
 					<th scope="col"></th>
-					<th scope="col">회원번호</th>
 					<th scope="col">이름</th>
 					<th scope="col">유저 아이디</th>
 					<th scope="col"><i class="fa fa-search"></i></th>
@@ -103,7 +101,6 @@
 								<i class="fa fa-angle-down"></i>
 							</button>
 						</td>
-						<td scope="row">${item.id}</td>
 						<td>${item.name}</td>
 
 						<!-- 드롭다운 부분 -->

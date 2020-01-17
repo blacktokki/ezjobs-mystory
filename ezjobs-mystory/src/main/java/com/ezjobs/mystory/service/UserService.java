@@ -35,21 +35,21 @@ public class UserService {
 
 	}*/
 	
-	public User findByLoginId(String loginId) {
-		return userRepository.findById(loginId).get();
+	public User findByLoginId(String id) {
+		return userRepository.findById(id).orElse(null);
 	}
 
-	public void clearFailureCount(String loginId) {	
-		userRepository.clearLoginFailureCount(loginId);
+	public void clearFailureCount(String id) {	
+		userRepository.clearLoginFailureCount(id);
 	}
 	
-	public void addFailureCount(String loginId) {	
-		userRepository.addLoginFailureCount(loginId);
+	public void addFailureCount(String id) {
+		userRepository.addLoginFailureCount(id);
 	}
 	
-	public void visit(String loginId) {
+	public void visit(String id) {
 		User user=new User();
-		user.setId(loginId);
+		user.setId(id);
 		user.setVisitDate(new Date());
 		userRepository.updateVisitDate(user);
 	}
@@ -61,25 +61,26 @@ public class UserService {
 		User user=mapper.convertValue(map, User.class);//board로 변환
 		String pw=user.getLoginPw();
 		user.setLoginPw(UserSha256.encrypt(pw));
-		userRepository.save(user);		
+		user.setIsAdmin(false);
+		userRepository.save(user);
 	}
 
 	public void edit(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
 		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		String loginId=modelMap.get("loginId").toString();
+		String id=modelMap.get("id").toString();
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setId(loginId);
+		user.setId(id);
 		userRepository.updateWithoutPw(user);
 	}
 
 	public void info(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
-		String loginId=(String)modelMap.get("loginId");
+		String id=(String)modelMap.get("id");
 		User user=new User();
-		user.setId(loginId);
+		user.setId(id);
 		user=userRepository.findOne(Example.of(user)).get();
 		user.setLoginPw("");
 		model.addAttribute("user",user);
@@ -114,7 +115,7 @@ public class UserService {
 	public void changePw(Model model) {
 		Map<String,Object> modelMap=model.asMap();
 		User user=new User();
-		user.setId((String)modelMap.get("loginId"));
+		user.setId((String)modelMap.get("id"));
 		String loginPw=(String)modelMap.get("newPw");
 		//System.out.println(loginPw);
 		user.setLoginPw(UserSha256.encrypt(loginPw));

@@ -4,13 +4,14 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ezjobs.mystory.service.TagService;
 import com.ezjobs.mystory.entity.User;
-import com.ezjobs.mystory.service.BoardService;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.UserService;
+import com.ezjobs.mystory.service.board.BoardService;
 
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,8 @@ public class AdminController {
 	private ResumeService resumeService;
 	
 	@Inject
-	private BoardService boardService;
+	@Named("boardArchiveService")
+	private BoardService<?> boardService;
 	
 	@GetMapping("/personal/{loginId}")//글내용 보기 /board/content
 	public String content(@PathVariable String loginId,Model model){
@@ -40,21 +42,21 @@ public class AdminController {
 	}
 	
 	@GetMapping("/user")
-	public String user(@RequestParam Map<Object,Object> map, Model model){
+	public String user(@RequestParam Map<String,Object> map, Model model){
 		model.addAttribute("map",map);
 		userService.list(model);
 		return "admin/user";
 	}
 	
 	@GetMapping("/tag")
-	public String tag(@RequestParam Map<Object,Object> map, Model model){
+	public String tag(@RequestParam Map<String,Object> map, Model model){
 		model.addAttribute("map",map);
 		tagService.list(model);
 		return "admin/tag";
 	}
 	
 	@PostMapping("/tag")
-	public String tag(@RequestParam Map<Object,Object> map, Model model, String sch, int showNum, String upTag, String upTagId, String delTagId){
+	public String tag(@RequestParam Map<String,Object> map, Model model, String sch, int showNum, String upTag, String upTagId, String delTagId){
 		model.addAttribute("map",map);
 		model.addAttribute("sch",sch);
 		model.addAttribute("showNum", showNum);
@@ -66,7 +68,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/resume")
-	public String resume(@RequestParam Map<Object,Object> map, Model model){
+	public String resume(@RequestParam Map<String,Object> map, Model model){
 		User user=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("isAdmin",user.getIsAdmin());
 		model.addAttribute("map",map);
@@ -75,9 +77,12 @@ public class AdminController {
 	}
 	
 	@GetMapping("/board")
-	public String board(@RequestParam Map<Object,Object> map, Model model){
-		model.addAttribute("map",map);
-		boardService.archive(model);
+	public String board(@RequestParam Map<String,Object> map, Model model){
+		model.addAttribute("boards",boardService.list(map));
+		model.addAttribute("page", map.get("page"));
+		model.addAttribute("size", map.get("size"));
+		model.addAttribute("op", map.get("op"));
+		model.addAttribute("keyword", map.get("keyword"));
 		return "admin/board";
 	}
 	

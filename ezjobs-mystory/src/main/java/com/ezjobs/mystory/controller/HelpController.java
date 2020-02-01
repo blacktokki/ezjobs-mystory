@@ -2,8 +2,6 @@ package com.ezjobs.mystory.controller;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +15,20 @@ import com.ezjobs.mystory.service.board.BoardService;
 import com.ezjobs.mystory.service.help.HelpService;
 import com.ezjobs.mystory.util.LoginUser;
 
+import lombok.AllArgsConstructor;
+
+
 @Controller
+@AllArgsConstructor
 @RequestMapping("/help")
 public class HelpController {
 	
-	@Inject
 	private HelpService noticeService;
 
-	@Inject 
 	private HelpService qnaService;
 	
-	@Inject 
 	private HelpService faqService;
 	
-	@Inject 
 	private BoardService<?> communityService;
 	
 	@GetMapping("/faq")

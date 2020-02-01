@@ -37,26 +37,7 @@
 					<input type="hidden" name="size" value="${size}">
 				</form>
 			</div>
-			<div class="col offset-3">
-				<div class="input-group">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="inGroup02">페이지 당</label>
-						</div>
-					<form method="get">
-						<input type="hidden" name="page" value="${page+1}">
-						<select class="custom-select" id="inGroup02" name="size"
-							onchange="this.form.submit()">
-							<option selected>현재 ${size} 명</option>
-							<option value=10>10 명 보기</option>
-							<option value=20>20 명 보기</option>
-							<option value=30>30 명 보기</option>
-							<option value=50>50 명 보기</option>
-							<option value=100>100 명 보기</option>
-						</select>
-					</form>
-				</div>
-
-			</div>
+			<%@ include file="/WEB-INF/jspf/pageSize.jspf"%>
 		</div>
 	</div>
 

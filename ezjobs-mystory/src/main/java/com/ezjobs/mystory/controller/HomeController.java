@@ -3,6 +3,7 @@ package com.ezjobs.mystory.controller;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +20,13 @@ public class HomeController{
 	private HelpService noticeService;
 	
 	@Inject
-	private BoardService<?> communityService;
+	@Named("communityService")
+	private BoardService<?> boardService;
 	
 	@GetMapping({"index","/"})
 	public String index(@RequestParam Map<String, Object> map, Model model) {
 		model.addAttribute("notice",noticeService.list(map));
-		model.addAttribute("boards",communityService.list(map));
+		model.addAttribute("boards",boardService.list(map));
 		return "index";
 	}
 	// 태그 검색 처리 소스 넣을 공간.

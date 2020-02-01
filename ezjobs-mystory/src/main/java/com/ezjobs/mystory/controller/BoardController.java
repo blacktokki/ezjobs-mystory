@@ -9,6 +9,7 @@ import com.ezjobs.mystory.util.LoginUser;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,19 +17,21 @@ import org.springframework.ui.Model;
 @Controller
 @RequestMapping("/board") // 상위 서브도메인
 public class BoardController {
+	
 	@Inject
-	private BoardService<?> communityService;
+	@Named("communityService")
+	private BoardService<?> boardService;
 
 	@GetMapping("/community") // 커뮤니티 게시판 목록 /board/community
 	public String community(@RequestParam Map<String,Object> map, Model model) {
-		model.addAttribute("boards",communityService.list(map));
+		model.addAttribute("boards",boardService.list(map));
 		model.addAttribute("page", map.get("page"));
 		return "board/list";
 	}
 
 	@GetMapping("/content/{id}") // 글내용 보기 /board/content
 	public String content(@PathVariable Integer id, Model model) {
-		model.addAttribute("board",communityService.content(id));
+		model.addAttribute("board",boardService.content(id));
 		return "board/content";
 	}
 
@@ -40,9 +43,9 @@ public class BoardController {
 
 	@GetMapping("/write/{id}") // 글수정 화면/board/write/1
 	public String writeView(@PathVariable Integer id, Model model) {
-		if(communityService.isWrited(id,LoginUser.getId())){
+		if(boardService.isWrited(id,LoginUser.getId())){
 			model.addAttribute("method","put");
-			model.addAttribute("board",communityService.content(id));
+			model.addAttribute("board",boardService.content(id));
 			return "board/write";
 		}
 		else {
@@ -54,23 +57,23 @@ public class BoardController {
 	public String Write(@RequestParam Map<String, Object> map, Model model) {
 		map.put("userId",LoginUser.getId());
 		map.put("boardType","Board");
-		communityService.write(map);
+		boardService.write(map);
 		return "redirect:../content/"+map.get("id");
 	}
 
 	@PutMapping("/write/{id}") // 글수정요청 /board/write/1
 	public String Write(@PathVariable Integer id, @RequestParam Map<String, Object> map, Model model) {
-		if(communityService.isWrited(id,LoginUser.getId())){
+		if(boardService.isWrited(id,LoginUser.getId())){
 			map.put("id", id);
-			communityService.edit(map);
+			boardService.edit(map);
 		}
 		return "redirect:../content/"+id;
 	}
 	@PostMapping("/archive/{id}") // 아카이브이동
 	public String archive(@PathVariable Integer id, Model model) {
 		User user = LoginUser.get();
-		if(communityService.isWrited(id,user.getId())||user.getIsAdmin()) {
-			communityService.delete(id);
+		if(boardService.isWrited(id,user.getId())||user.getIsAdmin()) {
+			boardService.delete(id);
 			return "redirect:../community";
 		}
 		else {

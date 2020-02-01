@@ -7,13 +7,14 @@ import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.UserService;
 import com.ezjobs.mystory.service.board.BoardService;
+import com.ezjobs.mystory.service.page.PageService;
+import com.ezjobs.mystory.util.LoginUser;
 
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -34,17 +35,16 @@ public class AdminController {
 	@Named("boardArchiveService")
 	private BoardService<?> boardService;
 	
-	@GetMapping("/personal/{loginId}")//글내용 보기 /board/content
-	public String content(@PathVariable String loginId,Model model){
-		model.addAttribute("loginId",loginId);
-		userService.info(model);
+	@GetMapping("/personal/{id}")//글내용 보기 /board/content
+	public String content(@PathVariable String id,Model model){
+		model.addAttribute("user",userService.info(id));
 		return "admin/personal";
 	}
 	
 	@GetMapping("/user")
 	public String user(@RequestParam Map<String,Object> map, Model model){
-		model.addAttribute("map",map);
-		userService.list(model);
+		model.addAttribute("users",userService.adminListAll(map));
+		PageService.addPageAttributes(map,model);
 		return "admin/user";
 	}
 	
@@ -69,20 +69,18 @@ public class AdminController {
 	
 	@GetMapping("/resume")
 	public String resume(@RequestParam Map<String,Object> map, Model model){
-		User user=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		model.addAttribute("isAdmin",user.getIsAdmin());
-		model.addAttribute("map",map);
-		resumeService.list(model);
+		User user=LoginUser.get();
+		map.put("id",user.getId());
+		map.put("isAdmin",user.getIsAdmin());
+		model.addAttribute("resumes",resumeService.list(map));
+		PageService.addPageAttributes(map,model);
 		return "admin/resume";
 	}
 	
 	@GetMapping("/board")
 	public String board(@RequestParam Map<String,Object> map, Model model){
 		model.addAttribute("boards",boardService.list(map));
-		model.addAttribute("page", map.get("page"));
-		model.addAttribute("size", map.get("size"));
-		model.addAttribute("op", map.get("op"));
-		model.addAttribute("keyword", map.get("keyword"));
+		PageService.addPageAttributes(map,model);
 		return "admin/board";
 	}
 	

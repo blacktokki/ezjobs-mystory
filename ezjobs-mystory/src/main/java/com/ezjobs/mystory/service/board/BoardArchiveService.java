@@ -2,27 +2,30 @@ package com.ezjobs.mystory.service.board;
 
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ezjobs.mystory.entity.BoardArchive;
 import com.ezjobs.mystory.repository.BoardRepository;
+import com.ezjobs.mystory.service.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.AllArgsConstructor;
+
 @Service
-public class BoardArchiveService implements BoardService<BoardArchive>{
+@AllArgsConstructor
+public class BoardArchiveService implements BoardService<BoardArchive>,AdminService<BoardArchive>{
 	
-	@Inject
 	BoardRepository<BoardArchive> boardRepository;
 	
-	@Inject
 	ObjectMapper mapper;
 	
 	@Override
 	public Page<BoardArchive> list(Map<String,Object> map){
+		PageRequest pr = getPageRequest(map,Sort.by(Sort.Direction.DESC,"editDate"));
 		String op = String.valueOf(map.get("op"));
 		String keyword = String.valueOf(map.get("keyword"));
 		
@@ -33,7 +36,7 @@ public class BoardArchiveService implements BoardService<BoardArchive>{
 		else if(op.equals("title")) {
 			board.setTitle(keyword);
 		}	
-		return boardRepository.findAll(Example.of(board), getPageRequest(map));//pr을 기준으로 검색
+		return boardRepository.findAll(Example.of(board),pr);//pr을 기준으로 검색
 	}
 
 	@Override
@@ -61,4 +64,10 @@ public class BoardArchiveService implements BoardService<BoardArchive>{
 	public void delete(Integer id) {//moveArchive
 		boardRepository.deleteById(id);
 	}
+
+	@Override
+	public Page<BoardArchive> adminListAll(Map<String, Object> map) {
+		return list(map);
+	}
+
 }

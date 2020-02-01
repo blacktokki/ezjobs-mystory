@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <c:set var="pageNavSize" value="5"/>
 <c:set var="pageNavStart" value="${page-page%pageNavSize}"/>
-<c:set var="pageParam" value="&size=${size}&op=${op}&size=${keyword}"/>
+<c:set var="pageParam" value="&size=${size}&op=${op}&keyword=${keyword}"/>
 <nav aria-label="Page navigation example">
 	<ul class="pagination justify-content-center">
 		<li class="page-item"><a class="page-link" href="?page=${pageNavStart}${pageParam}"

@@ -14,8 +14,8 @@
 
 	<!-- 겁색창 -->
 	<div class="card card-title" style="padding: 10px">
-		<div class="row">
-			<div class="col-4">
+		<div class="clearfix">
+			<div class="float-left">
 				<form method="post" action="#">
 					<div class="input-group">
 						<input name="sch" type="text" class="form-control"
@@ -31,12 +31,12 @@
 				</form>
 			</div>
 
-			<div class="col">
+			<div>
 				<button type="button" class="btn btn-outline-secondary">선택
 					삭제</button>
 			</div>
 
-			<div class="col offset-2">
+			<div class="float-right">
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<label class="input-group-text" for="inputGroupSelect01">페이지
@@ -217,16 +217,5 @@
 </div>
 <!-- 페이징 바 끝-->
 
-
-<script>
-	function checkAll() {
-		if ($("#th_checkAll").is(":checked")) {
-			$("input[name=checkRow]").prop("checked", true);
-		} else {
-			$("input[name=checkRow]").prop("checked", false);
-		}
-	}
-</script>
-
-
+<script src="/js/admin.js"></script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

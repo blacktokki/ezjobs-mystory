@@ -16,5 +16,6 @@ public interface PageService<T extends Map<?,?>> {
 		model.addAttribute("size", map.get("size"));
 		model.addAttribute("op", map.get("op"));
 		model.addAttribute("keyword", map.get("keyword"));
+		model.addAttribute("oplist", map.get("oplist"));
 	}
 }

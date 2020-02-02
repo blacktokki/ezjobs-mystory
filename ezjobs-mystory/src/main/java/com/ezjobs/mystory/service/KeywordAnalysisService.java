@@ -17,7 +17,6 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 //import org.springframework.data.elasticsearch.core.query.SourceFilter;
 //import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Input2CharSequence;
@@ -52,7 +51,7 @@ public class KeywordAnalysisService {
 	@Inject
 	private ElasticsearchOperations elasticsearchTemplate;
 	
-	public void tagger(Model model) {
+	public void tagger() {
 		Tag tagEx=new Tag();
 		tagEx.setType("유형");
 		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));
@@ -91,7 +90,7 @@ public class KeywordAnalysisService {
 		ResumeRepository.saveAll(resumes);
 	}
 	
-	public void taggerCount(Model model) {
+	public void taggerCount() {
 		Tag tagEx=new Tag();
 		tagEx.setType("유형");
 		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));

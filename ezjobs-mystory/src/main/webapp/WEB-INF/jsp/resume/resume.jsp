@@ -43,10 +43,8 @@
 	</div>
 </nav>
 <!--  -->
-<div class="container-fluid row" style="min-height:66vh">
-	<div class="col-2">
-	</div>
-	<div class="tab-content col-8" id="nav-tabContent">
+<div class="container px-5" style="min-height:66vh">
+	<div class="tab-content" id="nav-tabContent">
 		<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 			<div id="accordion1" role="tablist">
 				<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
@@ -56,10 +54,9 @@
 			<div id="accordion2" role="tablist"></div>
 		</div>
 	</div>
-	<div class="col-2">
-	</div>
 </div>
 <%@ include file="/WEB-INF/jsp/resume/review.jsp"%>
+<script src="/js/ckeditor/autocomplete-config.js"></script>
 <script>
 	var resume_idx = 1;
 	var resume_new = 1;
@@ -87,6 +84,7 @@
 	
 	function refreshList(){
 		var form=$("#accordion1").find(".search-form").serializeJSON();
+		form.size=$(".page-form").find("select").val();
 		console.log(form);
 		$.get("/resume/content",form, function(data) {
 			//console.log(data2);
@@ -94,8 +92,7 @@
 		});
 	}
 	
-	function pagingList(page){
-		$(".search-form").find("input[name=page]").val(page);
+	function changePageSize(e){
 		refreshList();
 	}
 	
@@ -210,10 +207,16 @@
 		});
 		return false;
 	})*/.delegate(".search-form","submit",function(e) {//조건검색
-		console.log("조건검색");
+		//alert("조건검색");
+		e.preventDefault();
+		refreshList();
+	}).delegate(".page-item a","click",function(e){//페이지 이동
+		var page=$(e.target).attr("data-page");
+		$(".search-form").find("input[name=page]").val(page);
 		refreshList();
 		return false;
-	}).delegate(".resume-delete form","submit",function(e){//자기소개서 삭제
+	})
+	.delegate(".resume-delete form","submit",function(e){//자기소개서 삭제
 		var form=$(e.target).serializeJSON();
 		$.post("/resume",form,function(data){
 			refreshList();
@@ -254,8 +257,8 @@
 		console.log(form);
 		$.post("/resume/content/" + form.id, form, function(data) {
 			var id=data.map.id;
-			$(e.target).find(".resume-id").val(data.map.id);
-			$(e.target).closest(".card").attr("id","resume-card"+data.map.id);
+			$(e.target).find(".resume-id").val(data.id);
+			$(e.target).closest(".card").attr("id","resume-card"+data.id);
 			$(e.target).find(".resume-method").val("put");
 			refreshList();
 		});

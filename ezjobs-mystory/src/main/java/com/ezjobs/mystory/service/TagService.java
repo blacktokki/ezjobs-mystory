@@ -1,22 +1,18 @@
 package com.ezjobs.mystory.service;
 
 import java.util.Map;
-import java.util.Optional;
-
 import javax.inject.Inject;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Tag;
 import com.ezjobs.mystory.repository.TagRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class TagService {
+public class TagService implements AdminService<Tag>{
 
 	@Inject
 	ObjectMapper mapper;
@@ -24,18 +20,12 @@ public class TagService {
 	@Inject
 	TagRepository tagRepository;
 
-	public void list(Model model) {
-		Map<String, Object> modelMap = model.asMap();
-		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
-		String page = Optional.ofNullable((String) map.get("page")).orElse("1");// String으로 담음
-		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0
-		String showNum2 = Optional.ofNullable((String) map.get("showNum")).orElse("20");
-		int showNum = Integer.parseInt(showNum2);
-
+	@Override
+	public Page<Tag> adminListAll(Map<String,Object> map) {
 		// 수정 부분
-		if (String.valueOf(model.getAttribute("upTagId")) != "null") {
-			int upTagId = Integer.parseInt(model.getAttribute("upTagId").toString());
-			String upTag = model.getAttribute("upTag").toString();
+		if (String.valueOf(map.get("upTagId")) != "null") {
+			int upTagId = Integer.parseInt(map.get("upTagId").toString());
+			String upTag = map.get("upTag").toString();
 			Tag tag = mapper.convertValue(map, Tag.class);// board로 변환
 			tag.setId(upTagId);
 			tag.setName(upTag);
@@ -43,29 +33,24 @@ public class TagService {
 		}
 
 		// 삭제 부분
-		if (String.valueOf(model.getAttribute("delTagId")) != "null") {
-			int delTagId = Integer.parseInt(model.getAttribute("delTagId").toString());
+		if (String.valueOf(map.get("delTagId")) != "null") {
+			int delTagId = Integer.parseInt(map.get("delTagId").toString());
 			Tag tag = mapper.convertValue(map, Tag.class);// board로 변환
 			tag.setId(delTagId);
 			tagRepository.delete(tag);
 		}
-
-		model.addAttribute("showNum", showNum);
-
-		PageRequest pr = PageRequest.of(pageNum, showNum * 2, Sort.by(Sort.Direction.ASC, "id"));
-
-		String sch = String.valueOf(model.getAttribute("sch"));
-
+		
+		PageRequest pr = getPageRequest(map);
+		String sch = String.valueOf(map.get("sch"));
+		
+		Page<Tag> re;
 		if (sch.equals("null")) {
-			Page<Tag> re = tagRepository.findAll(pr);
-			model.addAttribute("tags", re);
-			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
+			re = tagRepository.findAll(pr);
 		} else {
-			Page<Tag> re = tagRepository.findByNameContaining(pr, sch);
-			model.addAttribute("tags", re);
-			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
+			re = tagRepository.findByNameContaining(pr, sch);
 		}
-
+		
+		return re;
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.ezjobs.mystory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,15 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
+import com.ezjobs.mystory.entity.User;
 
 
 @TestConfiguration
@@ -44,4 +54,26 @@ public class TestConfig {
        dataSource.setPassword(map.get("password"));
        return dataSource;
     }
+	
+	private MockHttpSession mockHttpSession(User user,String... authorities) {
+		MockHttpSession session = new MockHttpSession();
+		ArrayList<GrantedAuthority> list= new ArrayList<>();
+		for(String e:authorities) {
+			list.add(new SimpleGrantedAuthority(e));
+		}
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+			user, user.getLoginPw(),list);
+		session.setAttribute(
+            HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, 
+            new SecurityContextImpl(auth));
+		return session;
+	}
+	
+	@Bean
+	public MockHttpSession loginSession(){
+		User user=new User();
+		user.setId("_admin");
+		user.setIsAdmin(true);
+		return mockHttpSession(user,"ROLE_USER");
+	}
 }

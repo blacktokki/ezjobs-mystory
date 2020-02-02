@@ -5,20 +5,17 @@ import org.springframework.web.bind.annotation.*;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.EmailService;
 import com.ezjobs.mystory.service.UserService;
-import com.ezjobs.mystory.util.UserSha256;
+import com.ezjobs.mystory.util.LoginUser;
+
+import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -26,18 +23,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
 
 	private static String authorizationRequestBaseUri = "oauth2/authorization";
 
-	@Inject
 	private ClientRegistrationRepository clientRegistrationRepository;
 	
-	@Inject
 	private UserService userService;
 
-	@Inject
 	private EmailService emailService;
 
 	@GetMapping("/login")
@@ -46,7 +41,7 @@ public class UserController {
 		if (clientRegistrationRepository instanceof InMemoryClientRegistrationRepository)
 			clientRegistrations= (InMemoryClientRegistrationRepository)clientRegistrationRepository;
 		
-		Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
+		Map<String, Object> oauth2AuthenticationUrls = new HashMap<>();
 		clientRegistrations.forEach(registration -> oauth2AuthenticationUrls.put(registration.getClientName(),
 				authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 		model.addAttribute("urls", oauth2AuthenticationUrls);
@@ -63,7 +58,7 @@ public class UserController {
 	@GetMapping("/check_id")
 	public Boolean checkId(@RequestParam String id) {
 		System.out.println(id);
-		return userService.findByLoginId(id) == null;
+		return userService.checkId(id) == null;
 	}
 
 	@GetMapping("/join")
@@ -72,30 +67,25 @@ public class UserController {
 	}
 
 	@PostMapping("/join") // 회원가입 요청
-	public String Write(@RequestParam Map<Object, Object> map, Model model) {
-		model.addAttribute("map", map);
-		userService.write(model);
+	public String Write(@RequestParam Map<String, Object> map, Model model) {
+		userService.write(map);
 		return "redirect:login";
 	}
 
 	@GetMapping("/info")
-	public String infoView(Authentication auth, Model model) {
-		User user = (User) auth.getPrincipal();
-		model.addAttribute("loginId", user.getId());
-		userService.info(model);
+	public String infoView(Model model) {
+		model.addAttribute("user",userService.info(LoginUser.getId()));
 		return "user/info";
 	}
 
 	@PutMapping("/info") // 정보수정 요청
-	public String Write(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
-		String loginId = ((User) auth.getPrincipal()).getId();
-		model.addAttribute("loginId", loginId);
-		model.addAttribute("map", map);
-		userService.edit(model);
-		User user = userService.findByLoginId(loginId);
-		Authentication newAuth = new UsernamePasswordAuthenticationToken(user, user.getLoginPw(),
-				auth.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(newAuth);
+	public String edit(@RequestParam Map<String, Object> map, Model model) {
+		String id=LoginUser.getId();
+		map.put("id",id);
+		userService.edit(map);
+		
+		User user = userService.checkId(id);
+		LoginUser.refreshAuthentication(user, user.getLoginPw());
 		return "redirect:/index";
 	}
 
@@ -105,16 +95,13 @@ public class UserController {
 	}
 
 	@PostMapping("/password")
-	public String passwordNew(@RequestParam Map<Object, Object> map, Model model) {
-		String loginId = (String) map.get("id");
-		String newPw = UserService.getRamdomPassword(10);
-		String email = (String) map.get("email");
-		User user = userService.findByLoginId(loginId);
-
+	public String passwordNew(@RequestParam Map<String, Object> map, Model model) {
+		User user = userService.checkId((String)map.get("id"));
+		String newPw=userService.getRamdomPassword(10);
+		String email=(String)map.get("email");
 		if (user != null && user.getEmail().equals(email)) {
-			model.addAttribute("loginId", loginId);
-			model.addAttribute("newPw", newPw);
-			userService.changePw(model);
+			map.put("newPw",newPw); 
+			userService.changePw(map);
 			emailService.sendSimpleMessage(email, "[Ezjbos]패스워드 재설정 안내", "임시 비밀번호 발급 안내 \r\n"
 					+ "임시 비밀번호가 아래와 같이 발급 되었습니다. \r\n" + "아래 비밀번호로 로그인 후 변경해 주세요. \r\n" + "임시 비밀번호:" + newPw);
 			return "redirect:/user/login";
@@ -130,20 +117,13 @@ public class UserController {
 	}
 
 	@PutMapping("/password")
-	public String passwordChange(Authentication auth, @RequestParam Map<Object, Object> map, Model model) {
-		String loginId = ((User) auth.getPrincipal()).getId();
-		String loginPw = UserSha256.encrypt((String) map.get("loginPw"));
-		String newPw = (String) map.get("newPw");
-		User user = userService.findByLoginId(loginId);
-
-		if (user != null && user.getLoginPw().equals(loginPw)) {
-			model.addAttribute("loginId", loginId);
-			model.addAttribute("newPw", newPw);
-			userService.changePw(model);
-			user.setLoginPw(UserSha256.encrypt(newPw));
-			Authentication newAuth = new UsernamePasswordAuthenticationToken(user, user.getLoginPw(),
-					auth.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(newAuth);
+	public String passwordChange(@RequestParam Map<String, Object> map, Model model) {
+		String id = LoginUser.getId();
+		User user = userService.checkId(id);
+		if (user != null && user.checkLoginPw((String)map.get("loginPw"))) {
+			userService.changePw(map);
+			user=userService.checkId(id);
+			LoginUser.refreshAuthentication(user, user.getLoginPw());
 			return "redirect:/index";
 		} else {
 			System.out.println("mismatch");
@@ -152,23 +132,21 @@ public class UserController {
 	}
 	
 	@GetMapping("/join/social")
-	public String writeSocialView(Authentication auth, Model model) {
-		User user = (User) auth.getPrincipal();
-		model.addAttribute("user",user);
+	public String writeSocialView(Model model) {
+		model.addAttribute("user",LoginUser.get());
 		return "user/joinsocial";
 	}
 	
-	@PostMapping("/join/social") // 회원가입 요청
-	public String writeSocial(Authentication auth,@RequestParam Map<Object, Object> map, Model model) {
-		User user = (User) auth.getPrincipal();
+	@PostMapping("/join/social") // 회원가입 요청(소셜)
+	public String writeSocial(@RequestParam Map<String, Object> map, Model model) {
+		User user = LoginUser.get();
 		map.put("loginId",user.getId());
 		map.put("loginPw","**********");
 		map.put("name",user.getName());
 		map.put("email",user.getEmail());
 		map.put("isAdmin",user.getIsAdmin());
 		map.put("loginRel",user.getLoginRel());
-		model.addAttribute("map", map);
-		userService.write(model);
+		userService.write(map);
 		
 		List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
 		grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -176,9 +154,7 @@ public class UserController {
 		if (user.getIsAdmin()) {
 			grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		}
-		Authentication newAuth = new UsernamePasswordAuthenticationToken(user, user.getLoginPw(),grantedAuthorityList);
-		SecurityContextHolder.getContext().setAuthentication(newAuth);
-
+		LoginUser.refreshAuthentication(user, user.getLoginPw(),grantedAuthorityList);
 		return "redirect:/index";
 	}
 }

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -25,7 +24,6 @@ import com.ezjobs.mystory.security.*;
  
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = {"com.ezjobs.*"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     @Autowired
@@ -61,10 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
             // USER, ADMIN으로 권한 분리 유알엘 정의
             .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+            .antMatchers("/user/password/change/**").not().hasAuthority("ROLE_SOCIAL")
             .antMatchers("/resume/**",
             			 "/board/write/**",
+            			 "/help/qnawrite/**",
             			 "/user/password/change/**").hasAuthority("ROLE_USER")
-            .antMatchers("/user/password/change/**").not().hasAuthority("ROLE_SOCIAL")
             .antMatchers("/user/join/social/**").authenticated()
             .antMatchers("/**").permitAll()
         .and()

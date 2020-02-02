@@ -21,25 +21,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 //import static org.mockito.BDDMockito.given;
 
-import com.ezjobs.mystory.controller.BoardController;
+import com.ezjobs.mystory.controller.*;
 import com.ezjobs.mystory.service.board.BoardService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = BoardController.class, 
+@WebMvcTest(controllers = {BoardController.class,UserController.class}, 
 			excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class),
 			excludeAutoConfiguration = SecurityAutoConfiguration.class
 		)
 
-public class BoardControllerTest {
+public class ControllerTest {
 	
 
-	private static final Logger logger = LoggerFactory.getLogger(BoardControllerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(ControllerTest.class);
 	
     @Inject
     private MockMvc mvc;
 
-    @MockBean
-    BoardService service;
+    @MockBean(name="communityService")
+    BoardService<?> boardService;
     
     @Test
     public void test1() throws Exception {

@@ -2,7 +2,6 @@ package com.ezjobs.mystory.service;
 
 import java.util.*;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -12,7 +11,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.Sentence;
@@ -20,27 +18,27 @@ import com.ezjobs.mystory.entity.Synonym;
 import com.ezjobs.mystory.repository.ResumeRepository;
 import com.ezjobs.mystory.repository.SentenceRepository;
 import com.ezjobs.mystory.repository.SynonymRepository;
+import com.ezjobs.mystory.service.page.DefaultPageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.AllArgsConstructor;
+
 @Service
-public class ResumeService {
+@AllArgsConstructor
+public class ResumeService implements DefaultPageService,AdminService<Resume>{
 	
-	@Inject
 	ResumeRepository resumeRepository;
 	
-	@Inject
 	SentenceRepository sentenceRepository;
 	
-	@Inject
 	SynonymRepository synonymRepository;
 	
-	@Inject
 	ObjectMapper mapper;
 
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	public void group(Model model){
+	public List<Object[]> group(){
 		String userId="_SI";
 		String group="userId";
 		List<Object[]> resumeGroup = entityManager
@@ -54,122 +52,88 @@ public class ResumeService {
 		    int count = ((Number) result[1]).intValue();
 		    System.out.println(name+" "+count);
 		}*/
-		model.addAttribute("resumeGroup",resumeGroup);
+		return resumeGroup;
 	}
 	
-	public void list(Model model){
-		Map<String, Object> modelMap = model.asMap();
-		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
+	public Page<Resume> list(Map<String,Object> map){
+		Boolean isAdmin=(Boolean)map.get("isAdmin");
+		String op= String.valueOf(map.get("op"));
+		String keyword = String.valueOf(map.get("keyword"));
+
 		Resume resume=new Resume();
-		Boolean isAdmin=(Boolean)modelMap.get("isAdmin");
-		String page ="1";
-		String size ="20";
-		String op=null;
-		if (map!=null) {
-			page = Optional.ofNullable((String) map.get("page")).orElse(page);// String으로 담음
-			size = Optional.ofNullable((String) map.get("size")).orElse(size);
-			op = String.valueOf(map.get("op"));
-			String keyword = String.valueOf(map.get("keyword"));
-			model.addAttribute("op", op);
-			model.addAttribute("keyword", keyword);
-			System.out.println(keyword);
-			System.out.println(op);
-			if (op.equals("tagSearch")) { // 태그명 검색
-				resume.setTags(keyword);
-			}
-			else if (op.equals("question")) { // 자소서 문항 검색
-				resume.setQuestion(keyword);
-			}
-			else if (isAdmin && op.equals("userId")) { // 작성자 검색
-				resume.setUserId(keyword);
-			}
-			else if (op.equals("company")) { // 회사명 검색
-				resume.setCompany(keyword);
-			}
-			else if (op.equals("state")) { // 상태명 검색
-				resume.setState(keyword);
-			}
+		if (op.equals("tagSearch")) { // 태그명 검색
+			resume.setTags(keyword);
 		}
-		
+		else if (op.equals("question")) { // 자소서 문항 검색
+			resume.setQuestion(keyword);
+		}
+		else if (isAdmin && op.equals("userId")) { // 작성자 검색
+			resume.setUserId(keyword);
+		}
+		else if (op.equals("company")) { // 회사명 검색
+			resume.setCompany(keyword);
+		}
+		else if (op.equals("state")) { // 상태명 검색
+			resume.setState(keyword);
+		}
 		if(!isAdmin)
-			resume.setUserId((String)modelMap.get("loginId"));
-		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0 //shownum->size, 
-		int sizeNum = Integer.parseInt(size);
-		model.addAttribute("size", sizeNum);
+			resume.setUserId((String)map.get("id"));
 		
 		Page<Resume> resumes;
-		PageRequest pr=PageRequest.of(pageNum,sizeNum,Sort.by(Sort.Direction.ASC,"editDate"));
-		if(op!=null|| !isAdmin) {
-			resumes=resumeRepository.findAll(Example.of(resume), pr);
+		PageRequest pr=getPageRequest(map,Sort.by(Sort.Direction.ASC,"editDate"));
+		System.out.println(op);
+		if((keyword.equals("null")|| keyword.equals(""))&& isAdmin) {
+			List<Resume> resumeList=resumeRepository.findAll(Example.of(resume));
+			int size=(Integer)map.get("size");
+			int form=size*((Integer)map.get("page"));
+			resumes=new PageImpl<>(resumeList.subList(form,form+size), pr, resumeList.size());
 		}
 		else {
-			List<Resume> resumeList=resumeRepository.findAll(Example.of(resume));
-			int form=sizeNum*pageNum;
-			resumes=new PageImpl<>(resumeList.subList(form,form+sizeNum), pr, resumeList.size());
+			resumes=resumeRepository.findAll(Example.of(resume), pr);
 		}
+		
 		System.out.println(resumes.getContent().size());
-		model.addAttribute("resumes", resumes);
-		model.addAttribute("pageNavNumber", resumes.getNumber() / 5);
+		return resumes;
+
 	}
 	
-	public void listAll(Model model){
-		Map<?,?> map=(Map<?,?>)model.getAttribute("map");
-		Integer page=Optional.of((Integer)map.get("page")).orElse(0);
-		Integer size=Optional.of((Integer)map.get("size")).orElse(32768);
-		Resume resume=new Resume();
-		PageRequest pr=PageRequest.of(page,size);
-		Page<Resume> resumes=resumeRepository.findAll(Example.of(resume), pr);
-		model.addAttribute("resumes",resumes);
+	public List<Resume> listAll(){
+		return resumeRepository.findAll();
 	}
 	
-	public void content(Model model){
-		Map<String,Object> modelMap=model.asMap();
-		int id=Integer.parseInt(modelMap.get("id").toString());
-		Resume resume=resumeRepository.findById(id).get();//id로 board 찾기		
-		model.addAttribute("resume",resume);
+	public Resume content(Integer id){
+		return resumeRepository.findById(id).get();	
 	}
 
-	public void write(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		String userId=(String)modelMap.get("loginId");
+	public void write(Map<String,Object> map) {
+		String userId=(String)map.get("userId");
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
 		resume.setUserId(userId);
 		resume.setState("미작성");
 		resume.setEditDate(new Date());
 		resumeRepository.save(resume);
-		model.addAttribute("map",resume);
+		map.put("id",resume.getId());
 	}
 	
-	public void edit(Model model){
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		int id=Integer.parseInt(modelMap.get("id").toString());
+	public void edit(Map<String,Object> map){
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
-		resume.setId(id);
 		//System.out.println(resume.getTags());
 		resumeRepository.update(resume);
 	}
 	
-	public void editState(Model model){
-		Map<String,Object> modelMap=model.asMap();
-		int id=Integer.parseInt(modelMap.get("id").toString());
-		String state=modelMap.get("state").toString();
+	public void editState(Integer id,String state){
 		Resume resume=new Resume();//board로 변환
 		resume.setId(id);
 		resume.setState(state);
 		resumeRepository.updateState(resume);
 	}
 	
-	public void delete(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+	public void delete(Map<String, Object> map) {
 		int id=Integer.parseInt(map.get("id").toString());
 		resumeRepository.deleteById(id);
 	}
 	
-	public void autoComplete(Model model){
-		Map<?,?> map=(Map<?,?>)model.getAttribute("map");
+	public List<Sentence> autoComplete(Map<String, Object> map){
 		String keyword=(String)map.get("keyword");
 		System.out.println(keyword);
 		String keywordInclude=(String)map.get("keywordInclude");
@@ -178,12 +142,10 @@ public class ResumeService {
 		PageRequest pr=PageRequest.of(page,size);
 		Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%"+keywordInclude+"%", pr);
 		System.out.println(pageList.getNumberOfElements());
-		List<Sentence> list=pageList.getContent();
-		model.addAttribute("list",list);
+		return pageList.getContent();
 	}
 
-	public void compareAll(Model model) {
-		String answer=((String)model.getAttribute("sentence"));
+	public Map<String,Object> compareAll(String answer) {
 		String[] strs=answer.split("\\s+");
 		int [] scores=new int[strs.length];
 		int rates=0;
@@ -208,12 +170,14 @@ public class ResumeService {
 			if(j<size)
 				break;
 		}
-		model.addAttribute("results",strs);
-		model.addAttribute("scores",scores);
-		model.addAttribute("rates",100*rates/(size*strs.length));
+		Map<String,Object> map=new HashMap<>();
+		map.put("results",strs);
+		map.put("scores",scores);
+		map.put("rates",100*rates/(size*strs.length));
+		return map;
 	}
 
-	public void tagsearch(Model model) {
+	public void tagsearch() {//시험용
 		/*
 		List<Sentence> sentences = entityManager
 		        .createQuery("SELECT s FROM Sentence s WHERE s.text LIKE ?1 AND s.tags LIKE ?2 AND s.tags LIKE ?3",Sentence.class)
@@ -224,13 +188,16 @@ public class ResumeService {
 		*/
 	}
 
-	public void addSynonym(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		String userId=(String)modelMap.get("loginId");
+	public void addSynonym(Map<String,Object> map) {
+		String userId=(String)map.get("loginId");
 		Synonym synonym=mapper.convertValue(map, Synonym.class);//board로 변환
 		synonym.setUserId(userId);
 		synonym.setValid((userId.equals("_admin")));
 		synonymRepository.save(synonym);
+	}
+
+	@Override
+	public Page<Resume> adminListAll(Map<String, Object> map) {
+		return list(map);
 	}
 }

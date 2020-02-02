@@ -85,6 +85,11 @@ public class UserService implements AdminService<User>{
 		return re;
 	}
 	
+	@Override
+	public User adminContentById(String id) {
+		return info(id);
+	}
+	
 	public void changePw(Map<String,Object> map) {
 		User user=new User();
 		user.setId((String)map.get("id"));

@@ -6,14 +6,22 @@
 <c:set var="pageParam" value="&size=${size}&op=${op}&keyword=${keyword}"/>
 <nav aria-label="Page navigation example">
 	<ul class="pagination justify-content-center">
-		<li class="page-item"><a class="page-link" href="?page=${pageNavStart}${pageParam}"
-			aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-		</a></li>
+		<li class="page-item">
+			<a class="page-link" data-page="${pageNavStart}" href="?page=${pageNavStart}${pageParam}" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
 		<c:forEach var="item" begin="${pageNavStart+1}" end="${pageNavStart+pageNavSize}">
-			<li class="page-item"><a class="page-link" href="?page=${item}${pageParam}">${item}</a></li>
+			<li class="page-item">
+				<a class="page-link" data-page="${item}" href="?page=${item}${pageParam}">
+					${item}
+				</a>
+			</li>
 		</c:forEach>
-		<li class="page-item"><a class="page-link" href="?page=${pageNavStart+pageNavSize+1}${pageParam}"
-			aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-		</a></li>
+		<li class="page-item">
+			<a class="page-link" data-page="${pageNavStart+pageNavSize+1}" href="?page=${pageNavStart+pageNavSize+1}${pageParam}" aria-label="Next"> 
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
 	</ul>
 </nav>

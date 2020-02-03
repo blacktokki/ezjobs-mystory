@@ -16,8 +16,8 @@
 
 	<!-- 겁색창 -->
 	<div class="card card-title" style="padding: 10px">
-		<div class="row">
-			<div class="col-6">
+		<div class="clearfix">
+			<div class="float-left">
 				<form action="/admin/board">
 					<div class="input-group">
 						<div class="input-group-prepend">
@@ -126,15 +126,7 @@
 </div>
 
 
-<script>
-	function checkAll() {
-		if ($("#th_checkAll").is(":checked")) {
-			$("input[name=checkRow]").prop("checked", true);
-		} else {
-			$("input[name=checkRow]").prop("checked", false);
-		}
-	}
-</script>
+<script src="/js/admin.js"></script>
 
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

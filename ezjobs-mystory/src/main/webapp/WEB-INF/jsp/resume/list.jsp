@@ -76,7 +76,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<form>
+							<form class="delete-form">
 								<div class="modal-body">
 									<p>정말로 "[${item.company}]${item.question }" 를 삭제 하시겠습니까?</p>
 								</div>

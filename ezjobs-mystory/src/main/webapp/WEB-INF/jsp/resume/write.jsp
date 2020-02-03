@@ -50,6 +50,7 @@
 				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
 				<button type="button" class="btn btn-primary resume-export">내보내기</button>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
+				<input type="hidden" class="resume-method" name="_method" value="" /> 
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>
 		</form>

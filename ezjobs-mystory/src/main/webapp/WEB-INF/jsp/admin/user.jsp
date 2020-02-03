@@ -16,8 +16,8 @@
 
 	<!-- 겁색창 -->
 	<div class="card card-title" style="padding: 10px">
-		<div class="row">
-			<div class="col-6">
+		<div class="clearfix">
+			<div class="float-left">
 				<form action="/admin/user">
 					<div class="input-group">
 						<div class="input-group-prepend">
@@ -145,5 +145,5 @@
 	<%@ include file="/WEB-INF/jspf/pageNavbar.jspf"%>	
 </div>
 <!-- 페이징 바 끝-->
-<script src="/js/admin-checkall.js"></script>
+<script src="/js/admin.js"></script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -45,7 +45,7 @@
 					</div>
 					<textarea class="form-control write-answer" id=" write-answer-i" name="answer" rows="20">${resume.answer}</textarea>
 				</div>
-				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#exampleModal">검토하기</button>
+				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#review-modal">검토하기</button>
 				<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>
 				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
 				<button type="button" class="btn btn-primary resume-export">내보내기</button>

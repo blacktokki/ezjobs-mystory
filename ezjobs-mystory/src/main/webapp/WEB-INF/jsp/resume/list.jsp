@@ -65,7 +65,7 @@
 				</button>
 			</form>
 			<!-- 삭제 모달 -->
-				<div class="modal" id="delete${item.id}" tabindex="-1"
+				<div class="modal delete-modal" id="delete${item.id}" tabindex="-1"
 					role="dialog">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">

@@ -28,7 +28,7 @@
 <nav aria-label="breadcrumb">
 	<div class=" breadcrumb pb-0  mx-0 row">
 		<div class="nav nav-tabs col-2 " id="nav-tab-left" role="tablist">
-			<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create" href="#" onclick="createResume()"> 새 자기소개서 </a>
+			<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create" href="#" onclick="event.preventDefault();createResume()"> 새 자기소개서 </a>
 		</div>
 		<div class="nav nav-tabs accordion justify-content-center col-8" id="nav-tab" role="tablist">
 			<a class="nav-item nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
@@ -57,7 +57,14 @@
 </div>
 <%@ include file="/WEB-INF/jsp/resume/review.jsp"%>
 <script src="/js/ckeditor/autocomplete-config.js"></script>
+
+<script src="/js/resume-editor/write.js"></script>
+<script src="/js/resume-editor/review.js"></script>
+<script src="/js/resume-editor/jQuery.resume.js"></script>
+<%--
 <script src="/js/resume-old.js"></script>
+<script src="/js/resume-editor/jQuery.resume.js"></script>
+ --%>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
 
 

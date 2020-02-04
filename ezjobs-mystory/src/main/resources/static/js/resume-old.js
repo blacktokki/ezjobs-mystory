@@ -32,7 +32,7 @@ function changePageSize(e){
 	refreshList();
 }
 
-function Export2Doc(content, filename){
+function export2Doc(content, filename){
     var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
     var postHtml = "</body></html>";
     var html = preHtml+content+postHtml;
@@ -94,7 +94,7 @@ function writePageAppend($result){
 
 function reviewText(){
 	var currentArray=[];
-	$copy=$("#wordChange ul .list-sentence").clone();
+	$copy=$("#word-change ul .list-sentence").clone();
 	if($copy.length>0){
 		$copy.find("select").each(function(i,element){
 			$(element).html($(element).find("option:selected").val());
@@ -161,7 +161,7 @@ $("#accordion1").delegate(".resume-link","click",function(e) {//자기소개서 
 	e.preventDefault();
 	$.post("/resume/content",form,function(data){
 		refreshList();
-		$("#delete"+form.id).modal('hide');
+		$(".delete-modal").modal('hide');
 	});
 	
 });
@@ -176,7 +176,7 @@ $("#accordion2").delegate(".write-question","propertychange change keyup paste i
 	//console.log(form.answer);
 	var text=form.question+" - "+form.company+"<p>"
 	+form.answer;
-	Export2Doc(text,form.question);
+	export2Doc(text,form.question);
 	return false;
 
 }).delegate("form :submit","click",function(e){
@@ -186,11 +186,11 @@ $("#accordion2").delegate(".write-question","propertychange change keyup paste i
 
 }).delegate("form", "submit", function(e) {//저장하기
 	var tags = [];
-	 $(event.target).find(".tagsinput").find(".tag>span").each(
-	function(i, e) {
-		tags.push($.trim($(e).text()));
+	 $(e.target).find(".tagsinput").find(".tag>span").each(
+	function(i, element) {
+		tags.push($.trim($(element).text()));
 	});
-	$(event.target).find(".tags").val(tags.join(","));
+	$(e.target).find(".tags").val(tags.join(","));
 	var form = $(e.target).serializeJSON();
 	if(form._method=="post")
 		form.id="";
@@ -204,60 +204,55 @@ $("#accordion2").delegate(".write-question","propertychange change keyup paste i
 	return false;
 });
 
-$("body").delegate(".review-modal","shown.bs.modal",function(e){//검토 하기
+$("body").delegate("#review-modal","shown.bs.modal",function(e){//검토 하기
 	var currentVal=$("#accordion2 .card").find(".show").find(".write-answer").val();
 	console.log(currentVal);
 	var form={answer:currentVal};
 	$.get("/resume/changelist", form, function(data) {
-		$("#wordChange ul").html(data).sortable().find("li").each(function(i,element){
+		$("#word-change ul").html(data).sortable().find("li").each(function(i,element){
 			$(element).find("ul").sortable();
 		});
 	});
 });
 
-$("#wordChange").delegate("select","change",function(e){//단어교체
-	var first=$("option",this).first().val();
-	var change=this.value;
+$("#word-change").delegate("select","change",function(e){//단어교체
+	var target=e.target;
+	var form=$("#review-modal").find("form").serializeJSON();
+	var first=$("option",target).first().val();
+	var change=target.value;
 	if(change=="_add"){
 		change=prompt("단어 추가",first);
 		console.log(change);
 		if (change!=""&&change!=null){
-			$("option[value=_add]",this).text(change).attr("value",change);
-			$("<option value='_add'>추가..</option>").appendTo($(this))
-			var form={
-				keyword:first,
-				synonym:change
-			}
-			$.post("/resume/synonym/", form, function(data) {
-				//console.log(data);
-				$(e.target).find(".resume-id").val(data.map.id);
-				$(e.target).find(".resume-method").val("put");
-				refreshList();
-			});
+			$("option[value=_add]",target).text(change).attr("value",change);
+			$("<option value='_add'>추가..</option>").appendTo($(target))
+			form.keyword=first;
+			form.synonym=change;
+			$.post("/resume/synonym/", form);
 		}
 		else{
 			change=first;
 		}
 	}
-	$("option[value="+change+"]",this)
-	.attr("selected",true).siblings()
+	$("option[value="+change+"]",target)
+	.attr("selected",target).siblings()
 	.removeAttr("selected");
 	
 });
 
-$("#exampleModal").delegate(".btn-apply","click",function(e){//단어교체 적용하기
+$("#review-modal").delegate(".btn-apply","click",function(e){//단어교체 적용하기
 	var currentVal=reviewText().join(' ');
-	$target=$("#accordion2 .card").find(".show").find(".write-answer").val(currentVal);
-	$("#exampleModal").modal('hide');
+	$("#accordion2 .card").find(".show").find(".write-answer").val(currentVal);
+	$("#review-modal").modal('hide');
 	return false;
 	
 }).delegate(".btn-load","click",function(e){//유사도검사
 	//console.log(currentVal.replace(/<p>|<\/p>/g));
-$("#compare ul").html("");
-	reviewText().forEach( function(e) {
+	$("#compare ul").html("");
+	reviewText().forEach( function(element) {
           var $target=$('<div class="spinner-border" role="status">'
         		  +'<span class="sr-only">Loading...</span></div>').appendTo("#compare ul");
-		  var sentence=$.trim(e.replace(/\s+/g, " "));
+		  var sentence=$.trim(element.replace(/\s+/g, " "));
           var form={sentence:sentence};
           $.get("/resume/compare", form, function(data_part) {
         	  $target.attr("class","").html(data_part);

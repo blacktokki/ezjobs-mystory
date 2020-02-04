@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<div class="modal fade review-modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="review-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<form>
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	</form>
 	<div class="modal-dialog  modal-xl" role="document">
 	    <div class="modal-content">
 	    	<div class="modal-body d-flex justify-content-between">
-				<div class="card col-5" id="wordChange">
+				<div class="card col-5" id="word-change">
 					<div class="card-header card-title">단어 교체</div>
 					<div class="card-body">
 						<ul class="card-text list-group form-inline"></ul>

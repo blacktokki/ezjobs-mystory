@@ -20,14 +20,14 @@
 		});
 	}
 	
-	function loadResume(href,card){
-		if ($(card).length == 0){
+	function loadResume(href,target){
+		if ($(target).length == 0){
 			model.load(href,function(data){
 				write.render("appendResume",data);
 			});
 		}
 		else{
-			write.render("showExistResume",card);
+			write.render("showExistResume",target);
 		}
 	}
 	function deleteResume(form){
@@ -149,32 +149,13 @@
 		}
 	}
 	
-	function ready(str,obj){
-		if(typeof obj == "undefined"){
-			$.getScript(root+str+".js");
-		}
-	}
-	
 	EDITOR.config.extraPlugins = 'wordcount';
 	global.RESUME=global.RESUME || {};
+	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.load=load;
-	global.RESUME.controller={};
-	global.RESUME.controller.refreshList=refreshList;
-	global.RESUME.controller.createResume=createResume;
-	
-	//console.log(EDITOR.plugins);
-	//console.log(EDITOR.config.plugins);
-	//console.log(EDITOR.config);
-	load();
-	ready("view",global.RESUME.View);
-	ready("list",global.RESUME.List);
-	ready("write",global.RESUME.Write);
-	ready("review",global.RESUME.Review);
-	ready("model",global.RESUME.Model);
-	
+	global.RESUME.controller={
+		refreshList:refreshList,
+		createResume:createResume,
+	};
 	
 }(this,jQuery,CKEDITOR));
-
-var createResume=function(){
-	RESUME.controller.createResume();
-}

@@ -20,7 +20,6 @@
 				countSpacesAsChars: true,
 			}
 		 }
-		console.log("create Model");
 	}
 	
 	function init(){
@@ -33,7 +32,6 @@
 			this.resume_idx += 1;
 			this.resume_new += 1;
 			var model=this;
-			//console.log(model);
 			$(document.createDocumentFragment())
 				.load("/resume/write",function(response){
 				callback({
@@ -70,22 +68,18 @@
 				callback(data);
 			});
 		}
-		
 		Model.prototype.addWord=function(form){
 			$.post("/resume/synonym/", form);
 		}
-		
 		Model.prototype.compare=function(form,callback){
 			$.get("/resume/compare", form, function(data){
 				callback(data);
 			});
 		}
-
 	}
-	global.RESUME=global.RESUME || {};
+	
 	global.RESUME.Model=Model;
-	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.init.model=init;
-	if(global.RESUME.load) global.RESUME.load();
+	global.RESUME.load();
 	
 }(this,jQuery));

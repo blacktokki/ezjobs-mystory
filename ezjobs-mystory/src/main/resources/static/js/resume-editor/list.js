@@ -4,7 +4,6 @@
 	
 	function List() {
 		this.element="#accordion1";
-		console.log("create List");
 	}
 	
 	function init(View){
@@ -61,11 +60,9 @@
 			return form;
 		}
 	}
-	
-	global.RESUME=global.RESUME || {};
+
 	global.RESUME.List=List;
-	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.init.list=init;
-	if(global.RESUME.load) global.RESUME.load();
+	global.RESUME.load();
 	
 }(this,jQuery));

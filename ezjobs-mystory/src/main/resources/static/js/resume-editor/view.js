@@ -21,9 +21,7 @@
 		};
 	}
 	
-	global.RESUME=global.RESUME || {};
 	global.RESUME.View=View;
-	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.init.view=init;
 	if(global.RESUME.load) global.RESUME.load();
 	

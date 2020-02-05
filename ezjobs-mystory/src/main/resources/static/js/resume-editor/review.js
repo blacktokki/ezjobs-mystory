@@ -6,7 +6,6 @@
 		this.element="#review-modal";
 		this.wordChange="#word-change";
 		this.comapre="#compare";
-		console.log("create Review");
 	}
 	
 	function init(View){
@@ -29,7 +28,7 @@
 					
 					if(change=="_add"){
 						change=prompt("단어 추가",first);
-						console.log(change);
+						//console.log(change);
 						if (change!=""&&change!=null){
 							form.isAdd=true;
 							form.keyword=first;
@@ -108,16 +107,13 @@
 						sentence+="\r\n";
 					currentArray.push(sentence);
 				});
-				console.log(currentArray);
+				//console.log(currentArray);
 			};
 			return currentArray;
 		}
 	}
-	
-	global.RESUME=global.RESUME || {};
 	global.RESUME.Review=Review;
-	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.init.review=init;
-	if(global.RESUME.load) global.RESUME.load();
+	global.RESUME.load();
 	
 }(this,jQuery));

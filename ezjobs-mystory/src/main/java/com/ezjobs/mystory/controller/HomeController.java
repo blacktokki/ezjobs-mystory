@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.webjars.RequireJS;
 
 import com.ezjobs.mystory.service.board.BoardService;
 import com.ezjobs.mystory.service.help.HelpService;
@@ -28,6 +30,12 @@ public class HomeController{
 		model.addAttribute("notice",noticeService.list(map));
 		model.addAttribute("boards",boardService.list(map));
 		return "index";
+	}
+	
+	@ResponseBody
+	@GetMapping(value = "/webjarsjs", produces = "application/javascript")
+	public String webjarjs() {
+	    return RequireJS.getSetupJavaScript("/webjars/");
 	}
 	// 태그 검색 처리 소스 넣을 공간.
 	

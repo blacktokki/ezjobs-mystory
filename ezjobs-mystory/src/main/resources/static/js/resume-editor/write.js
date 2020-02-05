@@ -4,7 +4,6 @@
 	
 	function Write() {
 		this.element="#accordion2";
-		console.log("create Write");
 	}
 	
 	function init(View){
@@ -27,9 +26,7 @@
 			exportResume: function(view,handler){//내보내기
 				$(view.element).delegate(".resume-export","click",function(e){
 					var form=$(e.target).closest("form").serializeJSON();
-					console.log(form);
 					var text=form.question+" - "+form.company+"<p>"+form.answer;
-					
 					handler(text,form.question);
 					return false;
 				});
@@ -69,9 +66,9 @@
 					var ac=new EDITOR.plugins.autocomplete(editor, ac_config );
 				});
 			},
-			showExistResume : function(view,card){
+			showExistResume : function(view,target){
 				$("#nav-profile-tab").tab("show");
-				$(card).find(".collapse").collapse("show");
+				$(target).find(".collapse").collapse("show");
 			},
 			titleSync :function(view,data){
 				$("#heading-write" + data.id + " a").html(data.currentVal);
@@ -97,8 +94,8 @@
 		Write.prototype.resumeTemplate=function(data,callback){
 			var resume_idx=data.model.resume_idx;
 			var resume_new=data.model.resume_new;
-			console.log(resume_new);
-			console.log(resume_idx);
+			//console.log(resume_new);
+			//console.log(resume_idx);
 			var ck_config=data.model.ck_config;
 			var $result=$(data.response);
 	
@@ -133,10 +130,8 @@
 		}
 	}
 	
-	global.RESUME=global.RESUME || {};
 	global.RESUME.Write=Write;
-	global.RESUME.init=global.RESUME.init || {};
 	global.RESUME.init.write=init;
-	if(global.RESUME.load) global.RESUME.load();
+	global.RESUME.load();
 	
 }(this,jQuery,CKEDITOR));

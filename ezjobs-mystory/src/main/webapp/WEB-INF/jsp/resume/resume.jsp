@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ include file="/WEB-INF/jspf/head.jspf"%>
+<%@ include file="/WEB-INF/jspf/extendHead.jspf"%>
 <style>
 [data-toggle="collapse"]:after {
 	display: inline-block;
@@ -57,13 +57,20 @@
 </div>
 <%@ include file="/WEB-INF/jsp/resume/review.jsp"%>
 <script src="/js/ckeditor/autocomplete-config.js"></script>
-
-<script src="/js/resume-editor/write.js"></script>
-<script src="/js/resume-editor/review.js"></script>
-<script src="/js/resume-editor/jQuery.resume.js"></script>
+<script>
+	var createResume;
+	var changePageSize;
+	require(["resume-bundle"],function(RESUME){
+		createResume=function(){
+			RESUME.controller.createResume();
+		}
+		changePageSize=function(){
+			RESUME.controller.refreshList();
+		}
+	});
+</script>
 <%--
 <script src="/js/resume-old.js"></script>
-<script src="/js/resume-editor/jQuery.resume.js"></script>
  --%>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
 

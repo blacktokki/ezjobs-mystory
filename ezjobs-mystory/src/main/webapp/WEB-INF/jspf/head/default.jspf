@@ -1,0 +1,25 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+	<title></title>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	 
+	<link href="/webjars/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/webjars/font-awesome/css/font-awesome.min.css"  rel="stylesheet">
+	<link href="/webjars/jquery-tagsinput/jquery.tagsinput.css" rel="stylesheet">
+	
+	<script src="/webjars/jquery/jquery.min.js"></script>
+	<script src="/webjars/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/webjars/jquery-tagsinput/jquery.tagsinput.js"></script>
+	<script src="/webjars/jquery-validation/jquery.validate.min.js"></script>
+	<script src="/webjars/jquery-validation/localization/messages_ko.min.js"></script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async="true" src="https://www.googletagmanager.com/gtag/js?id=UA-152621707-3">
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-152621707-3');
+	</script>

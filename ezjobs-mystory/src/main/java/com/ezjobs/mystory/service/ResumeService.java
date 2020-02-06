@@ -7,7 +7,6 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -83,10 +82,7 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		PageRequest pr=getPageRequest(map,Sort.by(Sort.Direction.ASC,"editDate"));
 		System.out.println(op);
 		if((keyword.equals("null")|| keyword.equals(""))&& isAdmin) {
-			List<Resume> resumeList=resumeRepository.findAll(Example.of(resume));
-			int size=(Integer)map.get("size");
-			int form=size*((Integer)map.get("page"));
-			resumes=new PageImpl<>(resumeList.subList(form,form+size), pr, resumeList.size());
+			resumes=resumeRepository.findAllByIdGreaterThan(0, pr);
 		}
 		else {
 			resumes=resumeRepository.findAll(Example.of(resume), pr);

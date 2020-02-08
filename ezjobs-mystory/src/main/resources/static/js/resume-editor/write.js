@@ -25,7 +25,7 @@
 			},
 			exportResume: function(view,handler){//내보내기
 				$(view.element).delegate(".resume-export","click",function(e){
-					var form=$(e.target).closest("form").serializeJSON();
+					var form=$(e.target).form().serializeJSON();
 					var text=form.question+" - "+form.company+"<p>"+form.answer;
 					handler(text,form.question);
 					return false;
@@ -36,6 +36,27 @@
 					handler(e.target);
 				});
 			},
+			appendTag: function(view,handler){//태그삽입
+				$(view.element).delegate(".tag-append","click",function(e){
+					var data={
+						string:$(e.target).text()+":: ",
+						editor:$(e.target).form().find(".write-answer").ckeditor().editor,
+					}
+					handler(data);
+				});
+			},
+			appendTagPrompt: function(view,handler){//태그삽입2
+				$(view.element).delegate(".tag-append-prompt","click",function(e){
+					var data={
+						string:$(e.target).text()+":* ",
+						editor:$(e.target).form().find(".write-answer").ckeditor().editor,
+					}
+					handler(data);
+					
+					
+				});
+			},
+			
 			saveResume: function(view,handler){//저장하기
 				$(view.element).delegate("form", "submit", function(e) {
 					var tags = [];
@@ -77,6 +98,13 @@
 				$(target).form()
 					.find("input[name=_method]")
 					.val($(target).val());
+			},
+			appendTag:function(view,data){
+				var text=data.string;
+				//var text="<span style='border-style: solid;border-radius: 10px;border-color:#888888'>"+data.string+'</span>';
+				//var newElement = EDITOR.dom.element.createFromHtml(text, data.editor.document );
+				//data.editor.insertElement(newElement);
+				data.editor.insertHtml(text); 
 			},
 			saveResume: function(view,data){
 				var target=data.target;

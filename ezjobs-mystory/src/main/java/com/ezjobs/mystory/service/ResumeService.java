@@ -4,6 +4,10 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -60,10 +64,11 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		String keyword = String.valueOf(map.get("keyword"));
 
 		Resume resume=new Resume();
+		/*
 		if (op.equals("tagSearch")) { // 태그명 검색
 			resume.setTags(keyword);
 		}
-		else if (op.equals("question")) { // 자소서 문항 검색
+		else */if (op.equals("question")) { // 자소서 문항 검색
 			resume.setQuestion(keyword);
 		}
 		else if (isAdmin && op.equals("userId")) { // 작성자 검색
@@ -129,16 +134,75 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		resumeRepository.deleteById(id);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Sentence> autoComplete(Map<String, Object> map){
 		String keyword=(String)map.get("keyword");
+		String typesStr=(String)map.get("types");
+		String deptsStr=(String)map.get("depts");
+		Boolean isStart=Boolean.parseBoolean(((String)map.get("isStart")));
+		Boolean isEnd=Boolean.parseBoolean(((String)map.get("isEnd")));
 		System.out.println(keyword);
-		String keywordInclude=(String)map.get("keywordInclude");
-		Integer page=0;
+		System.out.println(typesStr);
+		System.out.println(deptsStr);
+		System.out.println(isStart);
+		System.out.println(isEnd);
 		Integer size=30;
-		PageRequest pr=PageRequest.of(page,size);
-		Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%"+keywordInclude+"%", pr);
-		System.out.println(pageList.getNumberOfElements());
-		return pageList.getContent();
+		
+		CriteriaBuilder builder=entityManager.getCriteriaBuilder();
+		CriteriaQuery<Sentence> query = builder.createQuery(Sentence.class);
+		
+		//조회의 시작점을 뜻하는 Root객체 생성 여기서 변수명 m은 JPQL에서 별칭이라고 생각하면 된다.
+		//반환타입을 알수 없다면 제네릭타입을 Object로 준다.
+		Root<Sentence> m = query.from(Sentence.class);
+		
+		//검색조건 정의
+		List<Predicate> typesList=new ArrayList<>();
+		List<Predicate> deptsList=new ArrayList<>();
+		List<Predicate> position=new ArrayList<>();
+		try{
+			mapper.readValue(typesStr,List.class)
+				.forEach(item -> 
+					typesList.add(builder.like(m.get("tags"), "%"+item+"%"))
+				);
+		}catch(Exception e) {
+		}
+		try{
+			mapper.readValue(deptsStr,List.class)
+			.forEach(item -> 
+				deptsList.add(builder.like(m.get("tags"), "%"+item+"%"))
+			);
+		}
+		catch(Exception e) {
+		}
+		if(isStart) {
+			position.add(builder.lessThanOrEqualTo(m.get("position"), 1));
+		}
+		if(isEnd) {
+			position.add(builder.equal(
+				builder.diff(m.get("positionMax"), m.get("position")),1
+			));
+		}
+		List<Predicate> wheres=new ArrayList<>();
+		List<List<Predicate>> wheresArray=
+				Arrays.asList(typesList,deptsList,position);
+		wheres.add(builder.like(m.get("text"), keyword+"%"));
+		for(List<Predicate> list:wheresArray) {
+			if(list.size()>0)
+				wheres.add(builder.or(list.toArray(
+					new Predicate[list.size()])
+				));
+		}
+		//정렬조건 정의
+		//Order ageDesc = builder.desc(m.get("age"));
+		
+		//distinct 중복제거.
+		query.select(m)
+			 .distinct(true)
+			 .where(builder.and(wheres.toArray(new Predicate[wheres.size()])));
+		List<Sentence> list=entityManager.createQuery(query).setMaxResults(size).getResultList();	
+		//Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%", pr);
+		//System.out.println(pageList.getNumberOfElements());
+		return list;//pageList.getContent();
 	}
 
 	public Map<String,Object> compareAll(String answer) {

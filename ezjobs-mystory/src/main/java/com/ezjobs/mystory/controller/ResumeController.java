@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
+import com.ezjobs.mystory.service.TagService;
 import com.ezjobs.mystory.service.page.PageService;
 import com.ezjobs.mystory.util.LoginUser;
 
@@ -23,6 +24,8 @@ import org.springframework.ui.Model;
 public class ResumeController {
 	
 	ResumeService resumeService;
+	
+	TagService tagService;
 	
 	SplitService splitService;
 	
@@ -101,7 +104,13 @@ public class ResumeController {
 	@ResponseBody
 	@GetMapping("auto")
 	public ResponseEntity<?> auto(@RequestParam Map<String, Object> map,Model model){
-		model.addAttribute("list",resumeService.autoComplete(map));
+		String searchType=(String)map.get("searchType");
+		if(searchType.equals("")) {
+			model.addAttribute("list",resumeService.autoComplete(map));
+		}
+		else {
+			model.addAttribute("list",tagService.autoComplete(map));
+		}
 		return ResponseEntity.ok(model);
 	}
 	

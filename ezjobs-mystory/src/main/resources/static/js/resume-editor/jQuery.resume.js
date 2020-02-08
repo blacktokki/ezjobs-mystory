@@ -2,7 +2,6 @@
 	'use strict'
 
 	var list,write,review,model;
-	var root="/js/resume-editor/";
 	
 	function refreshList(callback){
 		var form=list.getSearchForm();
@@ -137,6 +136,12 @@
 			write.bind("exportResume",export2Doc);
 			write.bind("changeMethod",function(target){
 				write.render("changeMethod",target);
+			});
+			write.bind("appendTag",function(data){
+				write.render("appendTag",data);
+			});
+			write.bind("appendTagPrompt",function(data){
+				write.render("appendTag",data);
 			});
 			write.bind("saveResume",saveResume);
 			review.bind("startReview",reviewResume);

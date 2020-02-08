@@ -38,7 +38,10 @@
 					</div>
 					<input name="tags" class="tags" value="${resume.tags}" />
 				</div>
-
+				<button type="button" class="button badge button-secondary tag-append-prompt">문항유형</button>
+				<button type="button" class="button badge button-secondary tag-append-prompt">직무</button>
+				<button type="button" class="button badge button-secondary tag-append">시작문장</button>
+				<button type="button" class="button badge button-secondary tag-append">마지막문장</button>
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text">내용</span>

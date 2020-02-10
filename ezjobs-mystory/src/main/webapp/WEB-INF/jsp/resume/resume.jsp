@@ -62,10 +62,10 @@
 	var changePageSize;
 	require(["resume-bundle"],function(RESUME){
 		createResume=function(){
-			RESUME.controller.createResume();
+			RESUME.app.createResume();
 		}
 		changePageSize=function(){
-			RESUME.controller.refreshList();
+			RESUME.app.refreshList();
 		}
 	});
 </script>

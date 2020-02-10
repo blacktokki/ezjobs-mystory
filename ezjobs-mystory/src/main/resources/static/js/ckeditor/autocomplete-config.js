@@ -1,18 +1,15 @@
 ac_config={}
 
 function textTestCallback( range ) {
-	console.log("c1");
     // You do not want to autocomplete a non-empty selection.
     if ( !range.collapsed ) {
         return null;
     }
-
     // Use the text match plugin which does the tricky job of performing
     // a text search in the DOM. The matchCallback function should return
     // a matching fragment of the text.
     return CKEDITOR.plugins.textMatch.match( range, matchCallback );
 }
-
 
 // Returns the position of the matching text.
 // It matches a word starting from the '#' character
@@ -24,10 +21,7 @@ var TagMap={
 	"마지막문장":"isEnd",
 }
 
-
-
 function matchCallback( text, offset ) {
-	console.log("c2");
     // Get the text before the caret.
     var keywords = text.slice( 0, offset ).split(/다 |\.|\n/);
     var keyword=keywords[keywords.length-1];
@@ -41,7 +35,6 @@ ac_config.textTestCallback = textTestCallback;
 
 // Returns (through its callback) the suggestions for the current query.
 function dataCallback( matchInfo, callback ) {
-	console.log("c3");
 	var form={
 			keyword:"",
 			types:[],
@@ -101,11 +94,9 @@ function dataCallback( matchInfo, callback ) {
 	    // so dataCallback can do an XHR request or use any other asynchronous API.
 	    if(suggestions.length>0){
 	    	callback( suggestions );
-	    	console.log("c4");
 	    }
 	});
 }
-
 ac_config.dataCallback = dataCallback;
 
 ac_config.itemTemplate = '<li data-id="{id}">{tags}    <mark><strong>{front}</strong></mark>{back}</li>';

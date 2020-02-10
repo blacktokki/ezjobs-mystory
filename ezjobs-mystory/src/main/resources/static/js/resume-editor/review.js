@@ -4,8 +4,11 @@
 	
 	function Review() {
 		this.element="#review-modal";
-		this.wordChange="#word-change";
+		this.wordChange="#word-change";//select
 		this.comapre="#compare";
+		this.btnApply=".btn-apply";
+		this.btnLoad=".btn-load";
+		this.listSentence=".list-sentence";
 	}
 	
 	function init(View){
@@ -13,16 +16,16 @@
 		Review.prototype.constructor=Review;
 		
 		Review.prototype.bindEvents={
-			startReview: function(view,handler){//검토시작하기
-				$("body").delegate(view.element,"shown.bs.modal",function(e){
+			startReview: function(handler){//검토시작하기
+				$("body").delegate(this.element,"shown.bs.modal",function(e){
 					handler();
 				});
 			},
-			changeWord:function(view,handler){//단어교체
-				$(view.wordChange).delegate("select","change",function(e){//단어교체
+			changeWord:function(handler){//단어교체
+				$(this.wordChange).delegate("select","change",function(e){//단어교체
 					var first=$("option",e.target).first().val();//기본값
 					var change=e.target.value;//선택한 값
-					var form=$(view.element).find("form").serializeJSON();
+					var form=$(this.element).find("form").serializeJSON();
 					form.isAdd=false;
 					form.synonym=change;
 					
@@ -42,18 +45,20 @@
 					handler(e.target,form);
 				});
 			},
-			applyReview:function(view,handler){//단어교체 적용하기
-				$(view.element).delegate(".btn-apply","click",function(e){
-					var currentVal=view.reviewText().join(' ');
+			applyReview:function(handler){//단어교체 적용하기
+				var self=this;
+				$(this.element).delegate(this.btnApply,"click",function(e){
+					var currentVal=self.reviewText().join(' ');
 					handler(currentVal);
 					return false;
 					
 				});
 			},
-			compare:function(view,handler){//유사도 검사
-				$(view.element).delegate(".btn-load","click",function(e){
-					$("#compare ul").html("");
-					view.reviewText().forEach( function(element) {
+			compare:function(handler){//유사도 검사
+				var self=this;
+				$(this.element).delegate(this.btnLoad,"click",function(e){
+					$(self.compare+" ul").html("");
+					self.reviewText().forEach( function(element) {
 				          var $target=$('<div class="spinner-border" role="status">'
 				        		  +'<span class="sr-only">Loading...</span></div>').appendTo("#compare ul");
 						  var sentence=$.trim(element.replace(/\s+/g, " "));
@@ -65,38 +70,38 @@
 		};
 		
 		Review.prototype.renderViews={
-			changeList:function(view,data){
-				$(view.wordChange+" ul").html(data)
+			changeList:function(data){
+				$(this.wordChange+" ul").html(data)
 					.sortable()
 					.find("li")
 					.each(function(i,element){
 						$(element).find("ul").sortable();
 				});
 			},
-			changeWord:function(view,data){
+			changeWord:function(data){
 				var form=data.form;
 				var target=data.target;
 				$(target).find("option[value="+form.synonym+"]",this)
 					.attr("selected",true).siblings()
 					.removeAttr("selected");
 			},
-			createWord:function(view,data){
+			createWord:function(data){
 				var form=data.form;
 				var target=data.target;
 				$("option[value=_add]",target).text(form.synonym).attr("value",form.synonym);
 				$("<option value='_add'>추가..</option>").appendTo($(target));
 			},
-			applyReview:function(view,data){
-				$(view.element).modal('hide');
+			applyReview:function(data){
+				$(this.element).modal('hide');
 			},
-			compare:function(view,data){
+			compare:function(data){
 				data.$target.attr("class","").html(data.data_part);
 			}
 		};
 		
 		Review.prototype.reviewText=function(){
 			var currentArray=[];
-			var $copy=$(this.wordChange).find("ul .list-sentence").clone();
+			var $copy=$(this.wordChange).find("ul "+this.listSentence).clone();
 			if($copy.length>0){
 				$copy.find("select").each(function(i,element){
 					$(element).html($(element).find("option:selected").val());

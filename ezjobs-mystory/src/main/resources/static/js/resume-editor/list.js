@@ -4,6 +4,13 @@
 	
 	function List() {
 		this.element="#accordion1";
+		this.resumeLink=".resume-link";//href
+		this.searchForm=".search-form";//input[name=page]
+		this.pageItem=".page-item a";//data-page
+		this.resumeCard="#resume-card";
+		this.deleteForm=".delete-form";
+		this.deleteModal=".delete-modal";
+		this.pageFormSelect=".page-form select";
 	}
 	
 	function init(View){
@@ -11,32 +18,32 @@
 		List.prototype.constructor=List;
 		
 		List.prototype.bindEvents={
-			loadResume : function(view,handler){//자기소개서 불러오기
-				$(view.element).delegate(".resume-link","click",function(e){
+			loadResume : function(handler){//자기소개서 불러오기
+				$(this.element).delegate(this.resumeLink,"click",function(e){
 					e.preventDefault();
 					var href = $(e.target).attr("href");
-					var card = href.replace("/resume/write/", "#resume-card");
+					var card = href.replace("/resume/write/",this.resumeCard);
 					handler(href,card);
 				});
 			},
-			search : function(view,handler){//조건검색
-				$(view.element).delegate(".search-form","submit",function(e) {//조건검색
+			search : function(handler){//조건검색
+				$(this.element).delegate(this.searchForm,"submit",function(e) {//조건검색
 					e.preventDefault();
 					handler();
 				});
 			},
 			
-			changePage : function(view,handler){//페이지 이동
-				$(view.element).delegate(".page-item a","click",function(e){//페이지 이동
+			changePage : function(handler){//페이지 이동
+				$(this.element).delegate(this.pageItem,"click",function(e){//페이지 이동
 					var page=$(e.target).attr("data-page");
-					$(".search-form").find("input[name=page]").val(page);
+					$(this.searchForm).find("input[name=page]").val(page);
 					handler();
 					return false;
 				});
 			},
 			
-			deleteResume : function(view,handler){//자기소개서 삭제
-				$(view.element).delegate(".delete-form","submit",function(e){//자기소개서 삭제
+			deleteResume : function(handler){//자기소개서 삭제
+				$(this.element).delegate(this.deleteForm,"submit",function(e){//자기소개서 삭제
 					var form=$(e.target).serializeJSON();
 					e.preventDefault();
 					handler(form);
@@ -46,17 +53,17 @@
 		};
 		
 		List.prototype.renderViews={
-			refresh : function(view,data){
-				$(view.element).html(data);
+			refresh : function(data){
+				$(this.element).html(data);
 			},
-			hideDeleteModal :function(view,data){
-				$(".delete-modal").modal('hide');
+			hideDeleteModal :function(data){
+				$(this.deleteModal).modal('hide');
 			}
 		};
 		
 		List.prototype.getSearchForm=function(){
-			var form=$(this.element).find(".search-form").serializeJSON();
-			form.size=$(this.element).find(".page-form select").val();
+			var form=$(this.element).find(this.searchForm).serializeJSON();
+			form.size=$(this.element).find(this.pageFormSelect).val();
 			return form;
 		}
 	}

@@ -30,25 +30,22 @@ requirejs.config({
 	"shim" : {
 		"rsm-editor/jQuery.resume":{
 			deps:[
-				"ckeditor/ckeditor",
-				"ckeditor/adapters/jquery",
-				"cke-textwatcher/plugin",
-				"cke-autocomplete/plugin",
-				"cke-textmatch/plugin",
-				"cke-wordcount/plugin",
-				"cke-wordcount/lang/ko",
-				"jquery-ui-touch-punch"
-				/*
-				,
-				,*/
+				"jquery-ui-touch-punch",
 			],
 			exports : "RESUME",
 		},
 		"rsm-editor/list":["rsm-editor/jQuery.resume"],
-		"rsm-editor/model":["rsm-editor/jQuery.resume"],
 		"rsm-editor/review":["rsm-editor/jQuery.resume"],
-		"rsm-editor/view":["rsm-editor/jQuery.resume"],
-		"rsm-editor/write":["rsm-editor/jQuery.resume"],
+		"rsm-editor/write":[
+			"rsm-editor/jQuery.resume",
+			"ckeditor/ckeditor",
+			"ckeditor/adapters/jquery",
+			"cke-textwatcher/plugin",
+			"cke-autocomplete/plugin",
+			"cke-textmatch/plugin",
+			"cke-wordcount/plugin",
+			"cke-wordcount/lang/ko",
+		],
 	},
 	"packages" : []
 });
@@ -56,9 +53,7 @@ requirejs.config({
 define("resume-bundle",[
 	"rsm-editor/jQuery.resume",
 	"rsm-editor/list",
-	"rsm-editor/model",
 	"rsm-editor/review",
-	"rsm-editor/view",
 	"rsm-editor/write"
 	]
 	,function(RESUME){

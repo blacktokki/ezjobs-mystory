@@ -1,43 +1,145 @@
-(function(global,$,EDITOR) {
+(function(global,$) {
 	'use strict'
 
-	var list,write,review,model;
+	function View() {
+	}
 	
-	function refreshList(callback){
-		var form=list.getSearchForm();
-		model.list(form,function(data){
-			if(callback)
-				callback();
-			list.render("refresh",data);
+	View.prototype.bindEvents={
+	};
+	
+	View.prototype.renderViews={
+	};
+	
+	View.prototype.bindHandler=function(event,handler){
+		this.bindEvents[event].bind(this)(handler);
+		return this;
+	};
+	
+	View.prototype.render=function(view,data){
+		this.renderViews[view].bind(this)(data);
+	};
+	
+	View.prototype.bindRender=function(event,view){
+		var self=this;
+		this.bindHandler(event,function(data){
+			self.render(view,data);
 		});
+		return this;
+	}
+	
+	function App(list,write,review) {
+		this.list=list;
+		this.write=write;
+		this.review=review;
+		this.resume_idx = 0;
+		this.resume_new = 0;
 		
-	}
+		this.list.bindHandler("loadResume",this.getResume)
+			.bindHandler("search",this.refreshList)
+			.bindHandler("changePage",this.refreshList)
+			.bindHandler("deleteResume",this.deleteResume);
+		
+		this.write.bindRender("titleSync","titleSync")
+			.bindHandler("exportResume",RESUME.export2Doc)
+			.bindRender("changeMethod","changeMethod")
+			.bindRender("appendTag","appendTag")
+			.bindRender("appendTagPrompt","appendTag")
+			.bindHandler("appendTagCustom","appendTag")
+			.bindHandler("saveResume",this.postResume);
+		
+		this.review.bindHandler("startReview",this.reviewResume)
+			.bindHandler("changeWord",this.changeWord)
+			.bindHandler("applyReview",this.applyReview)
+			.bindHandler("compare",this.compare);
+	};
 	
-	function createResume(){
-		model.create(function(data){
-			write.render("appendResume",data);
+	App.prototype.getList=function(preRefresh){
+		$.get("/resume/content",self().list.getSearchForm(),function(data){
+			if(preRefresh)
+				preRefresh();
+			self().list.render("refresh",data);
 		});
 	}
-	
-	function loadResume(href,target){
+	App.prototype.createResume=function(){
+		self().resume_idx += 1;
+		self().resume_new += 1;
+		$(document.createDocumentFragment()).load("/resume/write",function(response){
+			var data={
+				response : response,
+				model :self(),
+				resume_idx : self().resume_idx,
+				resume_new : self().resume_new,
+			};
+			self().write.render("appendResume",data);
+		});
+	}
+	App.prototype.getResume=function(href,target){
 		if ($(target).length == 0){
-			model.load(href,function(data){
-				write.render("appendResume",data);
+			self().resume_idx += 1;
+			$(document.createDocumentFragment()).load(href,function(response){
+				var data={
+					response : response,
+					resume_idx : self().resume_idx,
+				};
+				self().write.render("appendResume",data);
 			});
 		}
-		else{
-			write.render("showExistResume",target);
-		}
+		else
+			self().write.render("showExistResume",target);
 	}
-	function deleteResume(form){
-		model.remove(form,function(data){
-			refreshList(function(){
-				list.render("hideDeleteModal",data);
+	App.prototype.deleteResume=function(form){
+		$.post("/resume/content",form,function(data){
+			self().getList(function(){
+				self().list.render("hideDeleteModal",data);
 			});
 		});
 	}
+	App.prototype.postResume=function(target,form){
+		$.post("/resume/content/" + form.id, form, function(data) {
+			self().refreshList();
+			self().write.render("saveResume",{
+				target:target,
+				data:data,
+			});
+		});
+	}
+	App.prototype.reviewResume=function(){
+		$.get("/resume/changelist",self().write.getCurrentAnswer(),function(data){
+			self().review.render("changeList",data);
+		});
+	}
+	App.prototype.changeWord=function(target,form){
+		var data={
+			target:target,
+			form:form,
+		};
+		if (form.isAdd){
+			$.post("/resume/synonym/", form);
+			self().review.render("createWord",data);
+		};
+		self().review.render("changeWord",data);
+	}
+	App.prototype.applyReview=function(data){
+		self().review.render("applyReview",data);
+		self().write.render("applyReview",data);
+	}
+	App.prototype.compare=function($target,form){
+		$.get("/resume/compare", form,function(data_part) {
+			var data={
+				$target:$target,
+				data_part:data_part,
+			}
+			self().review.render("compare",data);
+		});
+	}
 	
-	function export2Doc(content, filename){
+	function self(){
+		return RESUME.app;
+	}
+	
+	global.RESUME={};
+	global.RESUME.init={};
+	global.RESUME.export2Doc=function(content, filename){
 	    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
 	    var postHtml = "</body></html>";
 	    var html = preHtml+content+postHtml;
@@ -64,103 +166,22 @@
 	        document.body.removeChild(downloadLink);   
 	    }
 	}
-	
-	function saveResume(target,form){
-		model.save(form,function(data){
-			console.log(data);
-			refreshList();
-			write.render("saveResume",{
-				target:target,
-				data:data,
-			});
-		});
-	}
-	
-	function reviewResume(){
-		var form={
-			answer:write.getCurrentAnswer(),
-		};
-		model.review(form,function(data){
-			review.render("changeList",data);
-		});
-	}
-	
-	function changeWord(target,form){
-		var data={
-			target:target,
-			form:form,
-		};
-		if (form.isAdd){
-			model.addWord(form);
-			review.render("createWord",data);
-		};
-		review.render("changeWord",data);
-	}
-	
-	function compare($target,form){
-		
-		model.compare(form, function(data_part) {
-			review.render("compare",{
-				$target:$target,
-				data_part:data_part,
-			});
-			
-        });
-	}
-	
-	function load(){
-		if (RESUME.View &&
+	global.RESUME.load=function(){
+		if (
 			RESUME.List &&
 			RESUME.Write &&
 			RESUME.Review &&
-			RESUME.Model
+			!RESUME.app
 		){
-			RESUME.init.view();
-			RESUME.init.list(RESUME.View);
-			RESUME.init.write(RESUME.View);
-			RESUME.init.review(RESUME.View);
-			RESUME.init.model();
+			RESUME.init.list(View);
+			RESUME.init.write(View);
+			RESUME.init.review(View);
 			
-			list=new RESUME.List();
-			write=new RESUME.Write();
-			review=new RESUME.Review();
-			model=new RESUME.Model();
+			var list=new RESUME.List();
+			var write=new RESUME.Write();
+			var review=new RESUME.Review();
+			RESUME.app=new App(list,write,review);
 			
-			list.bind("loadResume",loadResume);
-			list.bind("search",refreshList);
-			list.bind("changePage",refreshList);
-			list.bind("deleteResume",deleteResume);
-			write.bind("titleSync",function(data){
-				write.render("titleSync",data);
-			});
-			write.bind("exportResume",export2Doc);
-			write.bind("changeMethod",function(target){
-				write.render("changeMethod",target);
-			});
-			write.bind("appendTag",function(data){
-				write.render("appendTag",data);
-			});
-			write.bind("appendTagPrompt",function(data){
-				write.render("appendTag",data);
-			});
-			write.bind("saveResume",saveResume);
-			review.bind("startReview",reviewResume);
-			review.bind("changeWord",changeWord);
-			review.bind("applyReview",function(data){
-				write.render("applyReview",data);
-				review.render("applyReview",data);
-			});
-			review.bind("compare",compare);
 		}
 	}
-	
-	EDITOR.config.extraPlugins = 'wordcount';
-	global.RESUME=global.RESUME || {};
-	global.RESUME.init=global.RESUME.init || {};
-	global.RESUME.load=load;
-	global.RESUME.controller={
-		refreshList:refreshList,
-		createResume:createResume,
-	};
-	
-}(this,jQuery,CKEDITOR));
+}(this,jQuery));

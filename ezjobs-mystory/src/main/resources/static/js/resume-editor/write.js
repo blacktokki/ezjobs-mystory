@@ -2,8 +2,34 @@
 	
 	'use strict'
 	
+	var ck_config={
+		width: "100%",
+		height: 500,
+		language:'korean',
+		toolbar:[
+			{ name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo','Redo2'] },
+			{ name: 'editing', groups: [ 'find', 'selection' ], items: [ 'Find', 'Replace', '-', 'SelectAll'] },
+			{ name: 'about', items: [ 'About' ] }
+		],
+		wordcount:{
+			showWordCount: true,
+			showCharCount: true,
+			showParagraphs: false,
+			countSpacesAsChars: true,
+		}
+	}
+	
 	function Write() {
-		this.element="#accordion2";
+		this.element="#accordion2";//form :submit,.tags,.collapse
+		this.writeQuestion=".write-question";//id
+		this.resumeExport=".resume-export";
+		this.tagAppend=".tag-append";
+		this.tagAppendPrompt=".tag-append-prompt";
+		this.tagAppendCustom=".tagsinput .tag>span";
+		this.writeAnswer=".write-answer";
+		this.navProfileTab="#nav-profile-tab";
+		this.resumeId=".resume-id";
+		this.resumeMethod=".resume-method"
 	}
 	
 	function init(View){
@@ -12,55 +38,66 @@
 		
 		
 		Write.prototype.bindEvents={
-			titleSync: function(view,handler){//제목 동기화
+			titleSync: function(handler){//제목 동기화
 				var events="propertychange change keyup paste input";
-				$(view.element).delegate(".write-question",events,function(e){
-					var id=$(e.target).attr("id").replace("write-question", "");
-					var currentVal=$(e.target).val();
+				$(this.element).delegate(this.writeQuestion,events,function(e){
 					handler({
-						id:$(e.target).attr("id").replace("write-question", ""),
+						id:$(e.target).attr("id").replace(this.writeQuestion, ""),
 						currentVal:currentVal=$(e.target).val()
 					});
 				});
 			},
-			exportResume: function(view,handler){//내보내기
-				$(view.element).delegate(".resume-export","click",function(e){
+			exportResume: function(handler){//내보내기
+				$(this.element).delegate(this.resumeExport,"click",function(e){
 					var form=$(e.target).form().serializeJSON();
 					var text=form.question+" - "+form.company+"<p>"+form.answer;
 					handler(text,form.question);
 					return false;
 				});
 			},
-			changeMethod: function(view,handler){//저장메소드변경
-				$(view.element).delegate("form :submit","click",function(e){
+			changeMethod: function(handler){//저장메소드변경
+				$(this.element).delegate("form :submit","click",function(e){
 					handler(e.target);
 				});
 			},
-			appendTag: function(view,handler){//태그삽입
-				$(view.element).delegate(".tag-append","click",function(e){
+			appendTag: function(handler){//태그삽입
+				var writeAnswer=this.writeAnswer;
+				$(this.element).delegate(this.tagAppend,"click",function(e){
 					var data={
 						string:$(e.target).text()+":: ",
-						editor:$(e.target).form().find(".write-answer").ckeditor().editor,
+						editor:$(e.target).form().find(writeAnswer).ckeditor().editor,
 					}
 					handler(data);
 				});
 			},
-			appendTagPrompt: function(view,handler){//태그삽입2
-				$(view.element).delegate(".tag-append-prompt","click",function(e){
+			appendTagPrompt: function(handler){//태그삽입2
+				var writeAnswer=this.writeAnswer;
+				$(this.element).delegate(this.tagAppendPrompt,"click",function(e){
 					var data={
 						string:$(e.target).text()+":* ",
-						editor:$(e.target).form().find(".write-answer").ckeditor().editor,
+						editor:$(e.target).form().find(writeAnswer).ckeditor().editor,
 					}
 					handler(data);
 					
 					
+				});
+			},
+			appendTagCustom: function(handler){//태그삽입3
+				var writeAnswer=this.writeAnswer;
+				$(this.element).delegate(this.tagAppendCustom,"click",function(e){
+					var data={
+						string:$(e.target).text(),
+						editor:$(e.target).closest("form").find(writeAnswer).ckeditor().editor,
+					}
+					handler(data);
 				});
 			},
 			
-			saveResume: function(view,handler){//저장하기
-				$(view.element).delegate("form", "submit", function(e) {
+			saveResume: function(handler){//저장하기
+				var tagAppendCustom=this.tagAppendCustom;
+				$(this.element).delegate("form", "submit", function(e) {
 					var tags = [];
-					$(e.target).find(".tagsinput").find(".tag>span").each(function(i, element){
+					$(e.target).find(tagAppendCustom).each(function(i, element){
 						tags.push($.trim($(element).text()));
 					});
 					$(e.target).find(".tags").val(tags.join(","));
@@ -74,11 +111,13 @@
 		};
 		
 		Write.prototype.renderViews={
-			appendResume : function(view,data){
-				view.resumeTemplate(data,function(data){
-					var resume_idx=data.model.resume_idx;
-					$("#nav-profile-tab").tab("show");
-					data.$result.appendTo("#accordion2").find(".collapse").collapse("show");
+			appendResume : function(data){
+				var element=this.element;
+				var navProfileTab=this.navProfileTab;
+				this.resumeTemplate(data,function(data){
+					var resume_idx=data.resume_idx;
+					$(navProfileTab).tab("show");
+					data.$result.appendTo(element).find(".collapse").collapse("show");
 					$("#tags-write" + resume_idx).tagsInput({
 						'height' : '100%',
 						'width' : '80%',
@@ -87,44 +126,44 @@
 					var ac=new EDITOR.plugins.autocomplete(editor, ac_config );
 				});
 			},
-			showExistResume : function(view,target){
-				$("#nav-profile-tab").tab("show");
+			showExistResume : function(target){
+				$(this.navProfileTab).tab("show");
 				$(target).find(".collapse").collapse("show");
 			},
-			titleSync :function(view,data){
+			titleSync :function(data){
 				$("#heading-write" + data.id + " a").html(data.currentVal);
 			},
-			changeMethod :function(view,target){
+			changeMethod :function(target){
 				$(target).form()
 					.find("input[name=_method]")
 					.val($(target).val());
 			},
-			appendTag:function(view,data){
+			appendTag:function(data){
+				console.log(data);
 				var text=data.string;
 				//var text="<span style='border-style: solid;border-radius: 10px;border-color:#888888'>"+data.string+'</span>';
 				//var newElement = EDITOR.dom.element.createFromHtml(text, data.editor.document );
 				//data.editor.insertElement(newElement);
 				data.editor.insertHtml(text); 
 			},
-			saveResume: function(view,data){
+			saveResume: function(data){
 				var target=data.target;
 				var data=data.data;
-				$(target).find(".resume-id").val(data.id);
+				$(target).find(this.resumeId).val(data.id);
 				$(target).closest(".card").attr("id","resume-card"+data.id);
-				$(target).find(".resume-method").val("put");
+				$(target).find(this.resumeMethod).val("put");
 			},
-			applyReview: function(view,data){
-				$(view.element+" .card").find(".show").find(".write-answer").val(data);
+			applyReview: function(data){
+				$(this.element+" .card").find(".show").find(this.writeAnswer).val(data);
 			}
 			
 		};
 		
 		Write.prototype.resumeTemplate=function(data,callback){
-			var resume_idx=data.model.resume_idx;
-			var resume_new=data.model.resume_new;
+			var resume_idx=data.resume_idx;
+			var resume_new=data.resume_new;
 			//console.log(resume_new);
 			//console.log(resume_idx);
-			var ck_config=data.model.ck_config;
 			var $result=$(data.response);
 	
 			$result.find(".card-header")
@@ -145,7 +184,7 @@
 			$result.find(".write-date").datepicker({
 			    dateFormat: 'yy-mm-dd'
 		  	});
-			if(data.isNew){
+			if(resume_new){
 				$result.find(".write-question").val("새 자기소개서 " + resume_new);
 				$result.find(".card-header a").html("새 자기소개서 " + resume_new);
 			}
@@ -154,12 +193,14 @@
 		}
 		
 		Write.prototype.getCurrentAnswer=function(){
-			return $(this.element+" .card").find(".show").find(".write-answer").val();
+			var answer= $(this.element+" .card").find(".show").find(".write-answer").val();
+			return {answer:answer};
 		}
 	}
 	
 	global.RESUME.Write=Write;
 	global.RESUME.init.write=init;
+	EDITOR.config.extraPlugins = 'wordcount';
 	global.RESUME.load();
 	
 }(this,jQuery,CKEDITOR));

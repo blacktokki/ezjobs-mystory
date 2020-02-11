@@ -85,7 +85,8 @@ function dataCallback( matchInfo, callback ) {
 			}
 			else{
 				var front= form.searchType+":" +frontTrim;
-				itemsArray.push({tags:"", id: i, name: tagsRaw+e.id.replace(/\s/g,"_")+" ", front:front, back:e.id.replace(front,"")});
+				var fullname=e.type+":"+e.name;
+				itemsArray.push({tags:"", id: i, name: tagsRaw+fullname.replace(/\s/g,"_")+" ", front:front, back:fullname.replace(front,"")});
 			}
 		});
 		

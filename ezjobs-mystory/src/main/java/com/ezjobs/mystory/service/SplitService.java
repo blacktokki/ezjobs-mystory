@@ -65,15 +65,15 @@ public class SplitService {
 	
 	public void sentenceAddAll(List<Resume> resumes) {
 		List<List<String>> resumesSplit=spliterResumes(resumes);
-		int mx=0,j=0;
+		int mx=0;//,j=0;
 		for(List<String> resumeSplit:resumesSplit) {
 			int i=0;
 			List<Sentence> sentences=new ArrayList<Sentence>();
-			String tags=resumes.get(j++).getTags();
+			//String tags=resumes.get(j++).getTags();
 			for(String str:resumeSplit) {
 				Sentence sentence=new Sentence();
 				sentence.setUserId("_admin");
-				sentence.setTags(tags);
+				//sentence.setTags(tags);
 				sentence.setText(str);
 				sentence.setPosition(i++);
 				sentence.setPositionMax(resumeSplit.size());

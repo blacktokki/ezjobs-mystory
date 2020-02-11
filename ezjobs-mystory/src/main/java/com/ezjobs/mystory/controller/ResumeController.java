@@ -81,7 +81,7 @@ public class ResumeController {
 	@ResponseBody
 	@PutMapping("content/{id}")
 	public ResponseEntity<?> content(@PathVariable Integer id,@RequestParam Map<String, Object> map,Model model){
-		System.out.println("start");
+		map.put("userId",LoginUser.getId());
 		resumeService.edit(map,tagService.writeResumeTags(map));
 		model.addAttribute("id", id);
 		return ResponseEntity.ok(model);

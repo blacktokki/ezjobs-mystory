@@ -34,33 +34,39 @@ public class Resume {
 	)
 	private Set<Tag> tags=new HashSet<Tag>();
 	
-	@Column(name = "dept", nullable = false)
+	@Column(name = "dept")
 	private String dept;
 
-	@Column(name = "company", nullable = false)
+	@Column(name = "company")
 	private String company;
 	
-	@Column(name = "question", nullable = false)
+	@Column(name = "question")
 	private String question;
 
-	@Column(name = "answer", nullable = false)
+	@Column(name = "answer")
 	private String answer;
 
-	@Column(name = "user_id", nullable = false)
+	@Column(name = "user_id")
 	private String userId;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name = "close_date", nullable = false)
+	@Column(name = "close_date")
 	private Date closeDate;
 
-	@Column(name = "state", nullable = false)
+	@Column(name = "state")
 	private String state;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "edit_date", nullable = false ,insertable=false)
+	@Column(name = "edit_date")
 	private Date editDate;
 
-	@Column(name = "edit_group", nullable = false)
+	@Column(name = "edit_group")
 	private Integer editGroup;
+	
+	@PrePersist
+	@PreUpdate
+	protected void createEditDate() {
+	    editDate = new Date();
+	}
 
 }

@@ -39,11 +39,10 @@
 		
 		Write.prototype.bindEvents={
 			titleSync: function(handler){//제목 동기화
-				var events="propertychange change keyup paste input";
-				$(this.element).delegate(this.writeQuestion,events,function(e){
+				$(this.element).delegate(this.writeQuestion,"propertychange change keyup paste input",function(e){
 					handler({
-						id:$(e.target).attr("id").replace(this.writeQuestion, ""),
-						currentVal:currentVal=$(e.target).val()
+						id:$(e.target).attr("id").replace("write-question", ""),
+						currentVal:$(e.target).val()
 					});
 				});
 			},
@@ -96,16 +95,27 @@
 			saveResume: function(handler){//저장하기
 				var tagAppendCustom=this.tagAppendCustom;
 				$(this.element).delegate("form", "submit", function(e) {
-					var tags = [];
-					$(e.target).find(tagAppendCustom).each(function(i, element){
-						tags.push($.trim($(element).text()));
-					});
-					$(e.target).find(".tags").val(tags.join(","));
+					e.preventDefault();
 					var form = $(e.target).serializeJSON();
 					if(form._method=="post")
 						form.id="";
+					var tags=[];
+					$(e.target).find(tagAppendCustom).each(function(i, element){
+						var tag=$.trim($(element).text()).split(":");
+						//console.log(tag.length);
+						if (tag.length==1){
+							tag[1]=tag[0];
+							tag[0]="키워드";
+						}else if(tag[0]!="문항유형"&&tag[0]!="직무"){
+							tag[0]="키워드";
+						}
+						tags.push({
+							type:tag[0],
+							name:tag[1],
+						});
+					});
+					form.tagsStr=JSON.stringify(tags);
 					handler(e.target,form);
-					return false;
 				});
 			},
 		};

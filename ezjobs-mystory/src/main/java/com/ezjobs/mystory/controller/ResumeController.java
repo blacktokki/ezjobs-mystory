@@ -73,7 +73,7 @@ public class ResumeController {
 	@PostMapping("content")
 	public ResponseEntity<?> content(@RequestParam Map<String, Object> map,Model model){
 		map.put("userId",LoginUser.getId());
-		resumeService.write(map);
+		resumeService.write(map,tagService.writeResumeTags(map));
 		model.addAttribute("id", map.get("id"));
 		return ResponseEntity.ok(model);
 	}
@@ -81,7 +81,8 @@ public class ResumeController {
 	@ResponseBody
 	@PutMapping("content/{id}")
 	public ResponseEntity<?> content(@PathVariable Integer id,@RequestParam Map<String, Object> map,Model model){
-		resumeService.edit(map);
+		System.out.println("start");
+		resumeService.edit(map,tagService.writeResumeTags(map));
 		model.addAttribute("id", id);
 		return ResponseEntity.ok(model);
 	}

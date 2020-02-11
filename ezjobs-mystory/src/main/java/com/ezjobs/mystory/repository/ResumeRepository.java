@@ -28,7 +28,6 @@ public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 	@Query(value = "update Resume r set r.state = :#{#resume.state} "
 			+ " WHERE r.id = :#{#resume.id}")
 	void updateState(Resume resume);
-
-	Page<Resume> findAllByIdGreaterThan(Integer id, Pageable pr);
 	
+	Page<Resume> findAllByIdGreaterThan(Integer id, Pageable pr);
 }

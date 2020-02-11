@@ -48,12 +48,14 @@ public class AdminController {
 	@GetMapping("/tag")
 	public String tag(@RequestParam Map<String,Object> map, Model model){
 		model.addAttribute("tags",tagService.adminListAll(map));
+		PageService.addPageAttributes(map,model);
 		return "admin/tag";
 	}
 	
 	@PostMapping("/tag")
 	public String tag(@RequestParam Map<String,Object> map, Model model, String sch, int showNum, String upTag, String upTagId, String delTagId){
 		model.addAttribute("tags",tagService.adminListAll(map));
+		PageService.addPageAttributes(map,model);
 		return "admin/tag";
 	}
 	

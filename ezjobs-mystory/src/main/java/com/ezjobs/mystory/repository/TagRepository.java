@@ -1,5 +1,8 @@
 package com.ezjobs.mystory.repository;
 
+import java.util.Collection;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +27,12 @@ public interface TagRepository extends JpaRepository<Tag, Integer>{
 	@Modifying	// delete Query
 	@Query(value="delete from Tag t" + " WHERE t.id = :#{#tag.id}")
 	void delete(Tag tag);
+
+	//autocomplete
+	Page<Tag> findByTypeAndNameLike(String type,String name, Pageable pr);
+	
+	//saveResume
+	@Query(value="select t from Tag t where t.name in :names")
+	Set<Tag> findByNames(Collection<String> names);
 	
 }

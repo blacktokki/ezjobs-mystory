@@ -44,7 +44,7 @@
 			.bindRender("changeMethod","changeMethod")
 			.bindRender("appendTag","appendTag")
 			.bindRender("appendTagPrompt","appendTag")
-			.bindHandler("appendTagCustom","appendTag")
+			.bindRender("appendTagCustom","appendTag")
 			.bindHandler("saveResume",this.postResume);
 		
 		this.review.bindHandler("startReview",this.reviewResume)
@@ -95,8 +95,10 @@
 		});
 	}
 	App.prototype.postResume=function(target,form){
+		console.log(form);
+		
 		$.post("/resume/content/" + form.id, form, function(data) {
-			self().refreshList();
+			self().getList();
 			self().write.render("saveResume",{
 				target:target,
 				data:data,

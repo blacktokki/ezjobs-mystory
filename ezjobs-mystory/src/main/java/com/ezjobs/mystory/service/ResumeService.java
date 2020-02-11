@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.Sentence;
 import com.ezjobs.mystory.entity.Synonym;
+import com.ezjobs.mystory.entity.Tag;
 import com.ezjobs.mystory.repository.ResumeRepository;
 import com.ezjobs.mystory.repository.SentenceRepository;
 import com.ezjobs.mystory.repository.SynonymRepository;
@@ -40,23 +41,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	public List<Object[]> group(){
-		String userId="_SI";
-		String group="userId";
-		List<Object[]> resumeGroup = entityManager
-		        .createQuery("SELECT "+group+", COUNT("+group+") AS total FROM Resume "
-		        		+ "WHERE userId=?1 GROUP BY "+group,Object[].class)
-		        .setParameter(1, userId)
-		        .getResultList();
-		/*
-		for (Object[] result : results) {
-			String name = (String) result[0];
-		    int count = ((Number) result[1]).intValue();
-		    System.out.println(name+" "+count);
-		}*/
-		return resumeGroup;
-	}
 	
 	public Page<Resume> list(Map<String,Object> map){
 		Boolean isAdmin=(Boolean)map.get("isAdmin");
@@ -85,7 +69,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		
 		Page<Resume> resumes;
 		PageRequest pr=getPageRequest(map,Sort.by(Sort.Direction.ASC,"editDate"));
-		System.out.println(op);
 		if((keyword.equals("null")|| keyword.equals(""))&& isAdmin) {
 			resumes=resumeRepository.findAllByIdGreaterThan(0, pr);
 		}
@@ -105,20 +88,37 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 	public Resume content(Integer id){
 		return resumeRepository.findById(id).get();	
 	}
-
-	public void write(Map<String,Object> map) {
-		String userId=(String)map.get("userId");
+	
+	public void write(Map<String,Object> map,Set<Tag> tagsSet) {
 		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
-		resume.setUserId(userId);
-		resume.setState("미작성");
-		resume.setEditDate(new Date());
-		resumeRepository.save(resume);
-		map.put("id",resume.getId());
+		tagsSet.forEach(tag->tag.getResumes().add(resume));
+    	resume.setTags(tagsSet);
+    	resumeRepository.save(resume);
+		map.put("id", resume.getId());
+		
 	}
 	
-	public void edit(Map<String,Object> map){
-		Resume resume=mapper.convertValue(map, Resume.class);//board로 변환
-		//System.out.println(resume.getTags());
+	public void edit(Map<String,Object> map,Set<Tag> tagsSet){
+		System.out.println("start2");
+		System.out.println(tagsSet.toString());
+		Resume resume=mapper.convertValue(map, Resume.class);
+		Resume resumeOld=resumeRepository.getOne(Integer.parseInt((String)map.get("id")));
+		resume.setUserId(resumeOld.getUserId());
+		resume.setEditDate(resumeOld.getEditDate());
+		System.out.println("start3");
+		for(Tag tag:tagsSet) {
+			System.out.println("name:"+tag.getName());
+			System.out.println(tag.getResumes().toString());
+			tag.getResumes().add(resume);
+			System.out.println(tag.getResumes().toString());
+		}
+		/*
+		tagsSet.forEach(tag->{
+			System.out.println(tag.getResumes().toString());
+			tag.getResumes().add(resume);
+		});*/
+    	resume.setTags(tagsSet);
+    	System.out.println("update4");
 		resumeRepository.update(resume);
 	}
 	
@@ -134,7 +134,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		resumeRepository.deleteById(id);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Sentence> autoComplete(Map<String, Object> map){
 		String keyword=(String)map.get("keyword");
 		String typesStr=(String)map.get("types");
@@ -160,17 +159,13 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		List<Predicate> deptsList=new ArrayList<>();
 		List<Predicate> position=new ArrayList<>();
 		try{
-			mapper.readValue(typesStr,List.class)
-				.forEach(item -> 
-					typesList.add(builder.like(m.get("tags"), "%"+item+"%"))
-				);
+			for(String item:mapper.readValue(typesStr, String[].class))
+				typesList.add(builder.like(m.get("tags"), "%"+item+"%"));			
 		}catch(Exception e) {
 		}
-		try{
-			mapper.readValue(deptsStr,List.class)
-			.forEach(item -> 
-				deptsList.add(builder.like(m.get("tags"), "%"+item+"%"))
-			);
+		try{		
+			for(String item:mapper.readValue(deptsStr, String[].class))
+				deptsList.add(builder.like(m.get("tags"), "%"+item+"%"));	
 		}
 		catch(Exception e) {
 		}
@@ -235,17 +230,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		map.put("scores",scores);
 		map.put("rates",100*rates/(size*strs.length));
 		return map;
-	}
-
-	public void tagsearch() {//시험용
-		/*
-		List<Sentence> sentences = entityManager
-		        .createQuery("SELECT s FROM Sentence s WHERE s.text LIKE ?1 AND s.tags LIKE ?2 AND s.tags LIKE ?3",Sentence.class)
-		        .setParameter(1,"%키워드%")
-		        .setParameter(2,"%태그1%")
-		        .setParameter(3,"%태그2%")
-		        .getResultList();
-		*/
 	}
 
 	public void addSynonym(Map<String,Object> map) {

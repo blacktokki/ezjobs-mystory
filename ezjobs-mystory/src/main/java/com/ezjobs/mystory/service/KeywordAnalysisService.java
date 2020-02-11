@@ -59,7 +59,7 @@ public class KeywordAnalysisService {
 		Map<Integer,Integer> resumeMap=new HashMap<>();
 		PageRequest pr=PageRequest.of(0,10000);
 		for(int i=0;i<resumes.size();i++) {
-			resumes.get(i).setTags(resumes.get(i).getDept());
+			//resumes.get(i).setTags(resumes.get(i).getDept());
 			resumeMap.put(resumes.get(i).getId(),i);
 		}
 		for(Tag tag:tags) {
@@ -74,12 +74,13 @@ public class KeywordAnalysisService {
 					.build();
 			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
 			System.out.println(list.size());
+			/*
 			for(ElasticResume resume:list) {
 				//System.out.println(resume.getId());
-				int i=resumeMap.get(resume.getId());
+				//int i=resumeMap.get(resume.getId());
 				//System.out.println(resumes.get(i).getId());
-				resumes.get(i).setTags(name+","+resumes.get(i).getTags());
-			}
+				//resumes.get(i).setTags(name+","+resumes.get(i).getTags());
+			}*/
 			//System.out.println(resumes.get(0).getQuestion());
 			//System.out.println(resumes.get(0).getTags());
 		}
@@ -98,7 +99,7 @@ public class KeywordAnalysisService {
 		Map<Integer,Integer> resumeMap=new HashMap<>();
 		PageRequest pr=PageRequest.of(0,10000);
 		for(int i=0;i<resumes.size();i++) {
-			resumes.get(i).setTags(resumes.get(i).getDept());
+			//resumes.get(i).setTags(resumes.get(i).getDept());
 			resumeMap.put(resumes.get(i).getId(),i);
 		}
 		for(Tag tag:tags) {

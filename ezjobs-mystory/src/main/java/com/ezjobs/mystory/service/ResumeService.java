@@ -99,27 +99,14 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 	}
 	
 	public void edit(Map<String,Object> map,Set<Tag> tagsSet){
-		System.out.println("start2");
-		System.out.println(tagsSet.toString());
 		Resume resume=mapper.convertValue(map, Resume.class);
 		Resume resumeOld=resumeRepository.getOne(Integer.parseInt((String)map.get("id")));
-		resume.setUserId(resumeOld.getUserId());
-		resume.setEditDate(resumeOld.getEditDate());
-		System.out.println("start3");
 		for(Tag tag:tagsSet) {
-			System.out.println("name:"+tag.getName());
-			System.out.println(tag.getResumes().toString());
+			tag.getResumes().remove(resumeOld);
 			tag.getResumes().add(resume);
-			System.out.println(tag.getResumes().toString());
 		}
-		/*
-		tagsSet.forEach(tag->{
-			System.out.println(tag.getResumes().toString());
-			tag.getResumes().add(resume);
-		});*/
     	resume.setTags(tagsSet);
-    	System.out.println("update4");
-		resumeRepository.update(resume);
+		resumeRepository.save(resume);
 	}
 	
 	public void editState(Integer id,String state){

@@ -59,8 +59,7 @@
 				$(this.element).delegate(this.btnLoad,"click",function(e){
 					$(self.compare+" ul").html("");
 					self.reviewText().forEach( function(element) {
-				          var $target=$('<div class="spinner-border" role="status">'
-				        		  +'<span class="sr-only">Loading...</span></div>').appendTo("#compare ul");
+				          var $target=$(RESUME.loadingTmpl).appendTo("#compare ul");
 						  var sentence=$.trim(element.replace(/\s+/g, " "));
 				          var form={sentence:sentence};
 				          handler($target,form);

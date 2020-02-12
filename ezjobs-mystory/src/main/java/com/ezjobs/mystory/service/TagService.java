@@ -68,6 +68,7 @@ public class TagService implements AdminService<Tag>{
 		Integer size=30;
 		PageRequest pr=PageRequest.of(page,size);
 		Page<Tag> pageList=tagRepository.findByTypeAndNameLike(searchType,keyword+"%", pr);
+		pageList.getContent().forEach(p->p.setResumes(null));
 		return pageList.getContent();
 	}
 	

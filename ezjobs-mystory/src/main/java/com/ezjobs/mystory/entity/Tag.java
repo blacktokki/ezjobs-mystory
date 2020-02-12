@@ -21,7 +21,6 @@ public class Tag {
 	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@BatchSize(size = 25)
 	@ManyToMany(mappedBy = "tags")
 	private Set<Resume> resumes=new HashSet<Resume>();
 	

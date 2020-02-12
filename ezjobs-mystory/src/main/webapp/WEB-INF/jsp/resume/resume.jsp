@@ -65,7 +65,7 @@
 			RESUME.app.createResume();
 		}
 		changePageSize=function(){
-			RESUME.app.refreshList();
+			RESUME.app.getList();
 		}
 	});
 </script>

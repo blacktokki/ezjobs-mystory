@@ -34,11 +34,13 @@
 			},
 			
 			changePage : function(handler){//페이지 이동
+				var searchForm=this.searchForm;
 				$(this.element).delegate(this.pageItem,"click",function(e){//페이지 이동
+					e.preventDefault();
 					var page=$(e.target).attr("data-page");
-					$(this.searchForm).find("input[name=page]").val(page);
+					$(searchForm).find("input[name=page]").val(page);
 					handler();
-					return false;
+
 				});
 			},
 			
@@ -53,6 +55,9 @@
 		};
 		
 		List.prototype.renderViews={
+			preRefresh:function(data){
+				$(this.element).html(RESUME.loadingTmpl);
+			},
 			refresh : function(data){
 				$(this.element).html(data);
 			},

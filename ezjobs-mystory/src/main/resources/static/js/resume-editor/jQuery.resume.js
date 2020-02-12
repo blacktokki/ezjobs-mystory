@@ -35,8 +35,8 @@
 		this.resume_new = 0;
 		
 		this.list.bindHandler("loadResume",this.getResume)
-			.bindHandler("search",this.refreshList)
-			.bindHandler("changePage",this.refreshList)
+			.bindHandler("search",this.getList)
+			.bindHandler("changePage",this.getList)
 			.bindHandler("deleteResume",this.deleteResume);
 		
 		this.write.bindRender("titleSync","titleSync")
@@ -53,10 +53,10 @@
 			.bindHandler("compare",this.compare);
 	};
 	
-	App.prototype.getList=function(preRefresh){
-		$.get("/resume/content",self().list.getSearchForm(),function(data){
-			if(preRefresh)
-				preRefresh();
+	App.prototype.getList=function(){
+		var form=self().list.getSearchForm();
+		self().list.render("preRefresh",form);
+		$.get("/resume/content",form,function(data){
 			self().list.render("refresh",data);
 		});
 	}
@@ -89,14 +89,12 @@
 	}
 	App.prototype.deleteResume=function(form){
 		$.post("/resume/content",form,function(data){
-			self().getList(function(){
-				self().list.render("hideDeleteModal",data);
-			});
+			self().list.render("hideDeleteModal",data);
+			self().getList();
 		});
 	}
 	App.prototype.postResume=function(target,form){
 		console.log(form);
-		
 		$.post("/resume/content/" + form.id, form, function(data) {
 			self().getList();
 			self().write.render("saveResume",{
@@ -141,6 +139,8 @@
 	
 	global.RESUME={};
 	global.RESUME.init={};
+	global.RESUME.loadingTmpl='<div><div class="spinner-border" role="status">'
+		  +'<span class="sr-only">Loading...</span></div>데이터를 불러오는 중입니다</div>'
 	global.RESUME.export2Doc=function(content, filename){
 	    var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
 	    var postHtml = "</body></html>";

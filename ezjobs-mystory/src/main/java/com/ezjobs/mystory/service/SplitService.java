@@ -43,7 +43,7 @@ public class SplitService {
 	
 	public List<String> spliterAnswer(String answer) {
 		//System.out.println(answer);
-		return spliter(answer.replaceAll("\n", "<br>\n"));
+		return spliter(answer.replaceAll("(<p>|</p>)", "").replaceAll("\n", "<br>\n"));
 	}
 	
 	private List<String> spliter(String str) {
@@ -99,7 +99,7 @@ public class SplitService {
 		        .createNativeQuery("SELECT distinct keyword , synonym FROM synonym "
 		        		+ "where match(keyword) against('"+sentence+"') ORDER BY LENGTH(keyword) DESC")
 		        .getResultList();
-			sentence="<ul class='p-0'><li class='d-inline-block align-top'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-top'>")+"&nbsp;</li></ul>";
+			sentence="<ul class='p-0'><li class='d-inline-block align-middle'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-middle'>")+"&nbsp;</li></ul>";
 			//System.out.println(sentence);
 			Map<String,String> mapStr=new HashMap<>();
 			for(Object obj:synonyms) {

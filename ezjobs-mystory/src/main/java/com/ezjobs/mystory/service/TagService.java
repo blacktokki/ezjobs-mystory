@@ -1,6 +1,7 @@
 package com.ezjobs.mystory.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -88,6 +89,9 @@ public class TagService implements AdminService<Tag>{
 			tagsName.add(tag.getName());
 		}
 		tagRepository.saveAll(tags);
-    	return tagRepository.findByNames(tagsName);
+		if (tagsName.size()>0)
+			return tagRepository.findByNames(tagsName);
+		else
+			return new HashSet<Tag>();
 	}
 }

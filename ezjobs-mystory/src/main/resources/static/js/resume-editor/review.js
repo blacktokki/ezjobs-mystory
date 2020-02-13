@@ -5,7 +5,7 @@
 	function Review() {
 		this.element="#review-modal";
 		this.wordChange="#word-change";//select
-		this.comapre="#compare";
+		this.compare="#compare";
 		this.btnApply=".btn-apply";
 		this.btnLoad=".btn-load";
 		this.listSentence=".list-sentence";
@@ -64,6 +64,7 @@
 				          var form={sentence:sentence};
 				          handler($target,form);
 				    });
+					return false;
 				});
 			}
 		};

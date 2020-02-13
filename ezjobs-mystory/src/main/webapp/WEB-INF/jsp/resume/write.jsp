@@ -39,7 +39,7 @@
 					</div>
 					<input name="tags" class="tags" value="
 						<c:forEach var="tag" items="${resume.tags}">
-							${tag.type}:${tag.name},
+							<c:if test="${tag.type ne '키워드'}">${tag.type}:</c:if>${tag.name},
 						</c:forEach>
 					"/>
 				</div>

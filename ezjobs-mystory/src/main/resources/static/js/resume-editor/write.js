@@ -59,6 +59,7 @@
 					handler(e.target);
 				});
 			},
+			
 			appendTag: function(handler){//태그삽입
 				var writeAnswer=this.writeAnswer;
 				$(this.element).delegate(this.tagAppend,"click",function(e){
@@ -83,11 +84,14 @@
 			},
 			appendTagCustom: function(handler){//태그삽입3
 				var writeAnswer=this.writeAnswer;
+				var tagConverter=this.tagConverter;
 				$(this.element).delegate(this.tagAppendCustom,"click",function(e){
 					var text=$(e.target).text();
-					var tag=this.tagConverter(text);
+					var tag=tagConverter(text);
 					if (tag[0]=="키워드")
 						text=tag[1];
+					else
+						text=tag[0]+":"+tag[1];
 					
 					var data={
 						string:text,
@@ -99,6 +103,7 @@
 			
 			saveResume: function(handler){//저장하기
 				var tagAppendCustom=this.tagAppendCustom;
+				var tagConverter=this.tagConverter;
 				$(this.element).delegate("form", "submit", function(e) {
 					e.preventDefault();
 					var form = $(e.target).serializeJSON();
@@ -107,7 +112,7 @@
 					var tags=[];
 					$(e.target).find(tagAppendCustom).each(function(i, element){
 						var text=$.trim($(element).text());
-						var tag=this.tagConverter(text);	
+						var tag=tagConverter(text);	
 						tags.push({
 							type:tag[0],
 							name:tag[1],
@@ -207,10 +212,14 @@
 		}
 		Write.prototype.tagConverter=function(text){
 			var tag=text.split(":");
+			if(tag.length>2)
+				tag[1]=tag.join('').replace(tag[0],'');
 			if (tag.length==1){
 				tag[1]=tag[0];
 				tag[0]="키워드";
-			}else if(tag[0]!="문항유형"&&tag[0]!="직무"){
+			}
+			else if(tag[0]!="문항유형"&&tag[0]!="직무"){
+				tag[1]=tag[0]+":"+tag[1];
 				tag[0]="키워드";
 			}
 			return tag;

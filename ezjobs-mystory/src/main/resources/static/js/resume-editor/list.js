@@ -19,10 +19,11 @@
 		
 		List.prototype.bindEvents={
 			loadResume : function(handler){//자기소개서 불러오기
+				var resumeCard=this.resumeCard;
 				$(this.element).delegate(this.resumeLink,"click",function(e){
 					e.preventDefault();
 					var href = $(e.target).attr("href");
-					var card = href.replace("/resume/write/",this.resumeCard);
+					var card = href.replace("/resume/write/",resumeCard);
 					handler(href,card);
 				});
 			},

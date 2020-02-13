@@ -41,7 +41,7 @@
 		<div class="card-header resume-card-header" role="tab" id="heading${status.index}" style="font-size: 14px">
 			<a class="text-info resume-link" href="/resume/write/${item.id}">${item.company}<br>${item.question}</a><br>
 			<c:forEach var="tag" items="${item.tags}">
-				[${tag.type}:${tag.name}]
+				[<c:if test="${tag.type ne '키워드'}">${tag.type}:</c:if>${tag.name}]
 			</c:forEach>
 			<c:if test="${not empty item.closeDate}">
 				<fmt:parseNumber value="${item.closeDate.time / (1000*60*60*24)}" integerOnly="true" var="endDate"></fmt:parseNumber>

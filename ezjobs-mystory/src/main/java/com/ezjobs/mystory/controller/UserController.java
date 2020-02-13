@@ -121,6 +121,7 @@ public class UserController {
 		String id = LoginUser.getId();
 		User user = userService.checkId(id);
 		if (user != null && user.checkLoginPw((String)map.get("loginPw"))) {
+			map.put("id", id);
 			userService.changePw(map);
 			user=userService.checkId(id);
 			LoginUser.refreshAuthentication(user, user.getLoginPw());
@@ -140,7 +141,7 @@ public class UserController {
 	@PostMapping("/join/social") // 회원가입 요청(소셜)
 	public String writeSocial(@RequestParam Map<String, Object> map, Model model) {
 		User user = LoginUser.get();
-		map.put("loginId",user.getId());
+		map.put("id",user.getId());
 		map.put("loginPw","**********");
 		map.put("name",user.getName());
 		map.put("email",user.getEmail());

@@ -4,35 +4,35 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 
-<form class="search-form" method="get">
-	<div class="input-group">
-		<div class="input-group-prepend">
-			<label class="input-group-text" for="inGroup01">조건 검색</label>
+<div class="card card-title" style="padding: 10px">
+	<div class="clearfix">
+		<div class="float-left">
+			<form class="search-form form-inline" method="get">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="inGroup01">조건 검색</label>
+					</div>
+					<select class="custom-select" id="inGroup01" name="op">
+						<option>분류</option>
+						<option value="tagSearch" <c:if test="${op eq 'tagSearch'}">selected</c:if>>태그 명</option>
+						<option value="question" <c:if test="${op eq 'question'}">selected</c:if>>자기소개서 문항</option>
+						<option value="company" <c:if test="${op eq 'company'}">selected</c:if>>회사명</option>
+						<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+							<option value="userId" <c:if test="${op eq 'userId'}">selected</c:if>>작성자</option>
+						</sec:authorize>
+						<option value="state" <c:if test="${op eq 'state'}">selected</c:if>>작성상태</option>
+					</select>
+					<input name="keyword" type="text" class="form-control" placeholder="검색어" aria-label="Recipient's username" value="${keyword}" aria-describedby="button-addon2">
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" type="submit" id="button-addon2">검색</button>
+					</div>
+				</div>
+				<input type="hidden" name="page" value="${ page + 1}">
+			</form>
 		</div>
-		<select class="custom-select" id="inGroup01" name="op">
-			<option>분류</option>
-			<option value="tagSearch" <c:if test="${op eq 'tagSearch'}">selected</c:if>>태그 명</option>
-			<option value="question" <c:if test="${op eq 'question'}">selected</c:if>>자기소개서 문항</option>
-			<option value="company" <c:if test="${op eq 'company'}">selected</c:if>>회사명</option>
-			<sec:authorize access="hasAuthority('ROLE_ADMIN')">
-				<option value="userId" <c:if test="${op eq 'userId'}">selected</c:if>>작성자</option>
-			</sec:authorize>
-			<option value="state" <c:if test="${op eq 'state'}">selected</c:if>>작성상태</option>
-		</select>
-		<input name="keyword" type="text" class="form-control" placeholder="검색어" aria-label="Recipient's username" value="${keyword}" aria-describedby="button-addon2">
-		<div class="input-group-append">
-			<button class="btn btn-outline-secondary" type="submit" id="button-addon2">검색</button>
-		</div>
-		<select class="custom-select" id="inGroup02" name="size" onchange="refreshList();">
-			<option value="${size}" selected>현재 ${size} 개</option>
-			<option value=10>10 개 보기</option>
-			<option value=20>20 개 보기</option>
-			<option value=30>30 개 보기</option>
-			<option value=50>50 개 보기</option>
-		</select>
+		<%@ include file="/WEB-INF/jspf/pageSize.jspf"%>
 	</div>
-	<input type="hidden" name="page" value="${ pageNavNumber + 1}">
-</form>
+</div>
 
 <jsp:useBean id="now" class="java.util.Date" />
 <fmt:parseNumber value="${now.time / (1000*60*60*24)}" integerOnly="true" var="strDate"></fmt:parseNumber>
@@ -40,7 +40,9 @@
 	<div class="card">
 		<div class="card-header resume-card-header" role="tab" id="heading${status.index}" style="font-size: 14px">
 			<a class="text-info resume-link" href="/resume/write/${item.id}">${item.company}<br>${item.question}</a><br>
-			${item.tags}
+			<c:forEach var="tag" items="${item.tags}">
+				[<c:if test="${tag.type ne '키워드'}">${tag.type}:</c:if>${tag.name}]
+			</c:forEach>
 			<c:if test="${not empty item.closeDate}">
 				<fmt:parseNumber value="${item.closeDate.time / (1000*60*60*24)}" integerOnly="true" var="endDate"></fmt:parseNumber>
 				D${strDate-endDate} 
@@ -58,14 +60,13 @@
 					</c:forEach>
 					--%>
 					${item.answer}
-					<input type="hidden" name="id" value="${item.question}"/>
 				</div>
 				<button type="button" data-toggle="modal" data-target="#delete${item.id}" data-whatever="@mdo" style="border: 0; background: 0;">
 					<i class="fa fa-times-circle" style="color: #FF8585"></i>삭제하기
 				</button>
 			</form>
 			<!-- 삭제 모달 -->
-				<div class="modal" id="delete${item.id}" tabindex="-1"
+				<div class="modal delete-modal" id="delete${item.id}" tabindex="-1"
 					role="dialog">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
@@ -76,7 +77,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<form>
+							<form class="delete-form">
 								<div class="modal-body">
 									<p>정말로 "[${item.company}]${item.question }" 를 삭제 하시겠습니까?</p>
 								</div>
@@ -98,28 +99,4 @@
 	</div>
 </c:forEach>
 
-<!-- 페이징 바 -->
-<%--<c:set var="navParam" value="&size=${size}&op=${op}&keyowrd=${keyword}"/>--%>
-<nav aria-label="Page navigation resume-page-nav">
-	<ul class="pagination justify-content-center">
-		<li class="page-item">
-			<a class="page-link" href="javascript:pagingList(${pageNavNumber*5});" aria-label="Previous"> 
-				<span aria-hidden="true">&laquo;</span>
-			</a>
-		</li>
-		<c:forEach var="item" begin="${pageNavNumber*5+1}" end="${(pageNavNumber+1)*5}">
-			<li class="page-item">
-				<a class="page-link" 
-					<c:if test="${item ne pageNavNumber+1}">href="javascript:pagingList(${item})"</c:if>>
-					${item}
-				</a>
-			</li>
-		</c:forEach>
-		<li class="page-item">
-			<a class="page-link" href="javascript:pagingList(${(pageNavNumber+1)*5+1})" aria-label="Next">
-				<span aria-hidden="true">&raquo;</span>
-			</a>
-		</li>
-	</ul>
-</nav>
-<!-- 페이징 바 끝-->
+<%@ include file="/WEB-INF/jspf/pageNavbar.jspf"%>

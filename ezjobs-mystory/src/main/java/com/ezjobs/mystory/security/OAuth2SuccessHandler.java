@@ -35,7 +35,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     	OAuth2AuthenticationToken auth=(OAuth2AuthenticationToken) authentication;
     	String registrationId = auth.getAuthorizedClientRegistrationId();
     	String name=auth.getName();
-    	User user = userService.findByLoginId(name);
+    	User user = userService.checkId(name);
     	List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
     	if(user==null) {
     		Map<String, Object> map=auth.getPrincipal().getAttributes();

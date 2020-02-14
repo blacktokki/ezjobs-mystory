@@ -11,13 +11,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.Sentence;
 import com.ezjobs.mystory.repository.SentenceRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.bydelta.koala.okt.SentenceSplitter;
 
@@ -27,16 +24,11 @@ public class SplitService {
 	@Inject
 	private SentenceRepository sentenceRepository;
 	
-	@Inject
-	private ObjectMapper mapper;
-	
 	@PersistenceContext
 	private EntityManager entityManager;
 	
-	public void spliterResumes(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Object resumesObj=mapper.convertValue(modelMap.get("resumes"),Map.class).get("content");
-		List<Resume> resumes=mapper.convertValue(resumesObj,new TypeReference<List<Resume>>(){});
+	
+	public List<List<String>> spliterResumes(List<Resume> resumes) {
 		List<List<String>> resumesSplit=new ArrayList<>();
 		for(Resume resume:resumes) {
 			String str=(String)resume.getAnswer();
@@ -46,15 +38,12 @@ public class SplitService {
 				System.out.println("NULL!");
 			System.out.println("-------------------------");
 		}
-		model.addAttribute("resumesSplit",resumesSplit);
+		return resumesSplit;
 	}
 	
-	public void spliterAnswer(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		String answer=((String)modelMap.get("answer")).replaceAll("\n", "<br>\n");
+	public List<String> spliterAnswer(String answer) {
 		//System.out.println(answer);
-		List<String> strs = spliter(answer);
-		model.addAttribute("sentences",strs);
+		return spliter(answer.replaceAll("(<p>|</p>)", "").replaceAll("\n", "<br>\n"));
 	}
 	
 	private List<String> spliter(String str) {
@@ -74,20 +63,17 @@ public class SplitService {
 		return paragraph;
 	}
 	
-	public void sentenceAddAll(Model model) {
-		Map<String,Object> modelMap=model.asMap();
-		Object resumesObj=mapper.convertValue(modelMap.get("resumes"),Map.class).get("content");
-		List<Resume> resumes=mapper.convertValue(resumesObj,new TypeReference<List<Resume>>(){});
-		List<List<String>> resumesSplit=mapper.convertValue(modelMap.get("resumesSplit"),new TypeReference<List<List<String>>>(){});	
-		int mx=0,j=0;
+	public void sentenceAddAll(List<Resume> resumes) {
+		List<List<String>> resumesSplit=spliterResumes(resumes);
+		int mx=0;//,j=0;
 		for(List<String> resumeSplit:resumesSplit) {
 			int i=0;
 			List<Sentence> sentences=new ArrayList<Sentence>();
-			String tags=resumes.get(j++).getTags();
+			//String tags=resumes.get(j++).getTags();
 			for(String str:resumeSplit) {
 				Sentence sentence=new Sentence();
 				sentence.setUserId("_admin");
-				sentence.setTags(tags);
+				//sentence.setTags(tags);
 				sentence.setText(str);
 				sentence.setPosition(i++);
 				sentence.setPositionMax(resumeSplit.size());
@@ -104,8 +90,8 @@ public class SplitService {
 	}
 	
 
-	public void changeSynonym(Model model) {
-		List<String> sentences=mapper.convertValue(model.getAttribute("sentences"),new TypeReference<List<String>>(){});
+	public List<String> changeSynonym(String answer) {
+		List<String> sentences=spliterAnswer(answer);
 		List<String> sentences2=new ArrayList<>();
 		for(String sentence:sentences) {
 			
@@ -113,7 +99,7 @@ public class SplitService {
 		        .createNativeQuery("SELECT distinct keyword , synonym FROM synonym "
 		        		+ "where match(keyword) against('"+sentence+"') ORDER BY LENGTH(keyword) DESC")
 		        .getResultList();
-			sentence="<ul class='p-0'><li class='d-inline-block align-top'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-top'>")+"&nbsp;</li></ul>";
+			sentence="<ul class='p-0'><li class='d-inline-block align-middle'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-middle'>")+"&nbsp;</li></ul>";
 			//System.out.println(sentence);
 			Map<String,String> mapStr=new HashMap<>();
 			for(Object obj:synonyms) {
@@ -138,6 +124,6 @@ public class SplitService {
 			sentences2.add(sentence);
 		}
 		//System.out.println(sentences.get(2));
-		model.addAttribute("sentences",sentences2);
+		return sentences2;
 	}
 }

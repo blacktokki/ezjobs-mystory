@@ -74,20 +74,7 @@
 				<p>
 			</form>
 		</div>
-
-		<nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">
-				<li class="page-item"><a class="page-link" href="?page=${pageNavNumber*5}"
-					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-				</a></li>
-				<c:forEach var="item" begin="${pageNavNumber*5+1}" end="${(pageNavNumber+1)*5}">
-					<li class="page-item"><a class="page-link" href="?page=${item}">${item}</a></li>
-				</c:forEach>
-				<li class="page-item"><a class="page-link" href="?page=${(pageNavNumber+1)*5+1}"
-					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</ul>
-		</nav>
+		<%@ include file="/WEB-INF/jspf/pageNavbar.jspf"%>	
 	</div>
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

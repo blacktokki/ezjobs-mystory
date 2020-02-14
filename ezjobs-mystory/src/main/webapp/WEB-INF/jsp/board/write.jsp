@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
-<%@ include file="/WEB-INF/jspf/head.jspf"%>
+<%@ include file="/WEB-INF/jspf/extendHead.jspf"%>
 <!-- body -->
 
 <!-- 점보트론 스타일 -->
@@ -43,7 +43,8 @@
 								<span class="input-group-text">글내용</span>
 							</div>
 							<textarea class="form-control" id="form-content" name="text" rows="15">${board.text}</textarea>
-							<script type="text/javascript">						
+							<script type="text/javascript">
+							require(["ckeditor/ckeditor"],function(CKEDITOR){
 								var editor =CKEDITOR.replace('form-content',{
 							 		removePlugins: 'contextmenu,tabletools,tableselection',
 									height: 500,
@@ -70,6 +71,7 @@
 									command : 'mySimpleCommand',
 									icon : 'https://avatars1.githubusercontent.com/u/5500999?v=2&s=16'
 								});*/
+							});
 							</script>
 						</div>
 						

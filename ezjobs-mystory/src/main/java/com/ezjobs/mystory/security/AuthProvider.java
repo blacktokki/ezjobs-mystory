@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.UserService;
-import com.ezjobs.mystory.util.UserSha256;
 
 @Component("authProvider")
 public class AuthProvider implements AuthenticationProvider  {
@@ -27,11 +26,11 @@ public class AuthProvider implements AuthenticationProvider  {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String id = authentication.getName();
-        String password = UserSha256.encrypt(authentication.getCredentials().toString());//HashUtil.sha256(authentication.getCredentials().toString());
+        String password = (String)authentication.getCredentials();
         CaptchaAuthenticationDetails details=(CaptchaAuthenticationDetails) authentication.getDetails();
-        User user = userService.findByLoginId(id);
+        User user = userService.checkId(id);
         // id에 맞는 user가 없거나 비밀번호가 맞지 않는 경우.
-        if (null == user || !user.getLoginPw().equals(password)) {
+        if (null == user || !user.checkLoginPw(password)) {
         	System.out.println("notexist");
         	throw new UsernameNotFoundException("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.");
         }
@@ -49,7 +48,7 @@ public class AuthProvider implements AuthenticationProvider  {
         }
  
         // 로그인 성공시 로그인 사용자 정보 반환
-        return new UsernamePasswordAuthenticationToken(user, password,  grantedAuthorityList);
+        return new UsernamePasswordAuthenticationToken(user, user.getLoginPw(),  grantedAuthorityList);
     }
     
     @Override

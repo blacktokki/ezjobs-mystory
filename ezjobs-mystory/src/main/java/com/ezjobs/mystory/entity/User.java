@@ -2,6 +2,9 @@ package com.ezjobs.mystory.entity;
 
 import java.util.Date;
 import javax.persistence.*;
+
+import com.ezjobs.mystory.util.UserSha256;
+
 import lombok.Data;
 
 @Entity
@@ -47,5 +50,9 @@ public class User {
     
     @Column(name="login_failure_cnt", nullable = false,insertable=false)
     private Integer loginFailureCnt;
+    
+    public boolean checkLoginPw(String loginPw) {
+    	return this.loginPw.equals(UserSha256.encrypt(loginPw));
+    }
     
 }

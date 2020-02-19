@@ -1,7 +1,10 @@
 package com.ezjobs.mystory.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -9,14 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.Tag;
 import com.ezjobs.mystory.repository.TagRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class TagService {
+public class TagService implements AdminService<Tag>{
 
 	@Inject
 	ObjectMapper mapper;
@@ -24,48 +26,72 @@ public class TagService {
 	@Inject
 	TagRepository tagRepository;
 
-	public void list(Model model) {
-		Map<String, Object> modelMap = model.asMap();
-		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
-		String page = Optional.ofNullable((String) map.get("page")).orElse("1");// String으로 담음
-		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0
-		String showNum2 = Optional.ofNullable((String) map.get("showNum")).orElse("20");
-		int showNum = Integer.parseInt(showNum2);
-
-		// 수정 부분
-		if (String.valueOf(model.getAttribute("upTagId")) != "null") {
-			int upTagId = Integer.parseInt(model.getAttribute("upTagId").toString());
-			String upTag = model.getAttribute("upTag").toString();
-			Tag tag = mapper.convertValue(map, Tag.class);// board로 변환
-			tag.setId(upTagId);
-			tag.setName(upTag);
-			tagRepository.update(tag);
+	@Override
+	public Page<Tag> adminListAll(Map<String,Object> map) {
+		// 수정 부분,미구현
+		if (String.valueOf(map.get("upTagId")) != "null") {
+			String upTagId = map.get("upTagId").toString();
+			//String upTag = map.get("upTag").toString();//새이름
+			String[] tagTypeName=upTagId.split(";");
+			Tag tag = new Tag();// board로 변환
+			tag.setType(tagTypeName[0]);
+			tag.setName(tagTypeName[1]);
+			//tagRepository.update(tag);
 		}
 
-		// 삭제 부분
-		if (String.valueOf(model.getAttribute("delTagId")) != "null") {
-			int delTagId = Integer.parseInt(model.getAttribute("delTagId").toString());
-			Tag tag = mapper.convertValue(map, Tag.class);// board로 변환
-			tag.setId(delTagId);
-			tagRepository.delete(tag);
+		// 삭제 부분,미구현
+		if (String.valueOf(map.get("delTagId")) != "null") {
+			String delTagId = map.get("delTagId").toString();
+			String[] tagTypeName=delTagId.split(";");
+			Tag tag = new Tag();// board로 변환
+			tag.setType(tagTypeName[0]);
+			tag.setName(tagTypeName[1]);
+			//tagRepository.delete(tag);
 		}
-
-		model.addAttribute("showNum", showNum);
-
-		PageRequest pr = PageRequest.of(pageNum, showNum * 2, Sort.by(Sort.Direction.ASC, "id"));
-
-		String sch = String.valueOf(model.getAttribute("sch"));
-
+		
+		PageRequest pr = getPageRequest(map,Sort.by(Sort.Direction.DESC,"name"));
+		String sch = String.valueOf(map.get("keyword"));
+		
+		Page<Tag> re;
 		if (sch.equals("null")) {
-			Page<Tag> re = tagRepository.findAll(pr);
-			model.addAttribute("tags", re);
-			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
+			re = tagRepository.findAll(pr);
 		} else {
-			Page<Tag> re = tagRepository.findByNameContaining(pr, sch);
-			model.addAttribute("tags", re);
-			model.addAttribute("pageNavNumber", re.getNumber() / 5);// 페이징바의 번호
+			re = tagRepository.findByNameContaining(pr, sch);
 		}
-
+		
+		return re;
 	}
-
+	
+	public List<Tag> autoComplete(Map<String,Object> map){
+		String keyword=(String)map.get("keyword");
+		String searchType=(String)map.get("searchType");
+		Integer page=0;
+		Integer size=30;
+		PageRequest pr=PageRequest.of(page,size);
+		Page<Tag> pageList=tagRepository.findByTypeAndNameLike(searchType,keyword+"%", pr);
+		pageList.getContent().forEach(p->p.setResumes(null));
+		return pageList.getContent();
+	}
+	
+	public Set<Tag> writeResumeTags(Map<String,Object> map){
+		String tagsStr=(String)map.get("tagsStr");
+		Tag[] resumeTags=new Tag[0];
+		try {
+			resumeTags=mapper.readValue(tagsStr, Tag[].class);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+		List<Tag> tags=new ArrayList<>();
+		List<String> tagsName=new ArrayList<>();
+		for(Tag tag:resumeTags) {
+			tags.add(tag);
+			tagsName.add(tag.getName());
+		}
+		tagRepository.saveAll(tags);
+		if (tagsName.size()>0)
+			return tagRepository.findByNames(tagsName);
+		else
+			return new HashSet<Tag>();
+	}
 }

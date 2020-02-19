@@ -14,7 +14,7 @@
   <tbody>
    <tr>
     <th scope="row">아이디</th>
-    <td><input type="text" id="user_id" name="loginId" class="wdp_90 alert alert-dark"></td>
+    <td><input type="text" id="user_id" name="id" class="wdp_90 alert alert-dark"></td>
    </tr>
    <tr>
     <th scope="row">이메일</th>

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <div class="card" id="resume-card${resume.id}">
 	<div class="card-header" role="tab" id="heading-i" style="font-size: 14px">
 		<a class="text-info collapsed" data-toggle="collapse" href="#collapse-i" aria-expanded="false" aria-controls="collapse-i">
@@ -36,20 +37,28 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="basic-addon3">태그</span>
 					</div>
-					<input name="tags" class="tags" value="${resume.tags}" />
+					<input name="tags" class="tags" value="
+						<c:forEach var="tag" items="${resume.tags}">
+							<c:if test="${tag.type ne '키워드'}">${tag.type}:</c:if>${tag.name},
+						</c:forEach>
+					"/>
 				</div>
-
+				<button type="button" class="button badge button-secondary tag-append-prompt">문항유형</button>
+				<button type="button" class="button badge button-secondary tag-append-prompt">직무</button>
+				<button type="button" class="button badge button-secondary tag-append">시작문장</button>
+				<button type="button" class="button badge button-secondary tag-append">마지막문장</button>
 				<div class="input-group">
 					<div class="input-group-prepend">
 						<span class="input-group-text">내용</span>
 					</div>
 					<textarea class="form-control write-answer" id=" write-answer-i" name="answer" rows="20">${resume.answer}</textarea>
 				</div>
-				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#exampleModal">검토하기</button>
+				<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#review-modal">검토하기</button>
 				<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>
 				<button type="submit" class="btn btn-primary resume-method" name="_method" value="${method}" >저장하기</button>
 				<button type="button" class="btn btn-primary resume-export">내보내기</button>
 				<input type="hidden" class="resume-id" name="id" value="${resume.id}" /> 
+				<input type="hidden" class="resume-method" name="_method" value="" /> 
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</div>
 		</form>

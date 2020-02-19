@@ -2,32 +2,27 @@ package com.ezjobs.mystory.service;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 
-import javax.inject.Inject;
-
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.repository.UserRepository;
 import com.ezjobs.mystory.util.UserSha256;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Service
-public class UserService {
+import lombok.AllArgsConstructor;
 
-	@Inject
+@Service
+@AllArgsConstructor
+public class UserService implements AdminService<User>{
+
 	UserRepository userRepository;
 	
-	@Inject
 	ObjectMapper mapper;
 	
-	/*
+	/*//회원탈퇴 미구현
 	public void out(Model model) {
 		// TODO Auto-generated method stub
 		Map<String,Object> modelMap=model.asMap();
@@ -35,7 +30,7 @@ public class UserService {
 
 	}*/
 	
-	public User findByLoginId(String id) {
+	public User checkId(String id) {
 		return userRepository.findById(id).orElse(null);
 	}
 
@@ -54,10 +49,7 @@ public class UserService {
 		userRepository.updateVisitDate(user);
 	}
 	
-	public void write(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
+	public void write(Map<String,Object> map) {
 		User user=mapper.convertValue(map, User.class);//board로 변환
 		String pw=user.getLoginPw();
 		user.setLoginPw(UserSha256.encrypt(pw));
@@ -65,40 +57,22 @@ public class UserService {
 		userRepository.save(user);
 	}
 
-	public void edit(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		Map<?,?> map=(Map<?, ?>)modelMap.get("map");
-		String id=modelMap.get("id").toString();
+	public void edit(Map<String,Object> map) {
 		User user=mapper.convertValue(map, User.class);//board로 변환
-		user.setId(id);
 		userRepository.updateWithoutPw(user);
 	}
 
-	public void info(Model model) {
-		// TODO Auto-generated method stub
-		Map<String,Object> modelMap=model.asMap();
-		String id=(String)modelMap.get("id");
-		User user=new User();
-		user.setId(id);
-		user=userRepository.findOne(Example.of(user)).get();
+	public User info(String id) {
+		User user=checkId(id);
 		user.setLoginPw("");
-		model.addAttribute("user",user);
+		return user;
 	}
 	
-	public void list(Model model) {
-		Map<String, Object> modelMap = model.asMap();
-		Map<?, ?> map = (Map<?, ?>) modelMap.get("map");
-		String page = Optional.ofNullable((String) map.get("page")).orElse("1");// String으로 담음
-		int pageNum = Integer.parseInt(page) - 1;// 값이없을경우 0 //shownum->size, 
-		String size = Optional.ofNullable((String) map.get("size")).orElse("20");
-		int sizeNum = Integer.parseInt(size);
-		model.addAttribute("size", sizeNum);
-		PageRequest pr = PageRequest.of(pageNum, sizeNum, Sort.by(Sort.Direction.DESC, "id"));
+	@Override
+	public Page<User> adminListAll(Map<String,Object> map) {
+		PageRequest pr = getPageRequest(map);
 		String op = String.valueOf(map.get("op"));
 		String keyword = String.valueOf(map.get("keyword"));
-		model.addAttribute("op", op);
-		model.addAttribute("keyword", keyword);
 		
 		Page<User> re;
 		if (op.equals("loginSearch")) {
@@ -108,21 +82,24 @@ public class UserService {
 			re = userRepository.findAll(pr);
 			System.out.println("s:" + re.getSize());
 		}
-		model.addAttribute("users", re);
-		model.addAttribute("pageNavNumber", re.getNumber() / 5);
+		return re;
 	}
 	
-	public void changePw(Model model) {
-		Map<String,Object> modelMap=model.asMap();
+	@Override
+	public User adminContentById(String id) {
+		return info(id);
+	}
+	
+	public void changePw(Map<String,Object> map) {
 		User user=new User();
-		user.setId((String)modelMap.get("id"));
-		String loginPw=(String)modelMap.get("newPw");
+		user.setId((String)map.get("id"));
+		String loginPw=(String)map.get("newPw");
 		//System.out.println(loginPw);
 		user.setLoginPw(UserSha256.encrypt(loginPw));
 		userRepository.updatePw(user);
 	}
 	
-	public static String getRamdomPassword(int len) {
+	public String getRamdomPassword(int len) {
 		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
 				'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 

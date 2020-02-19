@@ -1,0 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+<div class="float-right">
+	<form class="page-form form-inline" method="get">
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<label class="input-group-text" for="inGroup02">페이지 당</label>
+			</div>
+			<select class="custom-select" id="inGroup02" name="size"
+				onchange="changePageSize(this)">
+				<option selected value="${size}">현재 ${size} 명</option>
+				<option value=10>10 명 보기</option>
+				<option value=20>20 명 보기</option>
+				<option value=30>30 명 보기</option>
+				<option value=50>50 명 보기</option>
+				<option value=100>100 명 보기</option>
+			</select>
+		</div>
+		<input type="hidden" name="page" value="${ page + 1}">
+		<input type="hidden" name="op" value="${op}">
+		<input type="hidden" name="keyword" value="${keyword}">
+	</form>
+</div>

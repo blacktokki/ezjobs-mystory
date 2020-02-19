@@ -16,8 +16,8 @@
 
 	<!-- 겁색창 -->
 	<div class="card card-title" style="padding: 10px">
-		<div class="row">
-			<div class="col-6">
+		<div class="clearfix">
+			<div class="float-left">
 				<form action="/admin/board">
 					<div class="input-group">
 						<div class="input-group-prepend">
@@ -35,29 +35,9 @@
 						</div>
 					</div>
 					<input type="hidden" name="size" value="${size}">
-					<input type="hidden" name="page" value="${ pageNavNumber + 1}">
 				</form>
 			</div>
-			<div class="col offset-3">
-				<div class="input-group">
-						<div class="input-group-prepend">
-							<label class="input-group-text" for="inGroup02">페이지 당</label>
-						</div>
-					<form method="get">
-						<input type="hidden" name="page" value="${ pageNavNumber + 1}">
-						<select class="custom-select" id="inGroup02" name="size"
-							onchange="this.form.submit()">
-							<option selected>현재 ${size} 명</option>
-							<option value=10>10 명 보기</option>
-							<option value=20>20 명 보기</option>
-							<option value=30>30 명 보기</option>
-							<option value=50>50 명 보기</option>
-							<option value=100>100 명 보기</option>
-						</select>
-					</form>
-				</div>
-
-			</div>
+			<%@ include file="/WEB-INF/jspf/pageSize.jspf"%>
 		</div>
 	</div>
 
@@ -142,37 +122,11 @@
 			</tbody>
 		</table>
 	</div>
-
-	<!-- 페이징 바 -->
-	<nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center">
-			<li class="page-item"><a class="page-link"
-				href="?page=${pageNavNumber*5}" aria-label="Previous"> <span
-					aria-hidden="true">&laquo;</span>
-			</a></li>
-			<c:forEach var="item" begin="${pageNavNumber*5+1}"
-				end="${(pageNavNumber+1)*5}">
-				<li class="page-item"><a class="page-link"
-					href="?page=${item}&size=${size}">${item}</a></li>
-			</c:forEach>
-			<li class="page-item"><a class="page-link"
-				href="?page=${(pageNavNumber+1)*5+1}" aria-label="Next"> <span
-					aria-hidden="true">&raquo;</span>
-			</a></li>
-		</ul>
-	</nav>
+	<%@ include file="/WEB-INF/jspf/pageNavbar.jspf"%>	
 </div>
-<!-- 페이징 바 끝-->
 
-<script>
-	function checkAll() {
-		if ($("#th_checkAll").is(":checked")) {
-			$("input[name=checkRow]").prop("checked", true);
-		} else {
-			$("input[name=checkRow]").prop("checked", false);
-		}
-	}
-</script>
+
+<script src="/js/admin.js"></script>
 
 
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

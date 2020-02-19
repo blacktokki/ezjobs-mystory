@@ -1,5 +1,5 @@
 # ezjobs-mystory
-<strong>ezjobs-mystory</strong>는 취업준비생의 자기소개서 검색과 작성을도와주는 웹 서비스 입니다.
+<strong>ezjobs-mystory</strong>는 취업준비생의 자기소개서 검색과 작성을도와주는 웹 서비스 입니다. 5명의 팀원과 함께 약 2개월 동안 진행한 졸업프로젝트 입니다.
 
 ## 프로젝트 개요
 ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기소개서 정보들을 데이터베이스와 검색엔진에 저장하고 자기소개서의 각 문항과 내용의 문장들의 키워드로 자기소개서를 분류하였습니다. 사용자들은 다른 사람이 작성한 것을 참고하여 자신만의 자기소개서로 내용을 재구성 할 수 있으며, 자기소개서를 어떻게 쓰는지에 대한 틀을 제공하여 작성하는데에 있어 편의를 제공합니다.
@@ -24,6 +24,7 @@ ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기�
         * jquery-ui-touch-punch
       * jquery-validation
     * bootstrap
+    * require.js
     * ckeditor
       * autocomplete
       * wordcount

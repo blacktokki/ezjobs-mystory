@@ -51,7 +51,7 @@
 				</thead>
 				<!-- 티에블 내용 채우기 -->
 				<tbody>
-					<c:forEach var="item" items="${boards.content}">
+					<c:forEach var="item" items="${notice.content}">
 						<tr>
 							<td>
 								<a href="/board/noticecontent/${item.id}">${item.title}&nbsp;</a>
@@ -69,7 +69,7 @@
 				</thead>
 				<!-- 티에블 내용 채우기 -->
 				<tbody>
-					<c:forEach var="item" items="${boardscommunity.content}">
+					<c:forEach var="item" items="${boards.content}">
 						<tr>
 							<td><a href="/board/content/${item.id}">${item.title}&nbsp;</a></td>
 						</tr>

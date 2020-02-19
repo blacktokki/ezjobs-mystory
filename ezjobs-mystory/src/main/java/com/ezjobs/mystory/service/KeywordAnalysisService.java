@@ -17,7 +17,6 @@ import org.springframework.data.elasticsearch.core.query.SearchQuery;
 //import org.springframework.data.elasticsearch.core.query.SourceFilter;
 //import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Input2CharSequence;
@@ -52,7 +51,7 @@ public class KeywordAnalysisService {
 	@Inject
 	private ElasticsearchOperations elasticsearchTemplate;
 	
-	public void tagger(Model model) {
+	public void tagger() {
 		Tag tagEx=new Tag();
 		tagEx.setType("유형");
 		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));
@@ -60,7 +59,7 @@ public class KeywordAnalysisService {
 		Map<Integer,Integer> resumeMap=new HashMap<>();
 		PageRequest pr=PageRequest.of(0,10000);
 		for(int i=0;i<resumes.size();i++) {
-			resumes.get(i).setTags(resumes.get(i).getDept());
+			//resumes.get(i).setTags(resumes.get(i).getDept());
 			resumeMap.put(resumes.get(i).getId(),i);
 		}
 		for(Tag tag:tags) {
@@ -75,12 +74,13 @@ public class KeywordAnalysisService {
 					.build();
 			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
 			System.out.println(list.size());
+			/*
 			for(ElasticResume resume:list) {
 				//System.out.println(resume.getId());
-				int i=resumeMap.get(resume.getId());
+				//int i=resumeMap.get(resume.getId());
 				//System.out.println(resumes.get(i).getId());
-				resumes.get(i).setTags(name+","+resumes.get(i).getTags());
-			}
+				//resumes.get(i).setTags(name+","+resumes.get(i).getTags());
+			}*/
 			//System.out.println(resumes.get(0).getQuestion());
 			//System.out.println(resumes.get(0).getTags());
 		}
@@ -91,7 +91,7 @@ public class KeywordAnalysisService {
 		ResumeRepository.saveAll(resumes);
 	}
 	
-	public void taggerCount(Model model) {
+	public void taggerCount() {
 		Tag tagEx=new Tag();
 		tagEx.setType("유형");
 		List<Tag> tags=tagRepository.findAll(Example.of(tagEx));
@@ -99,7 +99,7 @@ public class KeywordAnalysisService {
 		Map<Integer,Integer> resumeMap=new HashMap<>();
 		PageRequest pr=PageRequest.of(0,10000);
 		for(int i=0;i<resumes.size();i++) {
-			resumes.get(i).setTags(resumes.get(i).getDept());
+			//resumes.get(i).setTags(resumes.get(i).getDept());
 			resumeMap.put(resumes.get(i).getId(),i);
 		}
 		for(Tag tag:tags) {

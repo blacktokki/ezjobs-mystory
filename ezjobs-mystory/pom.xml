@@ -41,10 +41,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
@@ -221,6 +217,29 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+			   <groupId>net.alchim31.maven</groupId>
+			    <artifactId>yuicompressor-maven-plugin</artifactId>
+			    <version>1.5.1</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>compress</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			    <configuration>
+		            <encoding>utf-8</encoding>
+		            <force>true</force>
+		            <nosuffix>true</nosuffix>
+		            <removeIncluded>false</removeIncluded>
+    			    <jswarn>false</jswarn>
+    			    <excludes>
+    			    	<exclude>**/css/template.css</exclude>
+    			    	<exclude>**/js/dashboard.js</exclude>
+    			    </excludes>
+    			</configuration>
+    		</plugin>
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>

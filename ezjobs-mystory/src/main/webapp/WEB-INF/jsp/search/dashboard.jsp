@@ -49,4 +49,4 @@
 </div>
 
 <script src="/js/dashboard.js"></script>
-<%@ include file="/WEB-INF/jspf/footer.jspf"%>
+<%@ include file="/WEB-INF/jspf/extendFooter.jspf"%>

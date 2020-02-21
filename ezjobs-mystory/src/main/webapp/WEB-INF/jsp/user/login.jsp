@@ -60,8 +60,10 @@
   
 </form>
 <script>
-$("#imgCaptcha").click(function(){
-    $(this).attr("src", "/captcha/index");
+window.addEventListener('DOMContentLoaded', function() {
+	$("#imgCaptcha").click(function(){
+	    $(this).attr("src", "/captcha/index");
+	});
 });
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

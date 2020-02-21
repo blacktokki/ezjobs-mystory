@@ -19,7 +19,7 @@
 		</div>
 	</form>
 </div>
-<script defer>
+<script>
 window.addEventListener('DOMContentLoaded', function() {
 	$('#tags').tagsInput({
 	  autocomplete_url:'http://myserver.com/api/autocomplete',

@@ -60,18 +60,20 @@
 <script>
 	var createResume;
 	var changePageSize;
-	require(["resume-bundle"],function(RESUME){
-		createResume=function(){
-			RESUME.app.createResume();
-		}
-		changePageSize=function(){
-			RESUME.app.getList();
-		}
+	window.addEventListener('DOMContentLoaded', function() {
+		require(["resume-bundle"],function(RESUME){
+			createResume=function(){
+				RESUME.app.createResume();
+			}
+			changePageSize=function(){
+				RESUME.app.getList();
+			}
+		});
 	});
 </script>
 <%--
 <script src="/js/resume-old.js"></script>
  --%>
-<%@ include file="/WEB-INF/jspf/footer.jspf"%>
+<%@ include file="/WEB-INF/jspf/extendFooter.jspf"%>
 
 

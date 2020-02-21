@@ -35,48 +35,50 @@
  </table>s
 </form>
 <script>
-$("#imgCaptcha").click(function(){
-    $(this).attr("src", "/captcha/index");
-});
-
-$("form").validate({
-	rules: {
-        loginPw: {
-            required : true,
-            minlength : 8,
-            maxlength : 15,
-        },
-        newPw: {
-            required : true,
-            minlength : 8,
-            maxlength : 15,
-        },
-        rePw: {
-            required : true,
-            minlength : 8,
-            maxlength : 15,
-            equalTo : user_newPw
-        }
-    },
-    //규칙체크 실패시 출력될 메시지
-    messages : {
-        loginPw: {
-            required : "필수로입력하세요",
-            minlength : "최소 {0}글자이상이어야 합니다",
-            maxlength : "최대 {0}글자이하이어야 합니다",
-        },
-        newPw: {
-            required : "필수로입력하세요",
-            minlength : "최소 {0}글자이상이어야 합니다",
-            maxlength : "최대 {0}글자이하이어야 합니다",
-        },
-        rePw: {
-            required : "필수로입력하세요",
-            minlength : "최소 {0}글자이상이어야 합니다",
-            maxlength : "최대 {0}글자이하이어야 합니다",
-            equalTo : "비밀번호가 일치하지 않습니다."
-        }
-    }
+window.addEventListener('DOMContentLoaded', function() {
+	$("#imgCaptcha").click(function(){
+	    $(this).attr("src", "/captcha/index");
+	});
+	
+	$("form").validate({
+		rules: {
+	        loginPw: {
+	            required : true,
+	            minlength : 8,
+	            maxlength : 15,
+	        },
+	        newPw: {
+	            required : true,
+	            minlength : 8,
+	            maxlength : 15,
+	        },
+	        rePw: {
+	            required : true,
+	            minlength : 8,
+	            maxlength : 15,
+	            equalTo : user_newPw
+	        }
+	    },
+	    //규칙체크 실패시 출력될 메시지
+	    messages : {
+	        loginPw: {
+	            required : "필수로입력하세요",
+	            minlength : "최소 {0}글자이상이어야 합니다",
+	            maxlength : "최대 {0}글자이하이어야 합니다",
+	        },
+	        newPw: {
+	            required : "필수로입력하세요",
+	            minlength : "최소 {0}글자이상이어야 합니다",
+	            maxlength : "최대 {0}글자이하이어야 합니다",
+	        },
+	        rePw: {
+	            required : "필수로입력하세요",
+	            minlength : "최소 {0}글자이상이어야 합니다",
+	            maxlength : "최대 {0}글자이하이어야 합니다",
+	            equalTo : "비밀번호가 일치하지 않습니다."
+	        }
+	    }
+	});
 });
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

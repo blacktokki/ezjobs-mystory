@@ -3,14 +3,10 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<%@ include file="/WEB-INF/jspf/head/default.jspf"%>
 	<link href="/webjars/chart.js/dist/Chart.min.css" rel="stylesheet">
 	<link href="/webjars/jqcloud2/dist/jqcloud.min.css" rel="stylesheet">
 	<link href="/js/ckeditor/plugins/autocomplete/skins/default.css" rel="stylesheet">
-	<%@ include file="/WEB-INF/jspf/head/default.jspf"%>
-	<script src="/webjars/jquery.serializeJSON/jquery.serializejson.min.js"></script>
-	<script src="/webjars/jqcloud2/dist/jqcloud.min.js"></script>
-	<script src="/webjars/requirejs/require.min.js"></script>
-	<script src="/js/require.js"></script>
 </head>
 <body>
 	<%@ include file="/WEB-INF/jspf/head/header.jspf"%>

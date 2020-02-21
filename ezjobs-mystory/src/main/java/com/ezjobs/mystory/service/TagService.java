@@ -80,7 +80,6 @@ public class TagService implements AdminService<Tag>{
 			resumeTags=mapper.readValue(tagsStr, Tag[].class);
 		}
 		catch(Exception e) {
-			System.out.println(e);
 		}
 		List<Tag> tags=new ArrayList<>();
 		List<String> tagsName=new ArrayList<>();

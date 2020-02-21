@@ -80,7 +80,6 @@ public class UserService implements AdminService<User>{
 		}
 		else {
 			re = userRepository.findAll(pr);
-			System.out.println("s:" + re.getSize());
 		}
 		return re;
 	}
@@ -94,7 +93,6 @@ public class UserService implements AdminService<User>{
 		User user=new User();
 		user.setId((String)map.get("id"));
 		String loginPw=(String)map.get("newPw");
-		//System.out.println(loginPw);
 		user.setLoginPw(UserSha256.encrypt(loginPw));
 		userRepository.updatePw(user);
 	}
@@ -106,7 +104,6 @@ public class UserService implements AdminService<User>{
 		int idx = 0;
 		StringBuffer sb = new StringBuffer();
 		// System.out.println("charSet.length :::: " + charSet.length);
-
 		for (int i = 0; i < len; i++) {
 			idx = (int) (charSet.length * Math.random()); // 36 * 생성된 난수를 Int로 추출 (소숫점제거)
 			// System.out.println("idx :::: " + idx);

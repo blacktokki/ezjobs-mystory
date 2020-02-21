@@ -57,7 +57,6 @@ public class UserController {
 	@ResponseBody
 	@GetMapping("/check_id")
 	public Boolean checkId(@RequestParam String id) {
-		System.out.println(id);
 		return userService.checkId(id) == null;
 	}
 

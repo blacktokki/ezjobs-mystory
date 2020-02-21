@@ -75,8 +75,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		else {
 			resumes=resumeRepository.findAll(Example.of(resume), pr);
 		}
-		
-		System.out.println(resumes.getContent().size());
 		return resumes;
 
 	}
@@ -127,11 +125,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		String deptsStr=(String)map.get("depts");
 		Boolean isStart=Boolean.parseBoolean(((String)map.get("isStart")));
 		Boolean isEnd=Boolean.parseBoolean(((String)map.get("isEnd")));
-		System.out.println(keyword);
-		System.out.println(typesStr);
-		System.out.println(deptsStr);
-		System.out.println(isStart);
-		System.out.println(isEnd);
 		Integer size=30;
 		
 		CriteriaBuilder builder=entityManager.getCriteriaBuilder();
@@ -183,7 +176,6 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 			 .where(builder.and(wheres.toArray(new Predicate[wheres.size()])));
 		List<Sentence> list=entityManager.createQuery(query).setMaxResults(size).getResultList();	
 		//Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%", pr);
-		//System.out.println(pageList.getNumberOfElements());
 		return list;//pageList.getContent();
 	}
 

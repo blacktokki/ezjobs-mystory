@@ -19,12 +19,14 @@
 		</div>
 	</form>
 </div>
-<script>
-$('#tags').tagsInput({
-  autocomplete_url:'http://myserver.com/api/autocomplete',
-  autocomplete:{selectFirst:true,width:'100px',autoFill:true},
-	'height' : '110%',
-	'width' : '100%',
-	'defaultText':'태그추가',
+<script defer>
+window.addEventListener('DOMContentLoaded', function() {
+	$('#tags').tagsInput({
+	  autocomplete_url:'http://myserver.com/api/autocomplete',
+	  autocomplete:{selectFirst:true,width:'100px',autoFill:true},
+		'height' : '110%',
+		'width' : '100%',
+		'defaultText':'태그추가',
+	});
 });
 </script>

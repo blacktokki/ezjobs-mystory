@@ -7,5 +7,15 @@
 		</nav>
 	</footer>
 	<%@ include file="/WEB-INF/jspf/footer/default.jspf"%>
+	<%@page import="com.ezjobs.mystory.util.CommonLogger"%>
+	<%
+		try{
+			long start = (long) request.getAttribute("startTime");
+			CommonLogger.getLogger().info("Elapsed after JSP rendering: " + (System.currentTimeMillis() - start));
+		}
+		catch(Exception e){
+			
+		}
+	%>
 	</body>
 </html>

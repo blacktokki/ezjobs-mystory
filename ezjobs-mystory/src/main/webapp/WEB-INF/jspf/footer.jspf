@@ -6,7 +6,8 @@
 			</a>
 		</nav>
 	</footer>
-	<%@ include file="/WEB-INF/jspf/footer/default.jspf"%>
+	<script src="/wro4j/default.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<%@page import="com.ezjobs.mystory.util.CommonLogger"%>
 	<%
 		try{

@@ -47,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         // 허용되어야 할 경로들
-        web.ignoring().antMatchers("/webjars/**", 
+        web.ignoring().antMatchers("/webjars/**",
+        						   "/wro4j/**",
                                    "/css/**",
                                    "/image/**",
                                    "/js/**");

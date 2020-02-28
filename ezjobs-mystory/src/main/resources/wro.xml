@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groups xmlns="http://www.isdc.ro/wro">
+	<group name="resume">
+		<js>/js/resume-editor/jQuery.resume.js</js>
+		<js>/js/resume-editor/list.js</js>
+		<js>/js/resume-editor/review.js</js>
+		<js>/js/resume-editor/write.js</js>
+	</group>
+	
+	<group name="cke-plugins">
+		<js>/js/ckeditor/autocomplete-config.js</js>
+		<js>/js/ckeditor/plugins/autocomplete/plugin.js</js>
+		<css>/js/ckeditor/plugins/autocomplete/skins/default.css</css>
+		<js>/js/ckeditor/plugins/textmatch/plugin.js</js>
+		<js>/js/ckeditor/plugins/textwatcher/plugin.js</js>
+		<js>/js/ckeditor/plugins/wordcount/plugin.js</js>
+		<css>/js/ckeditor/plugins/wordcount/css/wordcount.css</css>
+		<js>/js/ckeditor/plugins/wordcount/lang/ko.js</js>
+	</group>
+	
+	<group name="dashboard">
+		<js minimize="false">/webjars/jqcloud2/dist/jqcloud.min.js</js>
+		<js minimize="false">/webjars/chart.js/dist/Chart.min.js</js>
+		<js>/js/dashboard.js</js>
+		<css minimize="false">/webjars/jqcloud2/dist/jqcloud.min.css</css>
+		<css minimize="false">/webjars/chart.js/dist/Chart.min.css</css>
+	</group>
+	
+	<group name="default">
+		<css minimize="false">/webjars/jquery-ui/jquery-ui.min.css</css>
+		<css minimize="false">/webjars/font-awesome/css/font-awesome.min.css</css>
+		<css minimize="false">/webjars/jquery-tagsinput/jquery.tagsinput.css</css>
+		<js minimize="false">/webjars/jquery/jquery.min.js</js>
+		<js minimize="false">/webjars/jquery-ui/jquery-ui.min.js</js>
+		<js minimize="true">/webjars/jquery-tagsinput/jquery.tagsinput.js</js>
+		<js minimize="false">/webjars/jquery-validation/jquery.validate.min.js</js>
+		<js minimize="false">/webjars/jquery-validation/localization/messages_ko.min.js</js>
+		<js minimize="false">/webjars/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js</js>
+		<js minimize="false">/webjars/jquery.serializeJSON/jquery.serializejson.min.js</js>
+	</group>
+	
+</groups>

@@ -60,20 +60,20 @@
 <script>
 	var createResume;
 	var changePageSize;
+
 	window.addEventListener('DOMContentLoaded', function() {
-		require(["resume-bundle"],function(RESUME){
-			createResume=function(){
-				RESUME.app.createResume();
-			}
-			changePageSize=function(){
-				RESUME.app.getList();
-			}
-		});
+		createResume=function(){
+			RESUME.app.createResume();
+		}
+		changePageSize=function(){
+			RESUME.app.getList();
+		}
 	});
 </script>
-<%--
-<script src="/js/resume-old.js"></script>
- --%>
-<%@ include file="/WEB-INF/jspf/extendFooter.jspf"%>
+<script src="/webjars/ckeditor/standard/ckeditor.js" defer></script>
+<script src="/webjars/ckeditor/standard/adapters/jquery.js" defer></script>
+<script src="/wro4j/cke-plugins.js" defer></script>
+<script src="/wro4j/resume.js" defer></script>
+<%@ include file="/WEB-INF/jspf/footer.jspf"%>
 
 

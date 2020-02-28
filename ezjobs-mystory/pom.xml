@@ -158,12 +158,6 @@
 		    <artifactId>ckeditor</artifactId>
 		    <version>4.13.1</version>
 		</dependency>
-		<dependency>
-		    <groupId>org.webjars</groupId>
-		    <artifactId>requirejs</artifactId>
-		    <version>2.3.6</version>
-		    <scope>runtime</scope>
-		</dependency>
 		<!-- ORM -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -214,6 +208,11 @@
 			<artifactId>simplecaptcha</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<dependency>
+		    <groupId>eu.michael-simons</groupId>
+		    <artifactId>wro4j-spring-boot-starter</artifactId>
+		    <version>0.4.2</version>	    
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -221,29 +220,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-			   <groupId>net.alchim31.maven</groupId>
-			    <artifactId>yuicompressor-maven-plugin</artifactId>
-			    <version>1.5.1</version>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>compress</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			    <configuration>
-		            <encoding>utf-8</encoding>
-		            <force>true</force>
-		            <nosuffix>true</nosuffix>
-		            <removeIncluded>false</removeIncluded>
-    			    <jswarn>false</jswarn>
-    			    <excludes>
-    			    	<exclude>**/css/template.css</exclude>
-    			    	<exclude>**/js/dashboard.js</exclude>
-    			    </excludes>
-    			</configuration>
-    		</plugin>
+			
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>

@@ -4,9 +4,8 @@
 <html>
 <head>
 	<%@ include file="/WEB-INF/jspf/head/default.jspf"%>
-	<link href="/webjars/chart.js/dist/Chart.min.css" rel="stylesheet">
-	<link href="/webjars/jqcloud2/dist/jqcloud.min.css" rel="stylesheet">
-	<link href="/js/ckeditor/plugins/autocomplete/skins/default.css" rel="stylesheet">
+	<link href="/wro4j/cke-plugins.css" rel="stylesheet">
+	<link href="/wro4j/dashboard.css" rel="stylesheet">
 </head>
 <body>
 	<%@ include file="/WEB-INF/jspf/head/header.jspf"%>

@@ -31,7 +31,7 @@
 </style>
 <div class="container">
 	<div class="jumbotron">
-		<h1 class="display-4">공지사항 ${board.id} 번</h1>
+		<h1 class="display-4">QnA ${board.id} 번</h1>
 	</div>
 </div>
 

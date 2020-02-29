@@ -75,35 +75,36 @@ function dataCallback( matchInfo, callback ) {
 		form.depts=JSON.stringify(form.depts);
 		form.keyword=$.trim(query);
 		//console.log(form);
-		
-		$.get("/resume/auto", form, function(data) {
-			var itemsArray=[];
-			//console.log(data);
-			var $frag=$(document.createDocumentFragment());
-			//var wrapTagsRaw=tagsRaw.replace(/\s/g,",");
-			var frontTrim=$.trim(form.keyword.split("%")[0]);
-			data.list.forEach(function(e,i){
-				if(form.searchType==""){
-					var front=frontTrim;
-					itemsArray.push({tags:"", id: i, name: e.text, front:front, back:e.text.replace(front,"")});
-				}
-				else{
-					var front= form.searchType+":" +frontTrim;
-					var fullname=e.type+":"+e.name;
-					itemsArray.push({tags:"", id: i, name: tagsRaw+fullname.replace(/\s/g,"_")+" ", front:front, back:fullname.replace(front,"")});
-				}
+		if (form.keyword!=""){
+			$.get("/resume/auto", form, function(data) {
+				var itemsArray=[];
+				//console.log(data);
+				var $frag=$(document.createDocumentFragment());
+				//var wrapTagsRaw=tagsRaw.replace(/\s/g,",");
+				var frontTrim=$.trim(form.keyword.split("%")[0]);
+				data.list.forEach(function(e,i){
+					if(form.searchType==""){
+						var front=frontTrim;
+						itemsArray.push({tags:"", id: i, name: e.text, front:front, back:e.text.replace(front,"")});
+					}
+					else{
+						var front= form.searchType+":" +frontTrim;
+						var fullname=e.type+":"+e.name;
+						itemsArray.push({tags:"", id: i, name: tagsRaw+fullname.replace(/\s/g,"_")+" ", front:front, back:fullname.replace(front,"")});
+					}
+				});
+				
+			    var suggestions = itemsArray;
+			    // Note: The callback function can also be executed asynchronously
+			    // so dataCallback can do an XHR request or use any other asynchronous API.
+			    //if(suggestions.length>0)
+			    try{
+			    	callback( suggestions );
+			    }
+			    catch(e){
+			    }
 			});
-			
-		    var suggestions = itemsArray;
-		    // Note: The callback function can also be executed asynchronously
-		    // so dataCallback can do an XHR request or use any other asynchronous API.
-		    //if(suggestions.length>0)
-		    try{
-		    	callback( suggestions );
-		    }
-		    catch(e){
-		    }
-		});
+		}
 	},100);
 }
 ac_config.dataCallback = dataCallback;

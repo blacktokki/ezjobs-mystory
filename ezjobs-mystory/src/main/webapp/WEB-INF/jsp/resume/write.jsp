@@ -3,11 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <div>
 	<!-- write head -->
-	<li class="nav-item">
+	<li class="nav-item d-flex">
 		<a class="nav-link breadcrumb-item text-center" id="nav-resume-tab${resume.id}" data-toggle="tab" href="#nav-resume${resume.id}"
 			role="tab" aria-controls="nav-resume${resume.id}" aria-selected="false">
 			${resume.question}
 		</a>
+		<button type="button" class="nav-link close resume-close" aria-label="Close">
+  			<span aria-hidden="true">&times;</span>
+		</button>
 	</li>
 	
 	<!-- write body -->
@@ -48,7 +51,7 @@
 				<div class="input-group-prepend">
 					<span class="input-group-text">내용</span>
 				</div>
-				<textarea class="form-control" name="answer" rows="20">${resume.answer}</textarea>
+				<textarea class="form-control" name="answer" id="answer${resume.id}" rows="20">${resume.answer}</textarea>
 			</div>
 			<button type="button" class="btn btn-primary resume-review" data-toggle="modal" data-target="#review-modal">검토하기</button>
 			<button type="submit" class="btn btn-primary" name="_method" value="post" >다른 이름으로 저장하기</button>

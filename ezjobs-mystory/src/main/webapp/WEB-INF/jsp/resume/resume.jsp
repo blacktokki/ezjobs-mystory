@@ -31,7 +31,7 @@
 			<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create" href="#" onclick="event.preventDefault();createResume()"> 새 자기소개서 </a>
 		</div>
 		<ul class="nav nav-tabs accordion justify-content-center col-8" id="nav-tab" role="tablist">
-			<li class="nav-item">
+			<li class="nav-item nav-home">
 				<a class="nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
 					role="tab" aria-controls="nav-home" aria-selected="true">
 					작성 목록
@@ -69,6 +69,9 @@
 		changePageSize=function(){
 			RESUME.app.getList();
 		}
+		$("#nav-tab").sortable({
+		      items: "li:not(.nav-home)"
+	    });
 	});
 </script>
 <script src="/webjars/ckeditor/standard/ckeditor.js" defer></script>

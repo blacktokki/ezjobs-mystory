@@ -22,6 +22,7 @@
 	function Write() {
 		this.element="#nav-tabContent";
 		this.resumeExport=".resume-export";
+		this.resumeClose=".resume-close";
 		this.tagAppend=".tag-append";
 		this.tagAppendPrompt=".tag-append-prompt";
 		this.tagAppendCustom=".tagsinput .tag>span";
@@ -122,6 +123,16 @@
 					handler(e.target,form);
 				});
 			},
+			closeResume:function(handler){//닫기
+				$("#nav-tab").delegate(this.resumeClose,"click",function(e){
+					var $head=$(e.target).closest("li");
+					var $body=$("#"+$head.find("a").attr("aria-controls"));
+					handler({
+						$head:$head,
+						$body:$body
+					});
+				});
+			},
 		};
 		
 		Write.prototype.renderViews={
@@ -180,9 +191,16 @@
 					.attr("id","nav-resume"+data.id)
 					.attr("aria-labelledby","nav-resume-tab"+data.id);
 			},
+			closeResume:function(data){
+				data.$head.remove();
+				//var editor=data.$body.find(this.writeAnswer).ckeditor(ck_config).editor;
+				//EDITOR.remove(editor);
+				//data.$body.remove();
+				$("#nav-home-tab").tab("show");
+			},
 			applyReview: function(data){
 				this.getCurrentAnswer().val(data);
-			}
+			},
 			
 		};
 		

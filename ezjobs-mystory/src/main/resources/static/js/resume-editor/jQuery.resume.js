@@ -44,7 +44,8 @@
 			.bindRender("appendTag","appendTag")
 			.bindRender("appendTagPrompt","appendTag")
 			.bindRender("appendTagCustom","appendTag")
-			.bindHandler("saveResume",this.postResume);
+			.bindHandler("saveResume",this.postResume)
+			.bindRender("closeResume","closeResume");
 		
 		this.review.bindHandler("startReview",this.reviewResume)
 			.bindHandler("changeWord",this.changeWord)

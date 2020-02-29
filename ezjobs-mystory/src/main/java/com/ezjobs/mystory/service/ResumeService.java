@@ -176,7 +176,9 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 	public Map<String,Object> compareAll(String answer) {
 		String[] strs=answer.split("\\s+");
 		int [] scores=new int[strs.length];
+		int [] scoresMax=new int[strs.length];
 		int rates=0;
+		int ratesMax=0;
 		int size=Math.min(5,strs.length);
 		int repeat=strs.length-size+1;
 		String queries="";
@@ -200,17 +202,20 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		List<?> list=query.getResultList();
 		for(int i=0;i<repeat;i++) {
 			int cnt =((BigInteger)((Object[])list.get(i))[1]).intValue();
-			for(int j=0;j<size;j++) {			
-				int add=Math.min(cnt,size-scores[i+j]);
+			int add=cnt>0?1:0;
+			for(int j=0;j<size;j++) {
 				scores[i+j]+=add;
+				scoresMax[i+j]+=1;
 				rates+=add;
+				ratesMax+=1;
 			}
 		}
 		
 		Map<String,Object> map=new HashMap<>();
 		map.put("results",strs);
 		map.put("scores",scores);
-		map.put("rates",100*rates/(size*strs.length));
+		map.put("scoresMax",scoresMax);
+		map.put("rates",100*rates/ratesMax);
 		return map;
 	}
 

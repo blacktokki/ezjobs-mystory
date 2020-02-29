@@ -1,9 +1,11 @@
 package com.ezjobs.mystory.service;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -121,41 +123,35 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 	
 	public List<Sentence> autoComplete(Map<String, Object> map){
 		String keyword=(String)map.get("keyword");
-		String typesStr=(String)map.get("types");
-		String deptsStr=(String)map.get("depts");
+		String[] typeStrs = {};
+		String[] deptStrs = {};
 		Boolean isStart=Boolean.parseBoolean(((String)map.get("isStart")));
 		Boolean isEnd=Boolean.parseBoolean(((String)map.get("isEnd")));
 		Integer size=30;
+		try {
+			typeStrs=mapper.readValue((String)map.get("types"), String[].class);
+			deptStrs=mapper.readValue((String)map.get("depts"), String[].class);
+		}
+		catch(Exception e) {
+		}
 		
 		CriteriaBuilder builder=entityManager.getCriteriaBuilder();
 		CriteriaQuery<Sentence> query = builder.createQuery(Sentence.class);
-		
-		//조회의 시작점을 뜻하는 Root객체 생성 여기서 변수명 m은 JPQL에서 별칭이라고 생각하면 된다.
-		//반환타입을 알수 없다면 제네릭타입을 Object로 준다.
 		Root<Sentence> m = query.from(Sentence.class);
-		
 		//검색조건 정의
 		List<Predicate> typesList=new ArrayList<>();
 		List<Predicate> deptsList=new ArrayList<>();
 		List<Predicate> position=new ArrayList<>();
-		try{
-			for(String item:mapper.readValue(typesStr, String[].class))
-				typesList.add(builder.like(m.get("tags"), "%"+item+"%"));			
-		}catch(Exception e) {
-		}
-		try{		
-			for(String item:mapper.readValue(deptsStr, String[].class))
-				deptsList.add(builder.like(m.get("tags"), "%"+item+"%"));	
-		}
-		catch(Exception e) {
-		}
+		for(String item:typeStrs)
+			typesList.add(builder.like(m.get("tags"), "%"+item+"%"));	
+		for(String item:deptStrs)
+			deptsList.add(builder.like(m.get("tags"), "%"+item+"%"));
 		if(isStart) {
 			position.add(builder.lessThanOrEqualTo(m.get("position"), 1));
 		}
 		if(isEnd) {
 			position.add(builder.equal(
-				builder.diff(m.get("positionMax"), m.get("position")),1
-			));
+				builder.diff(m.get("positionMax"), m.get("position")), 1));
 		}
 		List<Predicate> wheres=new ArrayList<>();
 		List<List<Predicate>> wheresArray=
@@ -169,41 +165,48 @@ public class ResumeService implements DefaultPageService,AdminService<Resume>{
 		}
 		//정렬조건 정의
 		//Order ageDesc = builder.desc(m.get("age"));
-		
 		//distinct 중복제거.
 		query.select(m)
 			 .distinct(true)
 			 .where(builder.and(wheres.toArray(new Predicate[wheres.size()])));
 		List<Sentence> list=entityManager.createQuery(query).setMaxResults(size).getResultList();	
-		//Page<Sentence> pageList=sentenceRepository.findByTextLike(keyword+"%", pr);
-		return list;//pageList.getContent();
+		return list;
 	}
 
 	public Map<String,Object> compareAll(String answer) {
 		String[] strs=answer.split("\\s+");
 		int [] scores=new int[strs.length];
 		int rates=0;
-		int size=5;
-		for(int i=0;i<strs.length;i++) {
-			String like="";
-			int j;
-			for(j=0;j<size && i+j<strs.length;j++) {
+		int size=Math.min(5,strs.length);
+		int repeat=strs.length-size+1;
+		String queries="";
+		String[] likes=new String[repeat];
+		
+		for(int i=0;i<repeat;i++) {
+			if (i>0)
+				queries+=" union ";
+			queries+="SELECT ?0,count(*) FROM sentence where match(text) against( ?1 in boolean mode)"
+				.replace("?0",""+i)
+				.replace("?1","?"+(i+1));
+			likes[i]="";
+			for(int j=0;j<size;j++) {
 				if(strs[i+j].length()>1)
-					like+=strs[i+j]+" ";		
+					likes[i]+=strs[i+j]+" ";	
 			}
-			List<?> sentences=entityManager
-	        .createNativeQuery("SELECT text FROM sentence "
-	        		+ "where match(text) against('\""+like+"\"' in boolean mode)")
-	        .getResultList();
-			
-			for(j=0;j<size && i+j<strs.length;j++) {
-				int add=Math.min(sentences.size(),size-scores[i+j]);
+		}
+		Query query=entityManager.createNativeQuery(queries);
+		for(int i=0;i<repeat;i++)
+			query.setParameter(i+1, "\""+likes[i]+"\"");
+		List<?> list=query.getResultList();
+		for(int i=0;i<repeat;i++) {
+			int cnt =((BigInteger)((Object[])list.get(i))[1]).intValue();
+			for(int j=0;j<size;j++) {			
+				int add=Math.min(cnt,size-scores[i+j]);
 				scores[i+j]+=add;
 				rates+=add;
 			}
-			if(j<size)
-				break;
 		}
+		
 		Map<String,Object> map=new HashMap<>();
 		map.put("results",strs);
 		map.put("scores",scores);

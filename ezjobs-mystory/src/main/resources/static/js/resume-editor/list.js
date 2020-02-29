@@ -7,7 +7,7 @@
 		this.resumeLink=".resume-link";//href
 		this.searchForm=".search-form";//input[name=page]
 		this.pageItem=".page-item a";//data-page
-		this.resumeCard="#resume-card";
+		this.resumeCard="#nav-resume-tab";
 		this.deleteForm=".delete-form";
 		this.deleteModal=".delete-modal";
 		this.pageFormSelect=".page-form select";

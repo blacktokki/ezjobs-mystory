@@ -20,16 +20,16 @@
 	}
 	
 	function Write() {
-		this.element="#accordion2";//form :submit,.tags,.collapse
-		this.writeQuestion=".write-question";//id
+		this.element="#nav-tabContent";
 		this.resumeExport=".resume-export";
 		this.tagAppend=".tag-append";
 		this.tagAppendPrompt=".tag-append-prompt";
 		this.tagAppendCustom=".tagsinput .tag>span";
-		this.writeAnswer=".write-answer";
-		this.navProfileTab="#nav-profile-tab";
-		this.resumeId=".resume-id";
-		this.resumeMethod=".resume-method"
+			
+		this.writeQuestion="input[name=question]";
+		this.writeAnswer="textarea[name=answer]";
+		this.resumeId="input[name=id]";
+		this.resumeMethod="input[name=_method]";
 	}
 	
 	function init(View){
@@ -41,7 +41,7 @@
 			titleSync: function(handler){//제목 동기화
 				$(this.element).delegate(this.writeQuestion,"propertychange change keyup paste input",function(e){
 					handler({
-						id:$(e.target).attr("id").replace("write-question", ""),
+						id:$(e.target).closest(".tab-pane").attr("aria-labelledby"),
 						currentVal:$(e.target).val()
 					});
 				});
@@ -126,26 +126,31 @@
 		
 		Write.prototype.renderViews={
 			appendResume : function(data){
-				var element=this.element;
-				var navProfileTab=this.navProfileTab;
-				this.resumeTemplate(data,function(data){
-					var resume_idx=data.resume_idx;
-					$(navProfileTab).tab("show");
-					data.$result.appendTo(element).find(".collapse").collapse("show");
-					$("#tags-write" + resume_idx).tagsInput({
-						'height' : '100%',
-						'width' : '80%',
-					});
-					var editor=$("#write-answer" + resume_idx).ckeditor().editor;
-					var ac=new EDITOR.plugins.autocomplete(editor, ac_config );
+				var resume_new=data.resume_new;
+				var $result=$(data.response);
+				$result.find("input[name=closeDate]").datepicker({
+				    dateFormat: 'yy-mm-dd'
+			  	});
+				if(resume_new){
+					$result.find("input[name=question]").val("새 자기소개서 " + resume_new);
+					$result.find(".nav-item a").html("새 자기소개서 " + resume_new);
+				}
+				var $head=$result.find(".nav-item");
+				var $body=$result.find(".tab-pane");
+				$body.appendTo("#nav-tabContent");
+				$body.find("input[name=tags]").tagsInput({
+					'height' : '100%',
+					'width' : '80%',
 				});
+				var editor=$body.find(this.writeAnswer).ckeditor(ck_config).editor;
+				var ac=new EDITOR.plugins.autocomplete(editor, ac_config);
+				$head.appendTo("#nav-tab").find("a").tab("show");
 			},
 			showExistResume : function(target){
-				$(this.navProfileTab).tab("show");
-				$(target).find(".collapse").collapse("show");
+				$(target).tab("show");
 			},
 			titleSync :function(data){
-				$("#heading-write" + data.id + " a").html(data.currentVal);
+				$("#" + data.id).html(data.currentVal);
 			},
 			changeMethod :function(target){
 				$(target).form()
@@ -164,51 +169,25 @@
 				var target=data.target;
 				var data=data.data;
 				$(target).find(this.resumeId).val(data.id);
-				$(target).closest(".card").attr("id","resume-card"+data.id);
 				$(target).find(this.resumeMethod).val("put");
+				
+				var $body=$(target).closest(".tab-pane");
+				$("#"+$body.attr("aria-labelledby"))
+					.attr("id","nav-resume-tab"+data.id)
+					.attr("href","#nav-resume"+data.id)
+					.attr("aria-controls","nav-resume"+data.id);
+				$body
+					.attr("id","nav-resume"+data.id)
+					.attr("aria-labelledby","nav-resume-tab"+data.id);
 			},
 			applyReview: function(data){
-				$(this.element+" .card").find(".show").find(this.writeAnswer).val(data);
+				this.getCurrentAnswer().val(data);
 			}
 			
 		};
 		
-		Write.prototype.resumeTemplate=function(data,callback){
-			var resume_idx=data.resume_idx;
-			var resume_new=data.resume_new;
-			//console.log(resume_new);
-			//console.log(resume_idx);
-			var $result=$(data.response);
-	
-			$result.find(".card-header")
-				.attr("id","heading-write" + resume_idx)
-				.find("a")
-				.attr("href","#collapse-write" + resume_idx)
-				.attr("aria-controls","collapse-write" + resume_idx);
-			$result.find(".collapse")
-				.attr("id","collapse-write" + resume_idx)
-				.attr("aria-labelledby","heading-write" + resume_idx)
-				.find(".write-question")
-				.attr("id","write-question" + resume_idx);
-			$result.find(".collapse")
-				.find(".write-answer")
-				.attr("id","write-answer" + resume_idx)
-				.ckeditor(ck_config);
-			$result.find(".tags").attr("id","tags-write" + resume_idx);
-			$result.find(".write-date").datepicker({
-			    dateFormat: 'yy-mm-dd'
-		  	});
-			if(resume_new){
-				$result.find(".write-question").val("새 자기소개서 " + resume_new);
-				$result.find(".card-header a").html("새 자기소개서 " + resume_new);
-			}
-			data.$result=$result;
-			callback(data);
-		}
-		
 		Write.prototype.getCurrentAnswer=function(){
-			var answer= $(this.element+" .card").find(".show").find(".write-answer").val();
-			return {answer:answer};
+			return $(this.element).find(".show").find(this.writeAnswer);
 		}
 		Write.prototype.tagConverter=function(text){
 			var tag=text.split(":");

@@ -2,6 +2,7 @@ package com.ezjobs.mystory.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
@@ -56,8 +57,11 @@ public class ResumeController {
 	}
 	
 	@GetMapping("write")
-	public String write(Model model){
+	public String writeNew(@RequestParam Integer newId, Model model){
+		Resume resume=new Resume();
+		resume.setId(-newId);
 		model.addAttribute("method","post");
+		model.addAttribute("resume",resume);
 		return "resume/write";
 	}
 	

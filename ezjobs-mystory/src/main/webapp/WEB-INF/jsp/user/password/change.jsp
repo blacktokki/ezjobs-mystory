@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/jspf/head.jspf"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <style>
 .board_list {width: 500px; margin:0 auto;}
 .board_list tfoot {text-align: center;}
@@ -31,8 +32,19 @@
     <button type="button" onclick="location.href='/user/info'" class="btn btn-secondary resume-submit">취소</button>
     </td>
    </tr>
+   <c:if test="${not empty changePwException}">
+   <tr>
+	<td colspan='2'>
+		<font color="red">
+			요청 실패<br>
+			Reason:${sessionScope["changePwException"]}
+		</font>
+		<c:remove scope="session" var="changePwException"/>
+	</td>
+   </tr>
+   </c:if>
   </tbody>
- </table>s
+ </table>
 </form>
 <script>
 window.addEventListener('DOMContentLoaded', function() {

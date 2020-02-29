@@ -47,6 +47,17 @@
 	</td>
    </tr>
    </c:if>
+   <c:if test="${not empty changePwMessage}">
+   <tr>
+	<td colspan='2'>
+		<font color="black">
+			알림<br>
+			${sessionScope["changePwMessage"]}
+		</font>
+		<c:remove scope="session" var="changePwMessage"/>
+	</td>
+   </tr>
+   </c:if>
    <tr>
 	<td colspan='2'>
 		<c:forEach var="url" items="${urls}" varStatus="status">

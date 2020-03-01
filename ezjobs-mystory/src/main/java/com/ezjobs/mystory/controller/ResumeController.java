@@ -33,8 +33,14 @@ public class ResumeController {
 	@GetMapping("")//글작성 화면 
 	public String resume(@RequestParam Map<String, Object> map,Model model){
 		User user=LoginUser.get();
-		map.put("id",user.getId());
-		map.put("isAdmin",user.getIsAdmin());
+		if (user!=null) {
+			map.put("id",user.getId());
+			map.put("isAdmin",user.getIsAdmin());
+		}
+		else {
+			map.put("id"," ");
+			map.put("isAdmin",false);
+		}
 		model.addAttribute("resumes",resumeService.list(map));
 		PageService.addPageAttributes(map,model);
 		return "resume/resume";
@@ -43,8 +49,14 @@ public class ResumeController {
 	@GetMapping("content")
 	public String list(@RequestParam  Map<String, Object> map,Model model){
 		User user=LoginUser.get();
-		map.put("id",user.getId());
-		map.put("isAdmin",user.getIsAdmin());
+		if (user!=null) {
+			map.put("id",user.getId());
+			map.put("isAdmin",user.getIsAdmin());
+		}
+		else {
+			map.put("id"," ");
+			map.put("isAdmin",false);
+		}
 		model.addAttribute("resumes",resumeService.list(map));
 		PageService.addPageAttributes(map,model);
 		return "resume/list";

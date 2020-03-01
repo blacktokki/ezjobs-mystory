@@ -91,11 +91,16 @@
 	App.prototype.postResume=function(target,form){
 		console.log(form);
 		$.post("/resume/content/" + form.id, form, function(data) {
-			self().getList();
-			self().write.render("saveResume",{
-				target:target,
-				data:data,
-			});
+			if($("<div>"+data+"</div>").find("#frm").length>0){
+				window.open("/user/login");
+			}
+			else{
+				self().getList();
+				self().write.render("saveResume",{
+					target:target,
+					data:data,
+				});
+			}
 		});
 	}
 	App.prototype.reviewResume=function(){

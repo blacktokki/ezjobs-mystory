@@ -24,7 +24,7 @@ ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기�
         * jquery-ui-touch-punch
       * jquery-validation
     * bootstrap
-    * require.js
+    * wro4j
     * ckeditor
       * autocomplete
       * wordcount
@@ -38,15 +38,13 @@ ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기�
       * SHA-256
     * Spring-Data
       * JPA
+    * Spring Devtools
   * JSP
     * EL
     * JSTL
-    * JSPF
   * Lombok
   * Repository
     * MySQL
-    * ElasticSearch
-      * logstash
   * Server
     * Dev
       * Windows 10 Home
@@ -56,13 +54,12 @@ ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기�
     * Prod
       * Amazon Linux AMI release 2018.03
       * Linux Docker
-      * JDK 1.8
+      * (Open)JDK 1.8
       * Git
 
 * Dev-Ops/Tools
   * Test
     * JUnit
-    * Spring Devtools
   * Build/Deploy
     * Maven
       * Webjar
@@ -75,8 +72,6 @@ ezjobs-mystory는 자기소개서의 텍스트마이닝으로 수집한 자기�
     * VPC
   * Anayltics
     * Google Analytics
-    * ElasticSearch
-      * Kibana
 
 ## 주요기능
  모든 페이지에 대한 상세한 설명은 [페이지 설명.md](https://github.com/blacktokki/ezjobs-mystory/blob/master/페이지%20설명.md)에 있습니다.

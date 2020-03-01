@@ -2,6 +2,7 @@ package com.ezjobs.mystory.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.ezjobs.mystory.entity.Resume;
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.service.ResumeService;
 import com.ezjobs.mystory.service.SplitService;
@@ -32,8 +33,14 @@ public class ResumeController {
 	@GetMapping("")//글작성 화면 
 	public String resume(@RequestParam Map<String, Object> map,Model model){
 		User user=LoginUser.get();
-		map.put("id",user.getId());
-		map.put("isAdmin",user.getIsAdmin());
+		if (user!=null) {
+			map.put("id",user.getId());
+			map.put("isAdmin",user.getIsAdmin());
+		}
+		else {
+			map.put("id"," ");
+			map.put("isAdmin",false);
+		}
 		model.addAttribute("resumes",resumeService.list(map));
 		PageService.addPageAttributes(map,model);
 		return "resume/resume";
@@ -42,8 +49,14 @@ public class ResumeController {
 	@GetMapping("content")
 	public String list(@RequestParam  Map<String, Object> map,Model model){
 		User user=LoginUser.get();
-		map.put("id",user.getId());
-		map.put("isAdmin",user.getIsAdmin());
+		if (user!=null) {
+			map.put("id",user.getId());
+			map.put("isAdmin",user.getIsAdmin());
+		}
+		else {
+			map.put("id"," ");
+			map.put("isAdmin",false);
+		}
 		model.addAttribute("resumes",resumeService.list(map));
 		PageService.addPageAttributes(map,model);
 		return "resume/list";
@@ -56,8 +69,11 @@ public class ResumeController {
 	}
 	
 	@GetMapping("write")
-	public String write(Model model){
+	public String writeNew(@RequestParam Integer newId, Model model){
+		Resume resume=new Resume();
+		resume.setId(-newId);
 		model.addAttribute("method","post");
+		model.addAttribute("resume",resume);
 		return "resume/write";
 	}
 	

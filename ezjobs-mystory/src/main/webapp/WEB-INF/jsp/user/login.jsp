@@ -47,6 +47,17 @@
 	</td>
    </tr>
    </c:if>
+   <c:if test="${not empty changePwMessage}">
+   <tr>
+	<td colspan='2'>
+		<font color="black">
+			알림<br>
+			${sessionScope["changePwMessage"]}
+		</font>
+		<c:remove scope="session" var="changePwMessage"/>
+	</td>
+   </tr>
+   </c:if>
    <tr>
 	<td colspan='2'>
 		<c:forEach var="url" items="${urls}" varStatus="status">
@@ -60,8 +71,10 @@
   
 </form>
 <script>
-$("#imgCaptcha").click(function(){
-    $(this).attr("src", "/captcha/index");
+window.addEventListener('DOMContentLoaded', function() {
+	$("#imgCaptcha").click(function(){
+	    $(this).attr("src", "/captcha/index");
+	});
 });
 </script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

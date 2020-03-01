@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         // 허용되어야 할 경로들
-        web.ignoring().antMatchers("/webjars/**", 
+        web.ignoring().antMatchers("/webjars/**",
+        						   "/wro4j/**",
                                    "/css/**",
                                    "/image/**",
                                    "/js/**");
@@ -60,7 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // USER, ADMIN으로 권한 분리 유알엘 정의
             .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
             .antMatchers("/user/password/change/**").not().hasAuthority("ROLE_SOCIAL")
-            .antMatchers("/resume/**",
+            .antMatchers(HttpMethod.POST, "/resume/content/**").hasAuthority("ROLE_USER")
+            .antMatchers(HttpMethod.PUT, "/resume/content/**").hasAuthority("ROLE_USER")
+            .antMatchers(
             			 "/board/write/**",
             			 "/help/qnawrite/**",
             			 "/user/password/change/**").hasAuthority("ROLE_USER")

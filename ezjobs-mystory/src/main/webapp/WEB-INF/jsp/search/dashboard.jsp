@@ -47,6 +47,6 @@
 #트리맵 : 자기소개서의 태그에 관한 데이터입니다. 차트에 사용된 데이터는 문항 유형으로 분류되어진 태그입니다. 공간의 크기는 문항 유형 태그의 빈도에 따라 비례합니다.<br><br>
 <p style="font-size:10px;"> *단어 혹은 공간 클릭시 문장검색으로 이동하여 검색합니다. </p>
 </div>
-
-<script src="/js/dashboard.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="/wro4j/dashboard.js" defer></script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

@@ -68,7 +68,7 @@
 </form>
 
 <script>
-$(function(){
+window.addEventListener('DOMContentLoaded', function() {
     $("form").validate({
     	rules: {
             name: {

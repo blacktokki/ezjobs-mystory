@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import org.elasticsearch.script.Script;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +44,8 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 @Service
 public class KeywordAnalysisService {
 	
+	static final Logger logger = LoggerFactory.getLogger(KeywordAnalysisService.class);
+	
 	@Inject
 	private TagRepository tagRepository;
 	
@@ -64,7 +68,7 @@ public class KeywordAnalysisService {
 		}
 		for(Tag tag:tags) {
 			String name=tag.getName();
-			System.out.println(name);
+			logger.info(name);
 			SearchQuery searchQuery=new NativeSearchQueryBuilder()
 					.withQuery(matchQuery("question",name))
 					.withIndices("intro")
@@ -73,20 +77,20 @@ public class KeywordAnalysisService {
 					//.withSourceFilter(sourceFilter)
 					.build();
 			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
-			System.out.println(list.size());
+			logger.info(((Integer)list.size()).toString());
 			/*
 			for(ElasticResume resume:list) {
-				//System.out.println(resume.getId());
+				//logger.info(resume.getId());
 				//int i=resumeMap.get(resume.getId());
-				//System.out.println(resumes.get(i).getId());
+				//logger.info(resumes.get(i).getId());
 				//resumes.get(i).setTags(name+","+resumes.get(i).getTags());
 			}*/
-			//System.out.println(resumes.get(0).getQuestion());
-			//System.out.println(resumes.get(0).getTags());
+			//logger.info(resumes.get(0).getQuestion());
+			//logger.info(resumes.get(0).getTags());
 		}
 		/*
 		for(Resume resume:resumes) {
-			System.out.println(resume.getTags());
+			logger.info(resume.getTags());
 		}*/
 		ResumeRepository.saveAll(resumes);
 	}
@@ -112,7 +116,7 @@ public class KeywordAnalysisService {
 					//.withSourceFilter(sourceFilter)
 					.build();
 			List<ElasticResume> list=elasticsearchTemplate.queryForList(searchQuery,ElasticResume.class);
-			System.out.println(name+":"+list.size());
+			logger.info(name+":"+list.size());
 		}
 	}
 	
@@ -151,8 +155,8 @@ public class KeywordAnalysisService {
 				str="미분류";
 			}
 			al.add(str);
-			//System.out.println(resume.getQuestion());
-			//System.out.println(str);
+			//logger.info(resume.getQuestion());
+			//logger.info(str);
 		}
 		execute(al.toArray(new String[al.size()]));
 	}
@@ -180,7 +184,7 @@ public class KeywordAnalysisService {
 				out=new Formatter(new StringBuilder(), Locale.US);
 				FeatureSequence tokens=(FeatureSequence) model.data.get(i).instance.getData();
 				LabelSequence topics = model.getData().get(i).topicSequence;
-				System.out.println(i+"번째 문서");
+				logger.info(i+"번째 문서");
 		        for (int position = 0; position < tokens.getLength(); position++) {
 		            out.format("%s-%d ", dataAlphabet.lookupObject(tokens.getIndexAtPosition(position)), topics.getIndexAtPosition(position));
 		        }
@@ -190,7 +194,7 @@ public class KeywordAnalysisService {
 		            if(topicDistribution[topic]>1.0/numTopic){        
 		            	out = new Formatter(new StringBuilder(), Locale.US);
 		            	out.format("%d\t%.3f\t", topic, topicDistribution[topic]);
-		            	System.out.println(out);
+		            	 System.out.println(out);
 		            }
 		        }
 			}
@@ -198,7 +202,7 @@ public class KeywordAnalysisService {
 			
 			for(int i=0;i<topicSortedWords.size();i++) {
 				Iterator<IDSorter> iterator=topicSortedWords.get(i).iterator();
-				System.out.println(i+"번째 카테고리");
+				logger.info(i+"번째 카테고리");
 				out = new Formatter(new StringBuilder(), Locale.US);
 				int rank = 0;
 				while (iterator.hasNext() && rank < 5) {
@@ -206,7 +210,7 @@ public class KeywordAnalysisService {
 	                out.format("%s (%.0f) ", dataAlphabet.lookupObject(idCountPair.getID()), idCountPair.getWeight());
 	                rank++;
 	            }
-				System.out.println(out);
+				 System.out.println(out);
 			}
 			for(int i=0;i<topicSortedWords.size();i++) {
 				Iterator<IDSorter> iterator=topicSortedWords.get(i).iterator();
@@ -218,7 +222,7 @@ public class KeywordAnalysisService {
 	                	w=(int)idCountPair.getWeight();
 	                rank++;
 	            }
-				System.out.println(w);
+				 System.out.println(w);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

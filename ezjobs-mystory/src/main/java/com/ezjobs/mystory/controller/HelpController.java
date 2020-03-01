@@ -45,7 +45,7 @@ public class HelpController {
 
 	@GetMapping("/noticecontent/{id}")
 	public String noticecontent(@PathVariable Integer id, Model model) {
-		communityService.content(id);
+		model.addAttribute("board",communityService.content(id));
 		return "help/noticecontent";
 	}
 
@@ -57,7 +57,7 @@ public class HelpController {
 
 	@GetMapping("/qnacontent/{id}")
 	public String qnacontent(@PathVariable Integer id, Model model) {
-		communityService.content(id);
+		model.addAttribute("board",communityService.content(id));
 		return "help/qnacontent";
 	}
 

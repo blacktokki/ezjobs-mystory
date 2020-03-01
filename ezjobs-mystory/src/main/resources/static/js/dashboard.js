@@ -26,13 +26,10 @@ function showTreeMap(){
 	document.getElementById("vizTreeMap").style.display = "block";
 }
 	
-
-
-require(["d3","chart"],function(d3,Chart){
-	document.getElementById("jsonChart1").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
-	document.getElementById("jsonChart2").style.display = "none";
-	document.getElementById("vizTreeMap").style.display = "none";
-
+document.getElementById("jsonChart1").style.display = "none"; // 기본적으로 워드클라우드만 보여주기 위한 처리
+document.getElementById("jsonChart2").style.display = "none";
+document.getElementById("vizTreeMap").style.display = "none";
+window.addEventListener('DOMContentLoaded', function() {
 	
 		var randomColor = new Array(3); // 트리맵 색상 일치 용도, 워드 클라우드의 랜덤색상을 하나씩 따감
 		
@@ -106,7 +103,7 @@ require(["d3","chart"],function(d3,Chart){
 			    from: 0.07,
 			    to: 0.01
 			  },
-			  autoResize:true,
+			  autoResize:true
 			});
 		
 		// #차트
@@ -368,14 +365,14 @@ require(["d3","chart"],function(d3,Chart){
 	      .enter()
 	      .append('text')
 	      .selectAll('tspan')
-	      .data(d => {
+	      .data(function(d){
 	          return d.data.text.split(/(?=[\s]+)/g) // split the name of movie
-	              .map(v => { 
+	              .map(function(v){ 
 	                  return {
 	                      text: v,
 	                      x0: d.x0,
 	                      y0: d.y0
-	                  }
+	                  };
 	              });
 	      })
 	      .enter()
@@ -383,9 +380,9 @@ require(["d3","chart"],function(d3,Chart){
 						return "/search/list?searchTags="+d.text;
 					})
 	      .append('tspan')
-	      .attr("x", (d) => d.x0 + 5)
-	      .attr("y", (d, i) => d.y0 + 15 + (i * 17)) 
-	      .text((d) =>  d.text.replace(/(\s*)/g, ""))
+	      .attr("x", function(d){return d.x0 + 5;})
+	      .attr("y", function(d, i) {return d.y0 + 15 + (i * 17);}) 
+	      .text(function(d) {return d.text.replace(/(\s*)/g, "");})
 	      .attr("font-size", "0.8em")
 	      .attr("fill", "white") // #색상
 	})

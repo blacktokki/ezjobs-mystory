@@ -6,5 +6,17 @@
 			</a>
 		</nav>
 	</footer>
+	<script src="/wro4j/default.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<%@page import="com.ezjobs.mystory.util.CommonLogger"%>
+	<%
+		try{
+			long start = (long) request.getAttribute("startTime");
+			CommonLogger.getLogger().info("Elapsed after JSP rendering: " + (System.currentTimeMillis() - start));
+		}
+		catch(Exception e){
+			
+		}
+	%>
 	</body>
 </html>

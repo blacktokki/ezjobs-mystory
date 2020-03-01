@@ -59,14 +59,12 @@ public class SearchService {
 
 				if (searchTagArray.length == 0) {
 					Page<Sentence> Searchs = sentenceRepository.findAll(pr);
-					System.out.println(Searchs);
 					model.addAttribute("searchs", Searchs);
 					model.addAttribute("pageNavNumber", Searchs.getNumber() / 5);
 					model.addAttribute("recordCount", Searchs.getTotalElements());
 
 				} else if (searchTagArray.length == 1) {
 					Page<Sentence> Searchs = sentenceRepository.findByTagsContains(searchTagArray[0], pr);
-					System.out.println(Searchs);
 					model.addAttribute("searchs", Searchs);
 					model.addAttribute("pageNavNumber", Searchs.getNumber() / 5);
 					model.addAttribute("recordCount", Searchs.getTotalElements());
@@ -74,7 +72,6 @@ public class SearchService {
 				} else if (searchTagArray.length == 2) {
 					Page<Sentence> Searchs = sentenceRepository.findByTagsContainsOrTagsContains(searchTagArray[0],
 							searchTagArray[1], pr);
-					System.out.println(Searchs);
 					model.addAttribute("searchs", Searchs);
 					model.addAttribute("pageNavNumber", Searchs.getNumber() / 5);
 					model.addAttribute("recordCount", Searchs.getTotalElements());
@@ -82,7 +79,6 @@ public class SearchService {
 				} else {
 					Page<Sentence> Searchs = sentenceRepository.findByTagsContainsOrTagsContainsOrTagsContains(
 							searchTagArray[0], searchTagArray[1], searchTagArray[2], pr);
-					System.out.println(Searchs);
 					model.addAttribute("searchs", Searchs);
 					model.addAttribute("pageNavNumber", Searchs.getNumber() / 5);
 					model.addAttribute("recordCount", Searchs.getTotalElements());

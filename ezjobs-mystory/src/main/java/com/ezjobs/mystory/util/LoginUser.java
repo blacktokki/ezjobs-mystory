@@ -30,7 +30,11 @@ public class LoginUser {
 	}
 	
 	public static User get() {//추후 수정->getUser
-		return (User)getAuthentication().getPrincipal();
+		Object principal=getAuthentication().getPrincipal();
+		if(principal instanceof User)
+			return (User)principal;
+		else
+			return null;
 	}
 	
 	public static String getId() {

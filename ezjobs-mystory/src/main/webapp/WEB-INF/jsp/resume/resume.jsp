@@ -30,12 +30,15 @@
 		<div class="nav nav-tabs col-2 " id="nav-tab-left" role="tablist">
 			<a class="nav-item nav-link breadcrumb-item text-right" id="resume-create" href="#" onclick="event.preventDefault();createResume()"> 새 자기소개서 </a>
 		</div>
-		<div class="nav nav-tabs accordion justify-content-center col-8" id="nav-tab" role="tablist">
-			<a class="nav-item nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-				aria-controls="nav-home" aria-selected="true">작성 목록</a>
-			<a class="nav-item nav-link breadcrumb-item text-center" id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
-				role="tab" aria-controls="nav-profile" aria-selected="false">작성중</a>
-		</div>
+		<ul class="nav nav-tabs accordion justify-content-center col-8" id="nav-tab" role="tablist">
+			<li class="nav-item nav-home">
+				<a class="nav-link breadcrumb-item text-center active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+					role="tab" aria-controls="nav-home" aria-selected="true">
+					작성 목록
+				</a>
+			</li>
+			<!-- <li>write head</li>-->
+		</ul>
 		<div class="col-2">
 			<div class="justify-content-right" id="nav-tab-right">
 			</div>
@@ -50,9 +53,7 @@
 				<%@ include file="/WEB-INF/jsp/resume/list.jsp"%>
 			</div>
 		</div>
-		<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-			<div id="accordion2" role="tablist"></div>
-		</div>
+		<!--<div>write body</div> -->
 	</div>
 </div>
 <%@ include file="/WEB-INF/jsp/resume/review.jsp"%>
@@ -60,18 +61,29 @@
 <script>
 	var createResume;
 	var changePageSize;
-	require(["resume-bundle"],function(RESUME){
+
+	window.addEventListener('DOMContentLoaded', function() {
 		createResume=function(){
 			RESUME.app.createResume();
 		}
 		changePageSize=function(){
 			RESUME.app.getList();
 		}
+		$("#nav-tab").sortable({
+		      items: "li:not(.nav-home)"
+	    });
 	});
 </script>
-<%--
-<script src="/js/resume-old.js"></script>
- --%>
+<script src="/webjars/ckeditor/standard/ckeditor.js" defer></script>
+<script src="/webjars/ckeditor/standard/adapters/jquery.js" defer></script>
+<script src="/wro4j/cke-plugins.js" defer></script>
+<script src="/wro4j/resume.js" defer></script>
+<!--
+<script src="/js/resume-editor/jQuery.resume.js" defer></script>
+<script src="/js/resume-editor/list.js" defer></script>
+<script src="/js/resume-editor/review.js" defer></script>
+<script src="/js/resume-editor/write.js" defer></script>
+-->
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>
 
 

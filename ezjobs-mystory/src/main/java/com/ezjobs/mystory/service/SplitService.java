@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.ezjobs.mystory.entity.Resume;
@@ -20,6 +22,8 @@ import kr.bydelta.koala.okt.SentenceSplitter;
 
 @Service
 public class SplitService {
+	
+	static final Logger logger = LoggerFactory.getLogger(SplitService.class);
 	
 	@Inject
 	private SentenceRepository sentenceRepository;
@@ -35,14 +39,14 @@ public class SplitService {
 			if(str!=null)
 				resumesSplit.add(spliter(str));
 			else
-				System.out.println("NULL!");
-			System.out.println("-------------------------");
+				logger.info("NULL!");
+			logger.info("-------------------------");
 		}
 		return resumesSplit;
 	}
 	
 	public List<String> spliterAnswer(String answer) {
-		//System.out.println(answer);
+		//logger.info(answer);
 		return spliter(answer.replaceAll("(<p>|</p>)", "").replaceAll("\n", "<br>\n"));
 	}
 	
@@ -59,7 +63,7 @@ public class SplitService {
 		}
 		/*
 		for(String s:paragraph)
-			System.out.println(s);*/
+			logger.info(s);*/
 		return paragraph;
 	}
 	
@@ -79,9 +83,9 @@ public class SplitService {
 				sentence.setPositionMax(resumeSplit.size());
 				if(mx<str.length()) {
 					mx=str.length();
-					System.out.println(str);
+					logger.info(str);
 				}
-				System.out.println(mx);
+				logger.info(((Integer)mx).toString());
 				sentences.add(sentence);
 			}
 			sentenceRepository.saveAll(sentences);
@@ -100,7 +104,7 @@ public class SplitService {
 		        		+ "where match(keyword) against('"+sentence+"') ORDER BY LENGTH(keyword) DESC")
 		        .getResultList();
 			sentence="<ul class='p-0'><li class='d-inline-block align-middle'>"+sentence.replaceAll(" ","&nbsp;</li><li class='d-inline-block align-middle'>")+"&nbsp;</li></ul>";
-			//System.out.println(sentence);
+			//logger.info(sentence);
 			Map<String,String> mapStr=new HashMap<>();
 			for(Object obj:synonyms) {
 				Object[] strs=(Object[])obj;
@@ -123,7 +127,7 @@ public class SplitService {
 			}
 			sentences2.add(sentence);
 		}
-		//System.out.println(sentences.get(2));
+		//logger.info(sentences.get(2));
 		return sentences2;
 	}
 }

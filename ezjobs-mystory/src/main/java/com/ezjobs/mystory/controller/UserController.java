@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -57,7 +59,6 @@ public class UserController {
 	@ResponseBody
 	@GetMapping("/check_id")
 	public Boolean checkId(@RequestParam String id) {
-		System.out.println(id);
 		return userService.checkId(id) == null;
 	}
 
@@ -95,18 +96,15 @@ public class UserController {
 	}
 
 	@PostMapping("/password")
-	public String passwordNew(@RequestParam Map<String, Object> map, Model model) {
+	public String passwordNew(@RequestParam Map<String, Object> map,HttpSession session,Model model) {
+		map.put("newPw",userService.getRamdomPassword(10));
 		User user = userService.checkId((String)map.get("id"));
-		String newPw=userService.getRamdomPassword(10);
-		String email=(String)map.get("email");
-		if (user != null && user.getEmail().equals(email)) {
-			map.put("newPw",newPw); 
-			userService.changePw(map);
-			emailService.sendSimpleMessage(email, "[Ezjbos]패스워드 재설정 안내", "임시 비밀번호 발급 안내 \r\n"
-					+ "임시 비밀번호가 아래와 같이 발급 되었습니다. \r\n" + "아래 비밀번호로 로그인 후 변경해 주세요. \r\n" + "임시 비밀번호:" + newPw);
+		if (user != null && user.getEmail().equals((String)map.get("email"))) {
+			userService.changePw(map,emailService);
+			session.setAttribute("changePwMessage", "새 비밀번호가 이메일로 전송되었습니다.");
 			return "redirect:/user/login";
 		} else {
-			System.out.println("mismatch");
+			session.setAttribute("changePwException", "아이디 또는 이메일이 올바르지 않습니다.");
 			return "redirect:/user/password/new";
 		}
 	}
@@ -117,7 +115,7 @@ public class UserController {
 	}
 
 	@PutMapping("/password")
-	public String passwordChange(@RequestParam Map<String, Object> map, Model model) {
+	public String passwordChange(@RequestParam Map<String, Object> map,HttpSession session, Model model) {
 		String id = LoginUser.getId();
 		User user = userService.checkId(id);
 		if (user != null && user.checkLoginPw((String)map.get("loginPw"))) {
@@ -127,7 +125,7 @@ public class UserController {
 			LoginUser.refreshAuthentication(user, user.getLoginPw());
 			return "redirect:/index";
 		} else {
-			System.out.println("mismatch");
+			session.setAttribute("changePwException", "기존 비밀번호가 올바르지 않습니다.");
 			return "redirect:/user/password/change";
 		}
 	}

@@ -31,7 +31,6 @@
 		this.list=list;
 		this.write=write;
 		this.review=review;
-		this.resume_idx = 0;
 		this.resume_new = 0;
 		
 		this.list.bindHandler("loadResume",this.getResume)
@@ -45,7 +44,8 @@
 			.bindRender("appendTag","appendTag")
 			.bindRender("appendTagPrompt","appendTag")
 			.bindRender("appendTagCustom","appendTag")
-			.bindHandler("saveResume",this.postResume);
+			.bindHandler("saveResume",this.postResume)
+			.bindRender("closeResume","closeResume");
 		
 		this.review.bindHandler("startReview",this.reviewResume)
 			.bindHandler("changeWord",this.changeWord)
@@ -61,13 +61,10 @@
 		});
 	}
 	App.prototype.createResume=function(){
-		self().resume_idx += 1;
 		self().resume_new += 1;
-		$(document.createDocumentFragment()).load("/resume/write",function(response){
+		$(document.createDocumentFragment()).load("/resume/write?newId="+self().resume_new,function(response){
 			var data={
 				response : response,
-				model :self(),
-				resume_idx : self().resume_idx,
 				resume_new : self().resume_new,
 			};
 			self().write.render("appendResume",data);
@@ -75,11 +72,9 @@
 	}
 	App.prototype.getResume=function(href,target){
 		if ($(target).length == 0){
-			self().resume_idx += 1;
 			$(document.createDocumentFragment()).load(href,function(response){
 				var data={
 					response : response,
-					resume_idx : self().resume_idx,
 				};
 				self().write.render("appendResume",data);
 			});
@@ -96,15 +91,20 @@
 	App.prototype.postResume=function(target,form){
 		console.log(form);
 		$.post("/resume/content/" + form.id, form, function(data) {
-			self().getList();
-			self().write.render("saveResume",{
-				target:target,
-				data:data,
-			});
+			if($("<div>"+data+"</div>").find("#frm").length>0){
+				window.open("/user/login");
+			}
+			else{
+				self().getList();
+				self().write.render("saveResume",{
+					target:target,
+					data:data,
+				});
+			}
 		});
 	}
 	App.prototype.reviewResume=function(){
-		$.get("/resume/changelist",self().write.getCurrentAnswer(),function(data){
+		$.get("/resume/changelist",{answer:self().write.getCurrentAnswer().val()},function(data){
 			self().review.render("changeList",data);
 		});
 	}

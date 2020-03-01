@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ezjobs.mystory.entity.User;
 import com.ezjobs.mystory.repository.UserRepository;
@@ -80,7 +81,6 @@ public class UserService implements AdminService<User>{
 		}
 		else {
 			re = userRepository.findAll(pr);
-			System.out.println("s:" + re.getSize());
 		}
 		return re;
 	}
@@ -94,10 +94,19 @@ public class UserService implements AdminService<User>{
 		User user=new User();
 		user.setId((String)map.get("id"));
 		String loginPw=(String)map.get("newPw");
-		//System.out.println(loginPw);
 		user.setLoginPw(UserSha256.encrypt(loginPw));
 		userRepository.updatePw(user);
 	}
+	
+	@Transactional
+	public void changePw(Map<String, Object> map, EmailService emailService) {
+		String email=(String)map.get("email");
+		String newPw=(String)map.get("newPw");
+		changePw(map);
+		emailService.sendSimpleMessage(email, "[Ezjbos]패스워드 재설정 안내", "임시 비밀번호 발급 안내 \r\n"
+				+ "임시 비밀번호가 아래와 같이 발급 되었습니다. \r\n" + "아래 비밀번호로 로그인 후 변경해 주세요. \r\n" + "임시 비밀번호:" + newPw);
+	}
+	
 	
 	public String getRamdomPassword(int len) {
 		char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
@@ -106,7 +115,6 @@ public class UserService implements AdminService<User>{
 		int idx = 0;
 		StringBuffer sb = new StringBuffer();
 		// System.out.println("charSet.length :::: " + charSet.length);
-
 		for (int i = 0; i < len; i++) {
 			idx = (int) (charSet.length * Math.random()); // 36 * 생성된 난수를 Int로 추출 (소숫점제거)
 			// System.out.println("idx :::: " + idx);

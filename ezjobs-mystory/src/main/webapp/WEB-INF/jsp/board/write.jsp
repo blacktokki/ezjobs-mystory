@@ -44,7 +44,7 @@
 							</div>
 							<textarea class="form-control" id="form-content" name="text" rows="15">${board.text}</textarea>
 							<script type="text/javascript">
-							require(["ckeditor/ckeditor"],function(CKEDITOR){
+							window.addEventListener('DOMContentLoaded', function() {
 								var editor =CKEDITOR.replace('form-content',{
 							 		removePlugins: 'contextmenu,tabletools,tableselection',
 									height: 500,
@@ -58,7 +58,6 @@
 										{ name: 'colors', items: [ 'TextColor', 'BGColor' ] },
 										{ name: 'about', items: [ 'About' ] }
 									]
-								 });
 								/*
 								console.log(editor);
 								editor.addCommand("mySimpleCommand", { // create named command
@@ -71,6 +70,7 @@
 									command : 'mySimpleCommand',
 									icon : 'https://avatars1.githubusercontent.com/u/5500999?v=2&s=16'
 								});*/
+								});
 							});
 							</script>
 						</div>
@@ -82,4 +82,6 @@
 	</div>
 
 </div>
+<script src="/webjars/ckeditor/standard/ckeditor.js" defer></script>
+<script src="/webjars/ckeditor/standard/adapters/jquery.js" defer></script>
 <%@ include file="/WEB-INF/jspf/footer.jspf"%>

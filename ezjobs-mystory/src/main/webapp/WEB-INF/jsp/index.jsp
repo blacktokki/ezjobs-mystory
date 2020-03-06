@@ -54,7 +54,7 @@
 					<c:forEach var="item" items="${notice.content}">
 						<tr>
 							<td>
-								<a href="/board/noticecontent/${item.id}">${item.title}&nbsp;</a>
+								<a href="/help/noticecontent/${item.id}">${item.title}&nbsp;</a>
 							</td>
 						</tr>
 					</c:forEach>
